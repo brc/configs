@@ -1,0 +1,12 @@
+##
+## Arch Linux repository mirrorlist
+## Sorted by mirror score from mirror status page
+## Generated on 2013-05-01
+##
+
+## Score: 0.7, United States
+Server = http://lug.mtu.edu/archlinux/$repo/os/$arch
+## Score: 0.9, United States
+Server = http://hive.ist.unomaha.edu/archlinux/$repo/os/$arch
+## Score: 1.0, United States
+Server = http://mirror.rit.edu/archlinux/$repo/os/$arch
