@@ -1,0 +1,24 @@
+[user]
+    email = invsblduck@gmail.com
+    name = invsblduck
+
+[push]
+    default = simple
+
+[color]
+    diff = true
+    grep = true
+    status = true
+    branch = true
+
+[alias]
+    b   = branch 
+    co  = checkout
+    cob = checkout -b
+    com = checkout master
+    d   = diff
+    fu  = fetch upstream
+    s   = status
+    sh  = show
+[gitreview]
+	username = invsblduck

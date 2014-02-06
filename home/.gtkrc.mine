@@ -1,0 +1,7 @@
+gtk-key-theme-name = "Emacs"
+
+# Stop this default gtk keybinding that displays a context menu
+binding "NoKeyboardNavigation" {
+    unbind "<shift>F10"
+}
+class "*" binding "NoKeyboardNavigation"

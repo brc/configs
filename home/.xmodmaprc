@@ -1,0 +1,20 @@
+keysym equal = backslash bar
+keysym backslash = equal plus
+
+keysym Escape = grave asciitilde
+keysym grave = Escape Escape
+
+keysym slash = apostrophe quotedbl
+keysym apostrophe = slash question
+
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Control_L = Caps_Lock
+keysym Caps_Lock = Control_L
+add Lock = Caps_Lock
+add Control = Control_L  
+
+! For apple bluetooth kbd:
+!   map "Command" key (which is "Super") to Alt
+remove Mod4 = Super_L
+add Mod1 = Super_L

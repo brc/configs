@@ -1,0 +1,12 @@
+# 
+# /etc/fstab: static file system information
+#
+# <file system>    <dir>    <type>    <options>    <dump>    <pass>
+# UUID=65704186-ff4f-46d2-a6ac-d9557dae92f4
+
+/dev/sda1   /       ext4    rw,relatime,data=writeback,discard    0 1
+/swap       none    swap    defaults 
+
+LABEL=apt-mirror    /var/spool/apt-mirror   ext4    rw,user,noauto,noatime,async 
+/dev/mmcblk0p1      /mnt/sdcard             exfat   rw,noauto
+/dev/sr0            /mnt/cdrom              iso9660 ro,user,noauto

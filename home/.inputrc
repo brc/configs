@@ -1,0 +1,20 @@
+set bell-style visible 
+set completion-ignore-case on
+set show-all-if-unmodified on
+set visible-stats on
+
+M-m: menu-complete
+M-p: dabbrev-expand
+
+"\C-x\C-d": "\C-uxbacklight - 10 -time 1 -steps 1\C-m"
+"\C-x\C-b": "\C-uxbacklight + 10 -time 1 -steps 1\C-m"
+
+"\M-a": "|awk '{print $}'"
+"\M-g": "|grep -i "
+"\M-l": "|less"
+"\M-n": ">/dev/null "
+"\M-q": "pacman -Q"
+"\M-s": "|sed 's///'"
+"\M-w": "|while read x; do ; done"
+"\M-r": "|recolorize_grep.sh "
+"\M-x": "|xargs "
