@@ -9,3 +9,5 @@ home/.weechat/script/plugins.xml.gz
 home/.config/transmission/dht.dat
 home/.config/transmission/resume/*.resume
 home/.config/transmission/torrents/*.torrent
+
+home/.chef/servers.d/breu-chef
