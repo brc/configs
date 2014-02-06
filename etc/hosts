@@ -1,36 +1,28 @@
+# lo shit
 127.0.0.1       localhost.localdomain   localhost
 
+# soho shit
 192.168.1.1     routy routey
 
+# lab shit
+10.127.52.106   monkeybutler04 mb
+
+# public cloud shit
 198.61.212.8    chef-server irc
 166.78.183.153  bc-chef
 166.78.165.28   bc-api1 api1
 166.78.167.26   bc-api2 api2
 50.56.179.132   bc-nova1 nova1
 166.78.24.141   bc-nova2 nova2
+166.78.142.209  breu-chef
 
-10.127.52.6     compute-node04.sat6.rcb.me compute-node04
-10.127.52.7     compute-node05.sat6.rcb.me compute-node05
-10.127.52.8     compute-node06.sat6.rcb.me compute-node06
-10.127.52.20    compute-node17.sat6.rcb.me compute-node17
-10.127.52.21    compute-node18.sat6.rcb.me compute-node18
-10.127.52.22    compute-node19.sat6.rcb.me compute-node19
-10.127.52.23    compute-node22.sat6.rcb.me compute-node20
-10.127.52.24    compute-node21.sat6.rcb.me compute-node21
-10.127.52.25    compute-node22.sat6.rcb.me compute-node22
-10.127.52.26    compute-node23.sat6.rcb.me compute-node23
-10.127.52.27    compute-node24.sat6.rcb.me compute-node24
-10.127.52.28    compute-node25.sat6.rcb.me compute-node25
-10.127.52.29    compute-node26.sat6.rcb.me compute-node26
-10.127.52.106   monkeybutler04 mb
-
-#gebastion
-
+# fakecloud shit
 172.16.0.1      fcrouter
 172.16.0.100    chef
 172.16.0.101    chef-stackforge chefsf
-172.16.0.165    infra1
-172.16.0.201    infra2
-172.16.0.243    comp1
+172.16.0.181    infra1
+172.16.0.185    infra2
+172.16.0.205    comp1
 172.16.0.247    infra3
-172.16.0.142    sfaio1
+172.16.0.240    sfaio1
+172.16.0.99     dev
