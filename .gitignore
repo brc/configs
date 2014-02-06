@@ -1,6 +1,11 @@
 home/.vim/.netrwhist
+
 home/.weechat/logs
 home/.weechat/weechat.log
 home/.weechat/weechat_fifo_*
 home/.weechat/urlserver_list.txt
 home/.weechat/script/plugins.xml.gz
+
+home/.config/transmission/dht.dat
+home/.config/transmission/resume/*.resume
+home/.config/transmission/torrents/*.torrent
