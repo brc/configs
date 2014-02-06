@@ -1,0 +1,11 @@
+#!/bin/bash
+case "$1" in
+  resume|thaw)
+    setxkbmap dvorak
+    xmodmap /home/duck/.xmodmaprc
+  ;;
+  *)
+    exit 1
+  ;;
+esac
+exit 0

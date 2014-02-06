@@ -1,0 +1,13 @@
+#!/bin/bash
+case "$1" in
+  suspend|hibernate)
+    #do nothing
+  ;;
+  resume|thaw)
+    echo 0 > /sys/class/backlight/intel_backlight/brightness
+  ;;
+  *)
+    exit 1
+  ;;
+esac
+exit 0
