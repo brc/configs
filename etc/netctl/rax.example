@@ -1,0 +1,16 @@
+Description='A wireless connection using a custom network block configuration'
+Interface=wlp4s0
+Connection=wireless
+Security=wpa-configsection
+IP=dhcp
+WPAConfigSection=(
+    'ssid="R-Fast"'
+    'key_mgmt=WPA-EAP'
+    'eap=PEAP'
+    'pairwise=TKIP CCMP'
+    'anonymous_identity="anonymous"'
+    'identity="bcampbel"'
+    'password="********"'
+    'priority=1'
+    'phase2="auth=MSCHAPV2"'
+)
