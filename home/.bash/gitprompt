@@ -9,7 +9,7 @@ GIT_PS1_DESCRIBE_STYLE=branch
 
 . /usr/share/git/completion/git-completion.bash
 #. /usr/share/git/completion/git-prompt.sh
-. /git/git-prompt.sh
+. ~/.git-prompt.sh
 
 #  Customize BASH PS1 prompt to show current GIT repository and branch.
 #  by Mike Stewart - http://MediaDoneRight.com
