@@ -1,0 +1,37 @@
+URxvt.depth:       32
+URxvt.background:  #000000
+URxvt.foreground:  gray90
+URxvt.color7:      gray90
+URxvt.colorBD:     white
+URxvt.colorIT:     green
+URxvt.cursorBlink: true
+URxvt.cursorColor: green
+URxvt.font:        9x15
+!URxvt.font:        xft:monaco:size=10
+
+
+URxvt.cutchars: `()*;<=>@[]^{|}
+URxvt.pastableTabs: true
+
+URxvt.scrollBar: false
+URxvt.saveLines: 0
+
+URxvt.visualBell:   true
+!URxvt.urgentOnBell: true
+
+URxvt*loginShell:  true
+URxvt.utmpInhibit: true
+
+URxvt.perl-ext-common: default,clipboard,url-select,font-size
+
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.url-select.launcher:  /usr/bin/firefox
+URxvt.url-select.underline: true
+URxvt.colorUL:              #4682B4
+
+URxvt.keysym.C-equal: perl:font-size:increase
+URxvt.keysym.C-minus: perl:font-size:decrease
+
+!URxvt.perl-ext-common: default,matcher
+!URxvt.url-launcher: /usr/bin/firefox
+!URxvt.matcher.button: 1
