@@ -1,0 +1,4 @@
+#!/bin/sh
+#echo 0 > /sys/class/backlight/intel_backlight/brightness
+iwconfig wlp4s0 power off
+ethtool -s eno1 wol d
