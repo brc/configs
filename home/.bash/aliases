@@ -117,6 +117,7 @@ alias gir='cd /git/invsblduck/rcb-forks'
 alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
 alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
 alias cdcd='cd /git/invsblduck/chef_dev_utils'
+alias configs='cd /git/invsblduck/configs/home'
 
 alias g=git
 alias gp='git --no-pager'
