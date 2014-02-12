@@ -272,6 +272,9 @@
     <keybind key="A-F8">
         <action name="ToggleShade"/>
     </keybind>
+    <keybind key="A-F5">
+        <action name="ToggleOmnipresent"/>
+    </keybind>
     <keybind key="A-Escape">
       <action name="Lower"/>
       <action name="Unfocus"/>
