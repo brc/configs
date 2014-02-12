@@ -1,4 +1,5 @@
 execute pathogen#infect()
+runtime macros/matchit.vim
 
 set autoindent
 set backspace=indent,eol,start
@@ -49,13 +50,6 @@ set viminfo='10,\"100,:50,%,h,n~/.viminfo,f
 "let g:leave_my_textwidth_alone = 1 
 let maplocalleader = ","
 
-" Plugins
-filetype plugin indent on
-"source /usr/share/doc/vim-scripts/examples/plugin/info.vim  " info for vim
-"source /usr/share/doc/vim-scripts/examples/plugin/Chdir.vim " change cwd
-"source /usr/share/doc/vim-scripts/examples/closetag.vim     " code completion
-"source /usr/share/doc/vim-scripts/examples/plugin/whatdomain.vim  " tld search
-
 "set guioptions-=m
 "set guioptions-=M
 "set guioptions-=T
@@ -76,8 +70,7 @@ filetype plugin indent on
 :cnoremap <Esc><C-F>	<S-Right>
 :cnoremap <C-U>         <C-E><C-U>
 
-""" syntax highlighting
-"
+filetype plugin indent on
 syntax on
 
 " Maybe configure this so it knows xrandr is using the VGA output?
@@ -85,8 +78,8 @@ syntax on
 "if exists("$SSH_CLIENT")
 "    color evening
 "else
-    "color ir_black
-    color delek
+    color ir_black
+    "color delek
     hi Search  term=underline cterm=underline,bold ctermfg=yellow ctermbg=magenta
     hi WarningMsg term=standout ctermfg=yellow ctermbg=blue
 "endif
@@ -111,14 +104,9 @@ if &diff
     highlight DiffDelete term=reverse cterm=none ctermbg=black ctermfg=red
 endif
 
-"set diffexpr=MyDiff()
-"function! MyDiff()
-"  let opt = ''
-"  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-"  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-"  silent execute '!diff -a ' . opt . '"' . v:fname_in . '" "' . v:fname_new . '" > "' . v:fname_out . '"'
-"endfunction
-
+"
+" restore cursor position when opening file
+"
 function! ResCur()
   if line("'\"") <= line("$")
     normal! g`"
@@ -132,7 +120,8 @@ augroup resCur
 augroup END
 
 "
-" unimpairedPaste from Tim Pope
+" Set `paste' option for *THIS* single insert only
+" (unimpairedPaste from Tim Pope)
 "
 function! Setup_paste() abort
   let s:paste = &paste

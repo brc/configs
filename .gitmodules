@@ -7,3 +7,9 @@
 [submodule "home/.vim/bundle/vim-surround"]
 	path = home/.vim/bundle/vim-surround
 	url = git://github.com/tpope/vim-surround.git
+[submodule "home/.vim/bundle/vim-textobj-user"]
+	path = home/.vim/bundle/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user.git
+[submodule "home/.vim/bundle/vim-textobj-rubyblock"]
+	path = home/.vim/bundle/vim-textobj-rubyblock
+	url = https://github.com/nelstrom/vim-textobj-rubyblock.git
