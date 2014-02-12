@@ -5,22 +5,23 @@
 stty erase ^H
 export EDITOR=vim
 export PATH=~/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:~/.gem/ruby/2.0.0/bin:~/.gem/ruby/2.0.0/gems/chef-11.4.4/bin:~/.gem/ruby/2.0.0/gems/foodcritic-2.1.0/bin:/git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap:/git/invsblduck/fakecloud
+
+export GEM_HOME=/home/duck/.gem/ruby/2.0.0
+
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
 export LC_CTYPE=C
-export LESS="-QRfim -j4"
-export LESSCHARSET=utf-8
 
-#
-# Termcap codes for less(1)
-#
-### double-bright (headings, keywords, options, symbols)
+export LESSCHARSET=utf-8
+export LESS="-QRfim -j4"
+# termcap codes for less(1)
+# double-bright (headings, keywords, options, symbols)
 export LESS_TERMCAP_md=$'\E[01;37m'     # begin
 export LESS_TERMCAP_me=$'\E[0m'         # end
-### underline (arguments and filenames)
+# underline (arguments and filenames)
 export LESS_TERMCAP_us=$'\E[04;36m'     # begin
 export LESS_TERMCAP_ue=$'\E[0m'         # end
-### standout (highlighted search terms and info bar at bottom)
+# standout (highlighted search terms and info bar at bottom)
 export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
 export LESS_TERMCAP_se=$'\E[0m'         # end
 
