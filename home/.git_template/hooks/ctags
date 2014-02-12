@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+gitdir=$(git rev-parse --git-dir)
+mkdir $gitdir/tags_lock 2>/dev/null || exit 0
+
+trap "rmdir $gitdir/tags_lock; rm -f $gitdir/tags.$$" EXIT
+
+ctags --tag-relative -R -f ${gitdir}/tags.$$ --exclude=$gitdir \
+    --languages=-javascript,sql
+
+mv $gitdir/tags.$$ $gitdir/tags

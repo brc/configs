@@ -20,5 +20,8 @@
     fu  = fetch upstream
     s   = status
     sh  = show
+	ctags = !.git/hooks/ctags
 [gitreview]
 	username = invsblduck
+[init]
+	templatedir = ~/.git_template
