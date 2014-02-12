@@ -45,6 +45,7 @@ alias gra='grep -rsIi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
 alias t='tree -aCI .git'
 alias r=ranger
 alias r2='ssh -l root'
+alias ev='vim ~/.vimrc'
 alias ea='vim ~/.bash/aliases'
 alias va=ea
 alias na='. ~/.bash/aliases'
@@ -120,3 +121,4 @@ alias cdcd='cd /git/invsblduck/chef_dev_utils'
 alias g=git
 alias gp='git --no-pager'
 alias gl='git log'
+alias go='git show'
