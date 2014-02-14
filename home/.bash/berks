@@ -2,9 +2,9 @@
 
 function berks() {
     # Use Ruby 1.9.3
-    . ${HOME}/.bash/chruby-init
-    chruby-init
-    chruby 1.9.3
+    #. ${HOME}/.bash/chruby-init
+    #chruby-init
+    #chruby 1.9.3
 
     # Find the real berks executable
     local berks_bin=$(which --skip-alias --skip-functions berks)
