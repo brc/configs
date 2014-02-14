@@ -45,10 +45,11 @@ alias gra='grep -rsIi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
 alias t='tree -aCI .git'
 alias r=ranger
 alias r2='ssh -l root'
-alias ev='vim ~/.vimrc'
-alias ea='vim ~/.bash/aliases'
-alias va=ea
+alias vv='vim ~/.vimrc'
+alias va='vim ~/.bash/aliases'
+alias vp='vim ~/.bash_profile'
 alias na='. ~/.bash/aliases'
+alias np='. ~/.bash_profile'
 
 alias j='journalctl -xab |less +G'
 alias jf='journalctl -xfab'
@@ -118,6 +119,7 @@ alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
 alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
 alias cdcd='cd /git/invsblduck/chef_dev_utils'
 alias configs='cd /git/invsblduck/configs/home'
+alias fcc='cd /git/stackforge'
 
 alias g=git
 alias gp='git --no-pager'
