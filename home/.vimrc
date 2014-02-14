@@ -151,6 +151,10 @@ augroup END
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
+" force the quickfix window to the BOTTOM
+" (to fix things when tagbar is active)
+autocmd FileType qf wincmd J
+
 """ syntax hilighting
 map <F1> :syntax on<CR>
 map <S-F1> :syntax off<CR>
@@ -159,6 +163,12 @@ map <S-F1> :syntax off<CR>
 map <F2> :set paste<CR>
 imap <F2> :call Setup_paste()<CR>
 map <S-F2> :set nopaste<CR>
+
+""" edit alternate file
+map <F3> :e #<CR>
+
+""" toggle tagbar
+nmap <F4> :TagbarToggle<CR>
 
 """ filetype detection
 map <F6> :filetype detect<CR>
@@ -173,18 +183,17 @@ map <S-F9> :qa<CR>
 map <F10> :q!
 map <S-F10> :qa!
 
-map <F12> :w<CR>
-map <S-F12> :wa<CR>
-
 map <F11> :nohl<CR>
 map <S-F11> :set hls<CR>
 
-""" invoke ispell
-map <A-F12> :w<CR>:!ispell -x %<CR><CR>:e<CR>
+map <F12> :w<CR>
+map <S-F12> :wa<CR>
 
-""" edit alternate file
-map <F3> :e #<CR>
 map <S-F3> <F12><F3>
+
+""" invoke ispell
+"map <A-F12> :w<CR>:!ispell -x %<CR><CR>:e<CR>
+
 
 """ pan left/right
 map l z10l

@@ -22,3 +22,6 @@
 [submodule "home/.vim/bundle/vim-rake"]
 	path = home/.vim/bundle/vim-rake
 	url = https://github.com/tpope/vim-rake.git
+[submodule "home/.vim/bundle/tagbar"]
+	path = home/.vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
