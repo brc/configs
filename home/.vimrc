@@ -7,6 +7,7 @@ set backupcopy=auto
 set colorcolumn=80
 set expandtab
 set fileformat=unix
+set grepprg=grep\ -rsiI\ --exclude-dir=.git
 set history=15
 set hlsearch
 set ignorecase
@@ -146,6 +147,9 @@ augroup unimpaired_paste
         \ endif
 augroup END
 
+" Automatically show global/local quickfix windows
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
 
 """ syntax hilighting
 map <F1> :syntax on<CR>
@@ -186,3 +190,8 @@ map <S-F3> <F12><F3>
 map l z10l
 map h z10h
 
+""" toggle folds
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+
+""" vimgrep
+nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
