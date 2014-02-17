@@ -7,15 +7,17 @@ function berks() {
     #chruby 1.9.3
 
     # Find the real berks executable
-    local berks_bin=$(which --skip-alias --skip-functions berks)
-    [ -z "$berks_bin" ] && return 1  # which(1) above will print error
+    #local berks_bin=$(which --skip-alias --skip-functions berks)
+    #[ -z "$berks_bin" ] && return 1  # which(1) above will print error
 
     # Execute with Bundler
     if [ -e Gemfile ]; then
         echo -e "\e[1;32m(Using Bundler with $(ruby -v))\e[0m"
-        bundle exec ${berks_bin} $@
+        #bundle exec ${berks_bin} $@
+        bundle exec berks $@
     else
         echo -e "\e[1;31m(Not using Bundler! $(ruby -v))\e[0m"
-        ${berks_bin} $@
+        #${berks_bin} $@
+        berks $@
     fi
 }
