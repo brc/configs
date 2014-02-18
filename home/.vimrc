@@ -71,6 +71,10 @@ endif
 
 " Tell nerdtree not to use Unicode symbols!
 let NERDTreeDirArrows = 0
+let NERDTreeHijackNetrw = 1
+let NERDTreeShowBookmarks = 1
+let NERDTreeShowHidden = 1
+let NERDTreeMinimalUI = 1
 
 " Emacs-style keybindings for command line
 "
