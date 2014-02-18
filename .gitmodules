@@ -28,3 +28,6 @@
 [submodule "home/.vim/bundle/vim-json"]
 	path = home/.vim/bundle/vim-json
 	url = https://github.com/elzr/vim-json.git
+[submodule "home/.vim/bundle/nerdtree"]
+	path = home/.vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git

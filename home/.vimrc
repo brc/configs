@@ -58,6 +58,20 @@ let maplocalleader = ","
 "set guioptions+=c
 "set guifont=vt100:h10
 
+" Enable UTF-8
+if has("multi_byte")
+  "if &termencoding == ""
+  "  let &termencoding = &encoding
+  "endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  "setglobal bomb
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
+
+" Tell nerdtree not to use Unicode symbols!
+let NERDTreeDirArrows = 0
+
 " Emacs-style keybindings for command line
 "
 :cnoremap <C-A>		<Home>
@@ -83,6 +97,10 @@ syntax on
     "color delek
     hi Search  term=underline cterm=underline,bold ctermfg=yellow ctermbg=magenta
     hi WarningMsg term=standout ctermfg=yellow ctermbg=blue
+
+    " swap the highlighting of directories and symlinks in nerdtree
+    hi link NERDTreeDir Macro
+    hi link NERDTreeLink Directory
 "endif
 
 "hi Comment      term=none       ctermfg=cyan       cterm=bold
@@ -155,9 +173,8 @@ autocmd QuickFixCmdPost    l* nested lwindow
 " (to fix things when tagbar is active)
 autocmd FileType qf wincmd J
 
-""" syntax hilighting
-map <F1> :syntax on<CR>
-map <S-F1> :syntax off<CR>
+""" nerdtree
+map <F1> :NERDTreeToggle<CR>
 
 """ paste/nopaste
 map <F2> :set paste<CR>
@@ -194,7 +211,6 @@ map <S-F3> <F12><F3>
 """ invoke ispell
 "map <A-F12> :w<CR>:!ispell -x %<CR><CR>:e<CR>
 
-
 """ pan left/right
 map l z10l
 map h z10h
@@ -204,3 +220,7 @@ nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 
 """ vimgrep
 nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
+
+""" disable sudden/accidental window death
+nnoremap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
+nnoremap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
