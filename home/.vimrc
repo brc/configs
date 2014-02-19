@@ -197,18 +197,20 @@ if &term =~ '^screen' && exists('$TMUX')
     execute "set <F12>=\e[24;*~"
 endif
 
-" Emacs-style keybindings for command line
-""""""""""""""""""""""""""""""""""""""""""
-cnoremap <C-A>		<Home>
-cnoremap <C-E>		<End>
-cnoremap <C-B>		<Left>
-cnoremap <C-F>		<Right>
-cnoremap <C-D>		<Del>
-cnoremap <C-N>		<Down>
-cnoremap <C-P>		<Up>
-cnoremap <Esc><C-B>	<S-Left>
-cnoremap <Esc><C-F>	<S-Right>
-cnoremap <C-U>         <C-E><C-U>
+" Emacs-style keybindings (for Insert and Command-line modes)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+noremap! <C-a>	    <Home>
+noremap! <C-e>	    <End>
+noremap! <C-b>	    <Left>
+noremap! <C-f>	    <Right>
+noremap! <C-d>	    <Del>
+noremap! <C-n>	    <Down>
+noremap! <C-p>	    <Up>
+noremap! <ESC>b	    <S-Left>
+noremap! <ESC>f	    <S-Right>
+noremap! <C-k>      <ESC>lC
+noremap! <C-u>      <C-e><C-u>
+noremap! <C-t>      <ESC>xhpa
 
 " unimpairedPaste
 """""""""""""""""
@@ -228,52 +230,43 @@ nnoremap <silent> ygI :call <SID>Setup_paste()<CR>gI
 "
 " NERDTree window
 """""""""""""""""
-"toggle
-map <F1> :NERDTreeToggle<CR>
-imap <F1> :NERDTreeToggle<CR>
-"focus (far left)
-map <S-F1> 99h
-imap <S-F1> 99h
+"toggle/focus (far left)
+map ,nn :NERDTreeToggle<CR>
+map ,gn 99h
 
 " QuickFix window
 """""""""""""""""
-"toggle
-map <F2> :call ToggleQuickfixList()<CR>
-imap <F2> :call ToggleQuickfixList()<CR>
-"focus (very bottom)
-map <S-F2> 99j
-imap <S-F2> 99j
+"toggle/focus (very bottom)
+map ,ff :call ToggleQuickfixList()<CR>
+map ,gf 99j
 
 " MBE window
 """"""""""""
-"toggle
-map <F3> :MBEToggle<CR>
-imap <F3> :MBEToggle<CR>
-"focus (very top)
-map <S-F3> 99k
-imap <S-F3> 99k
+"toggle/focus (very top)
+map ,bb :MBEToggle<CR>
+map ,gb 99k
 
 " Tagbar window
 """""""""""""""
-"toggle
-map <F4> :TagbarToggle<CR>
-imap <F4> :TagbarToggle<CR>
-"focus (far right)
-map <S-F4> 99l
-imap <S-F4> 99l
+"toggle/focus (far right)
+map ,tt :TagbarToggle<CR>
+map ,gt 99l
 
-" Previous window
-"""""""""""""""""
-map <S-F5> 
-imap <S-F5> 
+" Window jumping
+""""""""""""""""
+map ,wj j
+map ,wk k
+map ,wl l
+map ,wh h
+map ,ww p
 
 " Paste
 """""""
 "toggle
-map <F5> :set paste<CR>
-map <S-F5> :set nopaste<CR>
+map <F1> :set paste<CR>
+map <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
-imap <F5> :call Setup_paste()<CR>
+imap <F1> :call Setup_paste()<CR>
 
 """
 "map <F6>
