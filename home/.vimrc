@@ -57,7 +57,7 @@ set cpoptions-=y  " yank command cannot be redone with '.'
 ""   "100        will save up to 100 lines for each register
 ""   :50         up to 50 lines of command-line history will be remembered
 ""   %           saves and restores buffer list
-""   h	        disable 'hlsearch' highlighting when starting
+""   h           disable 'hlsearch' highlighting when starting
 ""   f1          store global marks (A-Z and 0-9)
 ""   n           name used for the viminfo file (must be the last option)
 set viminfo='10,\"100,:50,%,h,f1,n~/.viminfo
@@ -199,18 +199,21 @@ endif
 
 " Emacs-style keybindings (for Insert and Command-line modes)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-noremap! <C-a>	    <Home>
-noremap! <C-e>	    <End>
-noremap! <C-b>	    <Left>
-noremap! <C-f>	    <Right>
-noremap! <C-d>	    <Del>
-noremap! <C-n>	    <Down>
-noremap! <C-p>	    <Up>
-noremap! <ESC>b	    <S-Left>
-noremap! <ESC>f	    <S-Right>
-noremap! <C-k>      <ESC>lC
+noremap! <C-a>    <Home>
+noremap! <C-e>    <End>
+noremap! <C-b>      <Left>
+noremap! <C-f>      <Right>
+noremap! <ESC>b     <S-Left>
+noremap! <ESC>f     <S-Right>
 noremap! <C-u>      <C-e><C-u>
-noremap! <C-t>      <ESC>xhpa
+noremap! <C-d>      <Del>
+"can't do these on command-line; Insert only (sends Escape).
+inoremap  <ESC>d     <ESC>ldwi
+inoremap  <C-k>      <ESC>lC
+inoremap  <C-t>      <ESC>xhpa
+"don't let these screw up the command-line if pressed on accident
+cmap <ESC>d <Nop>
+cmap <C-k> <Nop>
 
 " unimpairedPaste
 """""""""""""""""
