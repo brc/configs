@@ -165,7 +165,9 @@ endif
 " #########  KEYBOARD MAPPING  #############################################
 " ###########################################################################
 " ###########################################################################
-"
+
+set timeout timeoutlen=500 ttimeoutlen=100
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fix internal keycodes when running under TERM=screen in tmux
 " (sequences wildcarded to make modifiers work as well (<S-F1>, <C-F1>, etc))
@@ -199,21 +201,22 @@ endif
 
 " Emacs-style keybindings (for Insert and Command-line modes)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-noremap! <C-a>    <Home>
-noremap! <C-e>    <End>
+noremap! <C-a>      <Home>
+noremap! <C-e>      <End>
 noremap! <C-b>      <Left>
 noremap! <C-f>      <Right>
-noremap! <ESC>b     <S-Left>
-noremap! <ESC>f     <S-Right>
 noremap! <C-u>      <C-e><C-u>
 noremap! <C-d>      <Del>
-"can't do these on command-line; Insert only (sends Escape).
-inoremap  <ESC>d     <ESC>ldwi
-inoremap  <C-k>      <ESC>lC
-inoremap  <C-t>      <ESC>xhpa
-"don't let these screw up the command-line if pressed on accident
-cmap <ESC>d <Nop>
-cmap <C-k> <Nop>
+"can't do these on command-line; Insert only (sends Escape):
+inoremap <C-k>      <ESC>lC
+inoremap <C-t>      <ESC>xhpa
+"timeoutlen and ttimeoutlen don't seem to do what i want;
+"don't allow these in Insert mode:
+cnoremap <ESC>b     <S-Left>
+cnoremap <ESC>f     <S-Right>
+"don't let these screw up the command-line if pressed on accident:
+cmap     <ESC>d     <Nop>
+cmap     <C-k>      <Nop>
 
 " unimpairedPaste
 """""""""""""""""
