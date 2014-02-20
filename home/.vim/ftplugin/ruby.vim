@@ -5,7 +5,7 @@ let ruby_fold=1
 " infrastructure
 "
 map <buffer> <F5> :w<CR>:!clear; date; ruby <C-r>%<CR>
-map <buffer> [31;2~ :w<CR>:!clear; date; ruby <C-r>% 
+map <buffer> <S-F5> :w<CR>:!clear; date; ruby <C-r>%
 map <buffer> <F7> :w<CR>:!clear; date; ruby -wc <C-r>%<CR>
 
 map <buffer> <LocalLeader>ubr i#!/usr/bin/ruby<CR><BS><CR>
@@ -91,6 +91,21 @@ imap <buffer> <LocalLeader>t =~
 "
 map <buffer> ..deb iChef::Log.debug("")<ESC>hi
 imap <buffer> ..deb Chef::Log.debug("")<ESC>hi
+
+map <buffer> <LocalLeader>nd inode['']<ESC>hi
+imap <buffer> <LocalLeader>nd node['']<ESC>hi
+
+"
+" ERB shit
+"
+map <buffer> <LocalLeader>er i<%  %><ESC>3ha
+imap <buffer> <LocalLeader>er <%  %><ESC>3ha
+
+map <buffer> <LocalLeader>eq i<%  -%><ESC>4ha
+imap <buffer> <LocalLeader>eq <%  -%><ESC>4ha
+
+map <buffer> <LocalLeader>ev i<%=  %><ESC>3ha
+imap <buffer> <LocalLeader>ev <%=  %><ESC>3ha
 
 "
 " RSpec shit
