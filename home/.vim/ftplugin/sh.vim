@@ -1,3 +1,6 @@
+" enable function, heredoc, if/else/do folding
+let g:sh_fold_enabled = 7
+
 map <buffer> <LocalLeader>bin i#!/bin/sh<CR><BS><CR><CR>
 imap <buffer> <LocalLeader>bin #!/bin/sh<CR><BS><CR><CR>
 
