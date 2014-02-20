@@ -237,42 +237,42 @@ nnoremap <silent> ygI :call <SID>Setup_paste()<CR>gI
 " NERDTree window
 """""""""""""""""
 "toggle/focus (far left)
-map ,nn :NERDTreeToggle<CR>
-map ,gn 99h
+nmap ,nn :NERDTreeToggle<CR>
+nmap ,gn 99h
 
 " QuickFix window
 """""""""""""""""
 "toggle/focus (very bottom)
-map ,ff :call ToggleQuickfixList()<CR>
-map ,gf 99j
+nmap ,ff :call ToggleQuickfixList()<CR>
+nmap ,gf 99j
 
 " MBE window
 """"""""""""
 "toggle/focus (very top)
-map ,bb :MBEToggle<CR>
-map ,gb 99k
+nmap ,bb :MBEToggle<CR>
+nmap ,gb 99k
 
 " Tagbar window
 """""""""""""""
 "toggle/focus (far right)
-map ,tt :TagbarToggle<CR>
-map ,gt 99l
+nmap ,tt :TagbarToggle<CR>
+nmap ,gt 99l
 
 " Window jumping
 """"""""""""""""
-map ,wj j
-map ,wk k
-map ,wl l
-map ,wh h
-map ,ww p
+nmap ,wj j
+nmap ,wk k
+nmap ,wl l
+nmap ,wh h
+nmap ,ww p
 
 " Paste
 """""""
 "toggle
-map <F1> :set paste<CR>
-map <S-F1> :set nopaste<CR>
+nmap <F1> :set paste<CR>
+nmap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
-imap <F1> :call Setup_paste()<CR>
+inoremap <F1> :call Setup_paste()<CR>
 
 """
 "map <F6>
@@ -313,8 +313,15 @@ nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
 
 " Prevent window death
 """"""""""""""""""""""
-nnoremap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
-nnoremap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
+nmap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
+nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
+
+" Fugitive
+""""""""""
+nmap ,gt :Gstatus<CR>
+nmap ,gl :Glog<CR>
+nmap ,gb :Gblame<CR>
+nmap ,gc :Gcommit<CR>
 
 
 " ###########################################################################
