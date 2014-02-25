@@ -140,13 +140,13 @@ hi ColorColumn  ctermbg=blue ctermfg=yellow
 
 " Vimdiff mode
 """"""""""""""
-if &diff
+"if &diff
     "colorscheme <some_scheme> works here
     highlight DiffAdd term=reverse cterm=bold ctermbg=green ctermfg=black
     highlight DiffChange term=reverse cterm=none ctermbg=cyan ctermfg=black
     highlight DiffText term=reverse cterm=none ctermbg=blue ctermfg=white
     highlight DiffDelete term=reverse cterm=none ctermbg=black ctermfg=red
-endif
+"endif
 
 
 " ###########################################################################
