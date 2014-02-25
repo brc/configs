@@ -26,15 +26,17 @@ alias grep='egrep --color=auto'     # actual commands
 alias ftp=lftp                      #
 alias diff=colordiff                #
                                        
-alias p='pstree -U'                    #  made-up aliases for common tasks
-alias pp='ps faxww'                    #
-alias q='sudo'                         #
-alias qv='sudo vim'                    #
-alias count='wc -l'                    #
-alias chx='chmod a+x'                  #
-alias chw='sudo chmod a+w'             #
-alias chr='sudo chmod a-w'             #
-alias chb='sudo chown duck:users'      #
+alias p='pstree -U'                     #  made-up aliases for common tasks
+alias pp='ps faxww'                     #
+alias pg='pgrep -lf'                    #
+alias pgg='pgrep -lfa'                  #
+alias q='sudo'                          #
+alias qv='sudo vim'                     #
+alias count='wc -l'                     #
+alias chx='chmod a+x'                   #
+alias chw='sudo chmod a+w'              #
+alias chr='sudo chmod a-w'              #
+alias chb='sudo chown duck:users'       #
 alias untargzip='tar xvzf'
 alias untarbzip='tar xvjf'
 alias n='sudo ss -ltpn'
@@ -43,7 +45,7 @@ alias gr='grep -rsiI --exclude-dir=.git'
 alias gri='grep -rsI'
 alias gra='grep -rsIi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
 alias t='tree -aCI .git'
-alias r=ranger
+alias r='sudo -i'
 alias r2='ssh -l root'
 alias vv='vim ~/.vimrc'
 alias va='vim ~/.bash/aliases'
@@ -57,69 +59,82 @@ alias uf='systemctl list-unit-files'
 alias pd=pushd
 alias tf='tail -f'
 
-alias f='fixshit.sh'
-alias wi='sudo wifi-menu'
-alias kf='pkill plugin-containe'
+if grep -iwq ubuntu /etc/issue; then
+    alias aptdate='sudo apt-get update'
+    alias cache='apt-cache search'
+    alias pmi='sudo apt-get install'
+elif grep -iwq centos /etc/issue; then
+    alias cache='sudo yum search'
+    alias pmi='sudo yum install'
+elif grep -iwq arch /etc/issue; then
+    alias aptdate='sudo pacman -Syy'
+    alias cache='pacman -Ss'
+    alias pmi='sudo pacman -S'
+fi
 
-#alias cont='ssh root@192.168.2.97'
-#alias qunt='ssh root@192.168.100.2'
-#alias comp='ssh root@192.168.100.3'
+alias rcc='cd /var/chef/cache/cookbooks'
 
-alias g2=g2sh.pl
-alias irc='ssh chef-server'
-alias bcchef='ssh bc-chef'
-alias bcapi1='ssh bc-api1'
-alias bcapi2='ssh bc-api2'
-alias bcnova1='ssh bc-nova1'
-alias bcnova2='ssh bc-nova2'
-alias fish='ssh jenkins@build.monkeypuppetlabs.com'
-alias mb='ssh jenkins@mb'
-alias ge='ssh gebastion@gebastion'
-alias chef='ssh chef'
-alias chefsf='ssh chef-stackforge'
-alias sf1='ssh sfaio1'
-alias f1='ssh infra1'
-alias f2='ssh infra2'
-alias f3='ssh infra3'
-alias f4='ssh infra4'
-alias c1='ssh comp1'
-alias c2='ssh comp2'
-alias c3='ssh comp3'
-alias c4='ssh comp4'
-alias dev='ssh dev'
+if [ $(hostname) = xpsfoo ]; then
+    alias f='fixshit.sh'
+    alias wi='sudo wifi-menu'
+    alias kf='pkill plugin-containe'
 
-alias jenkins='java -jar /home/duck/jenkins-cli.jar'
-alias nr='next-review -u invsblduck -l stackforge/cookbook'
+    alias kc='knife client list'
+    alias kcc='knife client show'
+    alias kcd='knife client delete'
 
-alias aptdate='sudo pacman -Syy'
-alias cache='pacman -Ss'
-alias pmi='sudo pacman -S'
+    alias kn='knife node list'
+    alias knn='knife node show'
+    alias kne='knife node edit'
+    alias knd='knife node delete'
 
-alias kc='knife client list'
-alias kcc='knife client show'
-alias kcd='knife client delete'
+    #alias ke='knife environment list' # function
+    alias kee='knife environment edit'
 
-alias kn='knife node list'
-alias knn='knife node show'
-alias knd='knife node delete'
-alias kee='knife environment edit'
+    alias tm=tmux
+    alias tma='tmux attach'
+    alias raxvpn='sudo vpnc rax'
+    alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
-alias tm=tmux
-alias tma='tmux attach'
-alias raxvpn='sudo vpnc rax'
-alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
-alias fc='sudo fakecloud'
+    alias g2=g2sh.pl
+    alias irc='ssh chef-server'
+    alias bcchef='ssh bc-chef'
+    alias bcapi1='ssh bc-api1'
+    alias bcapi2='ssh bc-api2'
+    alias bcnova1='ssh bc-nova1'
+    alias bcnova2='ssh bc-nova2'
+    alias fish='ssh jenkins@build.monkeypuppetlabs.com'
+    alias mb='ssh jenkins@mb'
+    alias ge='ssh gebastion@gebastion'
+    alias chef='ssh chef'
+    alias chefsf='ssh chef-stackforge'
+    alias sf1='ssh sfaio1'
+    alias f1='ssh infra1'
+    alias f2='ssh infra2'
+    alias f3='ssh infra3'
+    alias f4='ssh infra4'
+    alias c1='ssh comp1'
+    alias c2='ssh comp2'
+    alias c3='ssh comp3'
+    alias c4='ssh comp4'
+    alias dev='ssh dev'
+
+    alias fc='sudo fakecloud'
+    alias jenkins='java -jar /home/duck/jenkins-cli.jar'
+    alias nr='next-review -u invsblduck -l stackforge/cookbook'
+
+    alias r=ranger
+    alias gi='cd /git/invsblduck'
+    alias gir='cd /git/invsblduck/rcb-forks'
+    alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
+    alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
+    alias cdcd='cd /git/invsblduck/chef_dev_utils'
+    alias configs='cd /git/invsblduck/configs/home'
+    alias fcc='cd /git/stackforge'
+fi
 
 alias d='env LESS="$LESS +G" dmesg -H'
 alias dt='dmesg -Hw'
-
-alias gi='cd /git/invsblduck'
-alias gir='cd /git/invsblduck/rcb-forks'
-alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
-alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
-alias cdcd='cd /git/invsblduck/chef_dev_utils'
-alias configs='cd /git/invsblduck/configs/home'
-alias fcc='cd /git/stackforge'
 
 alias g=git
 alias gp='git --no-pager'
