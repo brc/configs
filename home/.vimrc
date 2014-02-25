@@ -320,10 +320,14 @@ nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 " Fugitive
 """"""""""
 nmap ,gt :Gstatus<CR>
-nmap ,gl :Glog<CR>
+nmap ,gl :Glog --<CR>
+nmap ,gL :Glog -- %
+nmap ,gr :Ggrep 
 nmap ,gb :Gblame<CR>
+nmap ,ge :Gedit<CR>
 nmap ,gw :Gwrite<CR>
-nmap ,gr :Gread<CR>
+nmap ,gR :Gread<CR>
+nmap ,gd :Gdiff<CR>
 nmap ,gc :Gcommit<CR>
 
 
@@ -358,3 +362,8 @@ let g:tagbar_iconchars = ['+', '-']
 " disable default plugin bindings
 let g:toggle_list_no_mappings = 1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Fugitive
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" show current branch
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
