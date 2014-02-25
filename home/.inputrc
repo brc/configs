@@ -18,3 +18,4 @@ M-p: dabbrev-expand
 "\M-w": "|while read x; do ; done"
 "\M-r": "|recolorize_grep.sh "
 "\M-x": "|xargs "
+"\M-c": "|count "
