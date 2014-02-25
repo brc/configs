@@ -243,8 +243,8 @@ nmap ,gn 99h
 " QuickFix window
 """""""""""""""""
 "toggle/focus (very bottom)
-nmap ,ff :call ToggleQuickfixList()<CR>
-nmap ,gf 99j
+nmap ,qq :call ToggleQuickfixList()<CR>
+nmap ,gq 99j
 
 " MBE window
 """"""""""""
@@ -306,6 +306,7 @@ map h z10h
 " Toggle folds
 """"""""""""""
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+map ,f zi
 
 " Vimgrep
 """""""""
@@ -321,6 +322,8 @@ nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 nmap ,gt :Gstatus<CR>
 nmap ,gl :Glog<CR>
 nmap ,gb :Gblame<CR>
+nmap ,gw :Gwrite<CR>
+nmap ,gr :Gread<CR>
 nmap ,gc :Gcommit<CR>
 
 
