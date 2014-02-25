@@ -89,19 +89,19 @@ augroup END
 " unimpairedPaste from Tim Pope
 " (set `paste' for current insert only)
 "
-function! Setup_paste() abort
-  let s:paste = &paste
-  set paste
-endfunction
-
-augroup unimpaired_paste
-  autocmd!
-  autocmd InsertLeave *
-        \ if exists('s:paste') |
-        \ let &paste = s:paste |
-        \ unlet s:paste |
-        \ endif
-augroup END
+"function! Setup_paste() abort
+"  let s:paste = &paste
+"  set paste
+"endfunction
+"
+"augroup unimpaired_paste
+"  autocmd!
+"  autocmd InsertLeave *
+"        \ if exists('s:paste') |
+"        \ let &paste = s:paste |
+"        \ unlet s:paste |
+"        \ endif
+"augroup END
 
 
 " Automatically show global/local quickfix windows
@@ -220,14 +220,14 @@ cmap     <C-k>      <Nop>
 
 " unimpairedPaste
 """""""""""""""""
-nnoremap <silent> yp :call <SID>Setup_paste()<CR>a
-nnoremap <silent> yP :call <SID>Setup_paste()<CR>i
-nnoremap <silent> yo :call <SID>Setup_paste()<CR>o
-nnoremap <silent> yO :call <SID>Setup_paste()<CR>O
-nnoremap <silent> yA :call <SID>Setup_paste()<CR>A
-nnoremap <silent> yI :call <SID>Setup_paste()<CR>I
-nnoremap <silent> ygi :call <SID>Setup_paste()<CR>gi
-nnoremap <silent> ygI :call <SID>Setup_paste()<CR>gI
+"nnoremap <silent> yp :call Setup_paste()<CR>a
+"nnoremap <silent> yP :call Setup_paste()<CR>i
+"nnoremap <silent> yo :call Setup_paste()<CR>o
+"nnoremap <silent> yO :call Setup_paste()<CR>O
+"nnoremap <silent> yA :call Setup_paste()<CR>A
+"nnoremap <silent> yI :call Setup_paste()<CR>I
+"nnoremap <silent> ygi :call Setup_paste()<CR>gi
+"nnoremap <silent> ygI :call Setup_paste()<CR>gI
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ NB: Some commands below use raw control characters (^O, ^W, etc)
@@ -272,7 +272,7 @@ nmap ,ww p
 nmap <F1> :set paste<CR>
 nmap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
-inoremap <F1> :call Setup_paste()<CR>
+"inoremap <F1> :call Setup_paste()<CR>
 
 """
 "map <F6>
