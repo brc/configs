@@ -38,3 +38,6 @@ imap <buffer> <LocalLeader>ech echo ""<ESC>i
 
 map <buffer> <LocalLeader>func ifunction () {<CR>}<ESC>k$bi
 imap <buffer> <LocalLeader>func function () {<CR>}<ESC>k$bi
+
+map <buffer> <LocalLeader>al ialias =''<ESC>Bi
+imap <buffer> <LocalLeader>al alias =''<ESC>Bi
