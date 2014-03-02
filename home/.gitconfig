@@ -2,6 +2,9 @@
     email = invsblduck@gmail.com
     name = Brett Campbell
 
+[init]
+	templatedir = ~/.git_template
+
 [push]
     default = simple
 
@@ -12,19 +15,20 @@
     branch = true
 
 [alias]
-    b   = branch 
-    co  = checkout
-    cob = checkout -b
-    com = checkout master
-    d   = diff
-    fu  = fetch upstream
-    s   = status
-    sh  = show
-	ctags = !.git/hooks/ctags
-[gitreview]
-	username = invsblduck
-[init]
-	templatedir = ~/.git_template
+    b     = branch 
+    co    = checkout
+    cob   = checkout -b
+    com   = checkout master
+    d     = diff
+    fu    = fetch upstream
+    s     = status
+    sh    = show
+    sho   = show
+    ctags = !.git/hooks/ctags
+
 [github]
 	user = invsblduck
+
+[gitreview]
+	username = invsblduck
 
