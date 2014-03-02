@@ -127,7 +127,15 @@ autocmd FileType qf wincmd J
 "hi Nontext      term=bold       ctermfg=blue       cterm=bold
 "hi Normal       ctermfg=darkgreen
 "hi Search       term=underline cterm=underline ctermfg=magenta ctermbg=none
-color ir_black
+
+"color ir_black
+"color vividchalk
+
+" Molokai: bring the 256 color version as close as possible to the the default
+" (dark) GUI version
+"let g:rehash256 = 1
+
+color molokai
 
 " TODO: configure this so it checks xrandr for VGA output
 "color delek
