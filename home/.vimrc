@@ -249,8 +249,8 @@ nmap ,gq 99j
 " MBE window
 """"""""""""
 "toggle/focus (very top)
-nmap ,bb :MBEToggle<CR>
-nmap ,gb 99k
+nmap ,mm :MBEToggle<CR>
+nmap ,gm 99k
 
 " Tagbar window
 """""""""""""""
