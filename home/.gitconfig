@@ -25,3 +25,6 @@
 	username = invsblduck
 [init]
 	templatedir = ~/.git_template
+[github]
+	user = invsblduck
+
