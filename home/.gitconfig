@@ -1,9 +1,9 @@
 [user]
+    name  = Brett Campbell
     email = invsblduck@gmail.com
-    name = Brett Campbell
 
 [init]
-	templatedir = ~/.git_template
+    templatedir = ~/.git_template
 
 [push]
     default = simple
@@ -27,8 +27,7 @@
     ctags = !.git/hooks/ctags
 
 [github]
-	user = invsblduck
+    user = invsblduck
 
 [gitreview]
-	username = invsblduck
-
+    username = invsblduck
