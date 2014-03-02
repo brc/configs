@@ -130,6 +130,8 @@ autocmd FileType qf wincmd J
 
 "color ir_black
 "color vividchalk
+"color jellybeans
+"color inkpot
 
 " Molokai: bring the 256 color version as close as possible to the the default
 " (dark) GUI version
@@ -143,8 +145,8 @@ color molokai
 " Custom highlights
 """""""""""""""""""
 hi Search       cterm=underline,bold ctermfg=yellow ctermbg=magenta
-hi WarningMsg   ctermfg=yellow ctermbg=blue
-hi ColorColumn  ctermbg=blue ctermfg=yellow
+"hi WarningMsg   ctermfg=yellow ctermbg=blue
+"hi ColorColumn  ctermbg=blue ctermfg=yellow
 
 " Vimdiff mode
 """"""""""""""
