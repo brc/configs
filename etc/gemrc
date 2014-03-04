@@ -1,0 +1,9 @@
+# Read about the gemrc format at http://docs.rubygems.org/read/chapter/11
+
+# --user-install is used to install to $HOME/.gem/ by default since we want to separate
+#                pacman installed gems and gem installed gems
+gem: --user-install
+:gempath:
+- /home/duck/.gem/ruby/2.1.0
+- /home/duck/.gem/ruby/2.0.0
+- /usr/lib/ruby/gems/2.1.0
