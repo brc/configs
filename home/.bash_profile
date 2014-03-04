@@ -2,11 +2,32 @@
 # ~/.bash_profile
 #
 
+export GEM_HOME=~/.gem/ruby/2.1.0
+system_gems=/usr/lib/ruby/gems/2.1.0
+gempaths=(
+    ~/.gem/ruby/2.0.0
+    ${GEM_HOME}
+    ${system_gems}
+)
+export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
+
+mypaths=(
+    ~/bin
+    /usr/local/sbin
+    /usr/local/bin
+    /usr/bin
+    /usr/bin/vendor_perl
+    /usr/bin/core_perl
+    $(printf "%s/bin " "${gempaths[@]}")
+    /git/invsblduck/chef_dev_utils/rcb
+    /git/invsblduck/chef_dev_utils/stackforge
+    /git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap
+    /git/invsblduck/fakecloud
+)
+export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
+
 stty erase ^H
 export EDITOR=vim
-export PATH=~/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl:~/.gem/ruby/2.0.0/bin:~/.gem/ruby/2.0.0/gems/chef-11.4.4/bin:~/.gem/ruby/2.0.0/gems/foodcritic-2.1.0/bin:/git/invsblduck/chef_dev_utils/rcb:/git/invsblduck/chef_dev_utils/stackforge:/git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap:/git/invsblduck/fakecloud
-
-export GEM_HOME=/home/duck/.gem/ruby/2.0.0
 
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
