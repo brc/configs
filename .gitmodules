@@ -52,3 +52,6 @@
 [submodule "home/.vim/bundle/vim-easy-align"]
 	path = home/.vim/bundle/vim-easy-align
 	url = https://github.com/junegunn/vim-easy-align.git
+[submodule "home/.oh-my-zsh"]
+	path = home/.oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git
