@@ -67,6 +67,61 @@ eval "$(dircolors -b ~/.dircolors)"
 export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 
+# load some scripts
+for f in ~/.zsh/lib/*.zsh; do
+    source $f
+done
+
+# setup fpath
+fpath=(~/.zsh/fpath $fpath)
+
+# load and run compinit
+autoload -U compinit
+compinit -i -d ~/.zsh/.zcompdump-${ZSH_VERSION}
+
+# load functions
+for f in ~/.zsh/fpath/*.zsh; do
+    source $f
+done
+
+## smart urls
+autoload -U url-quote-magic
+zle -N self-insert url-quote-magic
+
+# Edit the current command line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M viins '\C-x\C-e' edit-command-line
+
+# git theming defaults
+ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
+ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt
+ZSH_THEME_GIT_PROMPT_DIRTY="*"  # text to display if branch is dirty
+ZSH_THEME_GIT_PROMPT_CLEAN=""   # text to display if branch is clean
+
+# Setup the prompt with pretty colors
+setopt prompt_subst
+#source ~/.zsh/prompts/peepcode.zsh
+source ~/.zsh/prompts/gitprompt
+#export PS1='[%~]\$ '
+#export RPROMPT='$(__git_ps1 " (%s)")'
+
+#autoload -U promptinit
+#promptinit
+#prompt walters
+
+# Uncomment following line if you want to disable autosetting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment following line if you want to  shown in the command execution time stamp 
+# in the history command output. The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|
+# yyyy-mm-dd
+#HIST_STAMPS="yyyy-mm-dd"
+
+#plugins=(gem git github knife)
+
+
+
 if which fortune >/dev/null; then
     echo -e "\e[34m"
     if which cowsay >/dev/null; then
@@ -77,7 +132,4 @@ if which fortune >/dev/null; then
     echo -e "\e[0m"
 fi
 
-#for f in ~/.bash/*; do
-#    source $f
-#done
-
+source ~/.zsh/aliases

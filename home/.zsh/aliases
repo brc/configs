@@ -21,6 +21,17 @@ alias mv='mv -i'  #
 alias cp='cp -i'  #
 
 alias ..='cd ..'
+alias pd=pushd
+alias d='dirs -v'
+alias 1='cd -'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
 
 alias grep='egrep --color=auto'     # actual commands
 alias ftp=lftp                      #
@@ -56,7 +67,6 @@ alias np='. ~/.bash_profile'
 alias j='journalctl -xab |less +G'
 alias jf='journalctl -xfab'
 alias uf='systemctl list-unit-files'
-alias pd=pushd
 alias tf='tail -f'
 
 if grep -iwq ubuntu /etc/issue; then
@@ -133,7 +143,7 @@ if [ $(hostname) = xpsfoo ]; then
     alias fcc='cd /git/stackforge'
 fi
 
-alias d='env LESS="$LESS +G" dmesg -H'
+alias dm='env LESS="$LESS +G" dmesg -H'
 alias dt='dmesg -Hw'
 
 alias g=git

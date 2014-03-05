@@ -12,3 +12,6 @@ home/.config/transmission/resume/*.resume
 home/.config/transmission/torrents/*.torrent
 
 home/.chef/servers.d/breu-chef
+
+home/.zsh/.zcompdump*
+home/.zsh/cache
