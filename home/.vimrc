@@ -269,13 +269,10 @@ nmap ,gm 99k
 nmap ,tt :TagbarToggle<CR>
 nmap ,gt 99l
 
-" Window jumping
-""""""""""""""""
-nmap ,wj j
-nmap ,wk k
-nmap ,wl l
-nmap ,wh h
-nmap ,ww p
+" Window management
+"""""""""""""""""""
+nmap ,w <c-w>
+nnoremap ,ww <c-w>p
 
 " Paste
 """""""
