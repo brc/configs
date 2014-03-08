@@ -1,3 +1,4 @@
+# vim: set tags=~/.zsh/tags :
 alias man='nocorrect man'
 alias mv='nocorrect mv'
 alias mysql='nocorrect mysql'

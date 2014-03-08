@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+TRAPINT	prompts/duck.zsh	/^function TRAPINT {$/;"	f
+__git_ps1	lib/git-prompt.zsh	/^__git_ps1 ()$/;"	f
+__git_ps1_colorize_gitstring	lib/git-prompt.zsh	/^__git_ps1_colorize_gitstring ()$/;"	f
+__git_ps1_show_upstream	lib/git-prompt.zsh	/^__git_ps1_show_upstream ()$/;"	f
+_git_log_prettily	fpath/git.plugin.zsh	/^function _git_log_prettily(){$/;"	f
+current_branch	fpath/git.plugin.zsh	/^function current_branch() {$/;"	f
+current_repository	fpath/git.plugin.zsh	/^function current_repository() {$/;"	f
+gdv	fpath/git.plugin.zsh	/^gdv() { git diff -w "$@" | view - }$/;"	f
+git_commit_id	prompts/peepcode.zsh	/^git_commit_id() {$/;"	f
+git_dirty	prompts/peepcode.zsh	/^git_dirty() {$/;"	f
+git_mode	prompts/peepcode.zsh	/^git_mode() {$/;"	f
+git_prompt	prompts/peepcode.zsh	/^git_prompt() {$/;"	f
+git_repo_path	prompts/peepcode.zsh	/^git_repo_path() {$/;"	f
+omz_termsupport_precmd	lib/termsupport.zsh	/^function omz_termsupport_precmd {$/;"	f
+omz_termsupport_preexec	lib/termsupport.zsh	/^function omz_termsupport_preexec {$/;"	f
+preexec	prompts/duck.zsh	/^function preexec {$/;"	f
+title	lib/termsupport.zsh	/^function title {$/;"	f
+work_in_progress	fpath/git.plugin.zsh	/^function work_in_progress() {$/;"	f
+zle	prompts/duck.zsh	/^function zle-keymap-select {$/;"	f
+zle	prompts/duck.zsh	/^function zle-line-finish {$/;"	f

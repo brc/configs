@@ -1,4 +1,5 @@
-# Aliases
+# vim: set tags=~/.zsh/tags :
+
 alias g='git'
 compdef g=git
 alias gst='git status'
@@ -155,6 +156,3 @@ alias gignore='git update-index --assume-unchanged'
 alias gunignore='git update-index --no-assume-unchanged'
 # list temporarily ignored files
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-
-
-

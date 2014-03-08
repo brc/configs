@@ -1,3 +1,5 @@
+# vim: set tags=~/.zsh/tags :
+
 unsetopt menu_complete   # do not autoselect the first completion entry
 setopt auto_menu         # show completion menu on succesive tab press
 #setopt complete_in_word
