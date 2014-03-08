@@ -91,7 +91,7 @@ zle -N self-insert url-quote-magic
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey -M viins '\C-x\C-e' edit-command-line
+bindkey -M viins "\ee" edit-command-line
 
 # git theming defaults
 ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
@@ -99,16 +99,15 @@ ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt
 ZSH_THEME_GIT_PROMPT_DIRTY="*"  # text to display if branch is dirty
 ZSH_THEME_GIT_PROMPT_CLEAN=""   # text to display if branch is clean
 
-# Setup the prompt with pretty colors
-setopt prompt_subst
-#source ~/.zsh/prompts/peepcode.zsh
-source ~/.zsh/prompts/gitprompt
-#export PS1='[%~]\$ '
-#export RPROMPT='$(__git_ps1 " (%s)")'
-
 #autoload -U promptinit
 #promptinit
 #prompt walters
+
+#source ~/.zsh/prompts/peepcode.zsh
+#source ~/.zsh/prompts/gitprompt
+source ~/.zsh/prompts/duck.zsh
+
+
 
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"

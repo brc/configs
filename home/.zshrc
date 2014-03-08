@@ -75,3 +75,7 @@ setopt rm_star_wait     # wait 10 seconds before accepting answer
 # jobs
 setopt check_jobs       # check for jobs before exiting shell
 setopt notify           # report bg status immediately; don't wait for prompt
+
+# prompt
+setopt prompt_subst     # expand parameter/command/arithmetic expressions
+setopt prompt_percent   # expand '%' escape sequences 
