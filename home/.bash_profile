@@ -5,9 +5,9 @@
 export GEM_HOME=~/.gem/ruby/2.1.0
 system_gems=/usr/lib/ruby/gems/2.1.0
 gempaths=(
-    ~/.gem/ruby/2.0.0
     ${GEM_HOME}
     ${system_gems}
+    ~/.gem/ruby/2.0.0
 )
 export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
 
