@@ -4,6 +4,7 @@ gitdir=$(git rev-parse --git-dir)
 
 trap "rm -f /tmp/tags.$$" EXIT
 
+# how to conditionally/intelligently use ripper-tags here?
 ctags --tag-relative -R -f /tmp/tags.$$ --exclude=$gitdir \
     --languages=-javascript,sql
 
