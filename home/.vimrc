@@ -11,6 +11,7 @@ set autoindent
 set backspace=indent,eol,start
 set backupcopy=auto
 set colorcolumn=80
+set diffopt=filler,vertical
 set expandtab
 set fileformat=unix
 set grepprg=grep\ -rsiI\ --exclude-dir=.git
@@ -152,10 +153,10 @@ hi Search       cterm=underline,bold ctermfg=yellow ctermbg=magenta
 """"""""""""""
 "if &diff
     "colorscheme <some_scheme> works here
-"    highlight DiffAdd term=reverse cterm=bold ctermbg=green ctermfg=black
-"    highlight DiffChange term=reverse cterm=none ctermbg=cyan ctermfg=black
-"    highlight DiffText term=reverse cterm=none ctermbg=blue ctermfg=white
-"    highlight DiffDelete term=reverse cterm=none ctermbg=black ctermfg=red
+    highlight DiffAdd term=reverse cterm=bold ctermbg=green ctermfg=black
+    highlight DiffChange term=reverse cterm=none ctermbg=cyan ctermfg=black
+    highlight DiffText term=reverse cterm=none ctermbg=blue ctermfg=white
+    highlight DiffDelete term=reverse cterm=none ctermbg=black ctermfg=red
 "endif
 
 
