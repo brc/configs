@@ -15,12 +15,15 @@
     branch = true
 
 [alias]
-    b     = branch 
+    b     = branch
+    c     = commit
+    ca    = commit -a
     co    = checkout
     cob   = checkout -b
     com   = checkout master
     d     = diff
     fu    = fetch upstream
+    p     = push
     s     = status
     sh    = show
     sho   = show
