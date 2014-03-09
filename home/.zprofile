@@ -1,5 +1,5 @@
 #
-# ~/.bash_profile
+# ~/.zprofile
 #
 
 export GEM_HOME=~/.gem/ruby/2.1.0
@@ -83,10 +83,10 @@ zle -N edit-command-line
 bindkey -M viins "\ee" edit-command-line
 
 # git theming defaults
-ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
-ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt
-ZSH_THEME_GIT_PROMPT_DIRTY="*"  # text to display if branch is dirty
-ZSH_THEME_GIT_PROMPT_CLEAN=""   # text to display if branch is clean
+#ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
+#ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt
+#ZSH_THEME_GIT_PROMPT_DIRTY="*"  # text to display if branch is dirty
+#ZSH_THEME_GIT_PROMPT_CLEAN=""   # text to display if branch is clean
 
 #autoload -U promptinit
 #promptinit
@@ -105,8 +105,6 @@ source ~/.zsh/prompts/duck.zsh
 # in the history command output. The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|
 # yyyy-mm-dd
 #HIST_STAMPS="yyyy-mm-dd"
-
-#plugins=(gem git github knife)
 
 
 
