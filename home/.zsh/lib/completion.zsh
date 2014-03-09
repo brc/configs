@@ -56,7 +56,7 @@ zstyle '*' single-ignored show
 
 # draw some pretty dots during completion
 expand-or-complete-with-dots() {
-    echo -n "\e[31m...\e[0m"
+    echo -n "\e[32m...\e[0m"
     zle expand-or-complete
     zle redisplay
 }
