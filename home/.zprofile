@@ -23,6 +23,7 @@ mypaths=(
     /git/invsblduck/chef_dev_utils/stackforge
     /git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap
     /git/invsblduck/fakecloud
+    /git/powerline/scripts
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
