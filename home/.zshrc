@@ -53,7 +53,7 @@ setopt no_case_match
 setopt nomatch              # bash failglob equivalent
 setopt numeric_glob_sort    # sort numeric globs in "human" order
 setopt rematch_pcre         # use pcre for =~
-#setopt sh_word_split        # split UNQUOTED parameters on spaces (like bash)
+setopt sh_word_split        # split UNQUOTED parameters on spaces (like bash)
 
 # history
 setopt append_history
