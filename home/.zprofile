@@ -26,6 +26,10 @@ mypaths=(
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
+if [ -n "$TMUX" ]; then
+    export TERM=screen-256color
+fi
+
 stty erase ^H
 export EDITOR=vim
 
@@ -47,21 +51,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
 export LESS_TERMCAP_se=$'\E[0m'         # end
 
 eval "$(dircolors -b ~/.dircolors)"
-
-#case ${TERM} in
-#  xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
-#    export PROMPT_COMMAND='printf "\033]0;%s\007" "${PWD/#$HOME/~}"'
-#    export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$ "
-#    ;;
-#  screen*)
-#    export PROMPT_COMMAND='printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-#    export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$ "
-#    ;;
-#esac
-#
-#for f in ~/.openrc ~/.bashrc; do
-#    [[ -f $f ]] && . $f
-#done
 
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
