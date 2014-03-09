@@ -67,7 +67,7 @@ GIT_PS1_SHOWCOLORHINTS='true'
 GIT_PS1_SHOWUPSTREAM='true'
 GIT_PS1_SHOWUNTRACKEDFILES='true'
 GIT_PS1_DESCRIBE_STYLE='branch'
-. ~/.zsh/lib/git-prompt.sh
+. ~/.zsh/lib/git-prompt.zsh
 
 RPROMPT='$(__git_ps1 "(%s)")'
 
