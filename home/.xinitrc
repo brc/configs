@@ -9,7 +9,7 @@ xset fp rehash
 xset r rate 180 100 &
 xmodmap /home/duck/.xmodmaprc &
 xrdb -merge /home/duck/.Xresources
-terminator -e tmux &
+terminator &
 xscreensaver </dev/null &>/dev/null &
 
 exec openbox
