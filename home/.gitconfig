@@ -24,6 +24,7 @@
     cob   = checkout -b
     com   = checkout master
     d     = diff
+    dc    = diff --cached
     fu    = fetch upstream
     p     = push
     s     = status
