@@ -36,6 +36,7 @@ alias 9='cd -9'
 alias grep='egrep --color=auto'     # actual commands
 alias ftp=lftp                      #
 alias diff=colordiff                #
+alias vi=vim                        #
                                        
 alias p='pstree -U'                     #  made-up aliases for common tasks
 alias pp='ps faxww'                     #
@@ -148,7 +149,3 @@ fi
 alias dm='env LESS="$LESS +G" dmesg -H'
 alias dt='dmesg -Hw'
 
-alias g=git
-alias gp='git --no-pager'
-alias gl='git log'
-alias go='git show'
