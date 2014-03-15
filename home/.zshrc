@@ -3,16 +3,6 @@ setopt auto_cd
 setopt auto_pushd
 setopt pushd_ignore_dups
 
-# completion
-setopt auto_list
-setopt auto_param_keys  # intelligently remove trailing space after completion
-setopt auto_param_slash
-setopt auto_remove_slash
-setopt glob_complete    # trigger menu comp for globs instead of exapanding
-setopt list_ambiguous   # auto insert unambigous parts of completions w/o menu
-setopt list_types       # show trailing character identify file type
-setopt no_list_beep     # don't fucking flash before showing menu
-
 # expansion and globbing
 setopt no_case_match
 setopt nomatch              # bash failglob equivalent

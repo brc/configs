@@ -1,11 +1,19 @@
 # vim: set tags=~/.zsh/tags :
 
-unsetopt menu_complete   # do not autoselect the first completion entry
-setopt auto_menu         # show completion menu on succesive tab press
-#setopt complete_in_word
-setopt always_to_end
-
 WORDCHARS=''
+
+setopt no_list_beep     # don't fucking flash before showing menu
+setopt no_menu_complete # don't autoselect the first completion entry
+
+setopt always_to_end    # move cursor to end of word after completion
+setopt auto_list        # automatically list choices on ambiguous completion
+setopt auto_menu        # show completion menu on succesive tab press
+setopt auto_param_keys  # intelligently remove completed chars for subkey chars
+setopt auto_param_slash # add slash instead of space if completing dir name
+setopt auto_remove_slash # remove trailing slash when next char is cmd delimeter
+setopt glob_complete    # trigger menu comp for globs instead of exapanding
+setopt list_ambiguous   # auto insert unambigous parts of completions w/o menu
+setopt list_types       # show trailing character in listing to id file type
 
 zmodload -i zsh/complist
 
@@ -73,11 +81,15 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
-# draw some pretty dots during completion
-expand-or-complete-with-dots() {
+# draw ellipsis during tab completion
+expand-or-complete-prefix-with-dots() {
     echo -n "\e[32m...\e[0m"
-    zle expand-or-complete
+    # by default you would call the standard expand-or-complete widget here,
+    # but expand-or-complete-prefix allows me to tab-complete words that have
+    # trailing characters after the cursor; see
+    # http://zsh.sourceforge.net/Guide/zshguide06.html#l145
+    zle expand-or-complete-prefix
     zle redisplay
 }
-zle -N expand-or-complete-with-dots
-bindkey "^I" expand-or-complete-with-dots
+zle -N expand-or-complete-prefix-with-dots
+bindkey "^I" expand-or-complete-prefix-with-dots
