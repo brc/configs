@@ -57,11 +57,6 @@ eval "$(dircolors -b ~/.dircolors)"
 export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 
-# load some scripts
-for f in ~/.zsh/lib/*.zsh; do
-    source $f
-done
-
 # setup fpath
 fpath=(~/.zsh/fpath $fpath)
 
@@ -70,7 +65,14 @@ autoload -U compinit
 compinit -i -d ~/.zsh/.zcompdump-${ZSH_VERSION}
 
 # load functions
+setopt null_glob  # don't bomb if glob expansion fails
 for f in ~/.zsh/fpath/*.zsh; do
+    source $f
+done
+setopt no_null_glob
+
+# run other scripts
+for f in ~/.zsh/lib/*.zsh; do
     source $f
 done
 
