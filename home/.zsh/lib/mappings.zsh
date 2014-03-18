@@ -30,6 +30,7 @@ bindkey -M viins "\e3;5~" delete-char
 bindkey -M viins "\e[3~" delete-char
 
 bindkey '^[[Z' reverse-menu-complete
+bindkey "\eh"   run-help
 
 # input macros
 #function xbacklight_dim
