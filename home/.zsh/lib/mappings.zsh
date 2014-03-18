@@ -2,34 +2,35 @@
 bindkey -v
 
 # emacs bindings
-bindkey -M viins ^b     backward-char
-bindkey -M viins ^f     forward-char
-bindkey -M viins ^a     beginning-of-line
-bindkey -M viins ^e     end-of-line
-bindkey -M viins "\eb"  backward-word
-bindkey -M viins "\ef"  forward-word
-bindkey -M viins ^h     backward-delete-char
-bindkey -M viins ^d     delete-char-or-list
-bindkey -M viins "\ed"  kill-word
-bindkey -M viins ^w     backward-kill-word
-bindkey -M viins ^k     kill-line
-bindkey -M viins ^u     kill-whole-line
-bindkey -M viins ^t     transpose-chars
-bindkey -M viins ^p     up-history
-bindkey -M viins ^n     down-history
-bindkey -M viins ^y     yank
-bindkey -M viins "\ey"  yank-pop
-bindkey -M viins "\e."  insert-last-word
-bindkey -M viins ^r     history-incremental-search-backward
-bindkey -M vicmd ^r     history-incremental-search-backward
+bindkey ^b      backward-char
+bindkey ^f      forward-char
+bindkey ^a      beginning-of-line
+bindkey ^e      end-of-line
+bindkey "\eb"   backward-word
+bindkey "\ef"   forward-word
+bindkey ^h      backward-delete-char
+bindkey ^d      delete-char-or-list
+bindkey "\ed"   kill-word
+bindkey ^w      backward-kill-word
+bindkey ^k      kill-line
+bindkey ^u      kill-whole-line
+bindkey ^t      transpose-chars
+bindkey ^p      up-history
+bindkey ^n      down-history
+bindkey ^y      yank
+bindkey "\ey"   yank-pop
+bindkey "\e."   insert-last-word
+bindkey ^r      history-incremental-search-backward
+bindkey ^r      history-incremental-search-backward
+bindkey       undo
 
 # Make the delete key work (or Fn + Delete on the Mac)
-bindkey -M viins '^?' backward-delete-char
-bindkey -M viins "\e[3~" delete-char
-bindkey -M viins "\e3;5~" delete-char
-bindkey -M viins "\e[3~" delete-char
+bindkey '^?'    backward-delete-char
+bindkey "\e[3~" delete-char
+bindkey "\e3;5~" delete-char
+bindkey "\e[3~" delete-char
 
-bindkey '^[[Z' reverse-menu-complete
+bindkey '^[[Z'  reverse-menu-complete
 bindkey "\eh"   run-help
 
 # input macros
