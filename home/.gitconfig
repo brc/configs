@@ -37,3 +37,6 @@
 
 [gitreview]
     username = invsblduck
+
+[grep]
+	patternType = extended
