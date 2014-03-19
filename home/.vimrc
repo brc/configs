@@ -282,8 +282,9 @@ nmap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
 "inoremap <F1> :call Setup_paste()<CR>
 
-"""
-"map <F6>
+" yank
+""""""
+nmap Y y$
 
 " Writing/quiting files
 """""""""""""""""""""""

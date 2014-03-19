@@ -30,6 +30,8 @@ bindkey "\e[3~" delete-char
 bindkey "\e3;5~" delete-char
 bindkey "\e[3~" delete-char
 
+# other misc mappings
+bindkey -M vicmd 'Y' vi-yank-eol
 bindkey '^[[Z'  reverse-menu-complete
 bindkey "\eh"   run-help
 
