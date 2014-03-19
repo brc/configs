@@ -13,6 +13,7 @@ setopt sh_word_split        # split UNQUOTED parameters on spaces (like bash)
 # history
 setopt append_history
 setopt extended_history     # `: <beginning time>:<elapsed seconds>;<command>'
+setopt hist_allow_clobber   # add `|' to output redirections in history
 setopt hist_find_no_dups    # unique events only (for ^R)
 setopt hist_ignore_dups     # only for contiguous events
 setopt hist_verify          # expand bang commands instead of executing them
