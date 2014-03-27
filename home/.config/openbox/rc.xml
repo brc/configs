@@ -254,7 +254,7 @@
     -->
     <!-- Keybindings for windows -->
     <keybind key="A-F10">
-        <action name="ToggleMaximize"/>
+      <action name="ToggleMaximize"/>
     </keybind>
     <keybind key="S-A-F10">
       <action name="ToggleMaximize">
@@ -267,13 +267,13 @@
       </action>
     </keybind>
     <keybind key="A-F9">
-        <action name="Iconify"/>
+      <action name="Iconify"/>
     </keybind>
     <keybind key="A-F8">
-        <action name="ToggleShade"/>
+      <action name="ToggleShade"/>
     </keybind>
     <keybind key="A-F5">
-        <action name="ToggleOmnipresent"/>
+      <action name="ToggleOmnipresent"/>
     </keybind>
     <keybind key="A-Escape">
       <action name="Lower"/>
