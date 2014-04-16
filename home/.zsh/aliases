@@ -141,6 +141,7 @@ if [ $(hostname) = xpsfoo ]; then
 
     alias r=ranger
     alias gi='cd /git/invsblduck'
+    alias gib='cd /git/invsblduck/bin'
     alias gir='cd /git/invsblduck/rcb-forks'
     alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
     alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
