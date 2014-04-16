@@ -387,3 +387,5 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 let g:gist_post_private = 1
 let g:gist_show_privates = 1
 let g:gist_open_browser_after_post = 1
+
+autocmd Filetype yaml set fdm=indent
