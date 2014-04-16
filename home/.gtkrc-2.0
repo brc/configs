@@ -1,5 +1,5 @@
 # -- THEME AUTO-WRITTEN DO NOT EDIT
-include "/home/duck/.themes/elementary Dark/gtk-2.0/gtkrc"
+include "/usr/share/themes/delorean-dark-theme-3.9/gtk-2.0/gtkrc"
 
 include "/home/duck/.gtkrc.mine"
 
