@@ -8,9 +8,9 @@
 #
 
 # Confusingly, i'm aliasing run-help to 'nocorrect run-help' so
-# it doesn't ask me this kind of shit when i invoke it:
+# it doesn't ask me this kind of shit:
 #
-#   /git/invsblduck/configs> run-help git                                          (master *% u=)
+#   /git/invsblduck/configs> run-help git
 #   zsh: correct 'git' to '.git' [nyae]?
 #
 alias run-help='nocorrect run-help'
@@ -22,4 +22,5 @@ alias mysql='nocorrect mysql'
 alias mkdir='nocorrect mkdir'
 alias gist='nocorrect gist'
 
-setopt correct_all
+setopt no_correct_all
+setopt correct
