@@ -354,7 +354,7 @@ vmap <Enter> <Plug>(EasyAlign)
 """ NERDTree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " don't use unicode arrow glyphs
-let NERDTreeDirArrows = 0
+"let NERDTreeDirArrows = 0
 let NERDTreeHijackNetrw = 1
 let NERDTreeShowBookmarks = 1
 let NERDTreeShowHidden = 1
