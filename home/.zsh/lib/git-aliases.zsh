@@ -4,72 +4,72 @@ function current_branch {
 
 # git
 alias g=git
-alias gm='g --no-pager'
+alias gm='git --no-pager'
 
 # log
-alias gl='g log --stat'
+alias gl='git log --stat'
 alias glm='gm log'
 
-alias gll='g log --oneline'
+alias gll='git log --oneline'
 alias gllm='gm log --oneline'
 
-alias glg='g log --grep'
+alias glg='git log --grep'
 alias glgm='gm log --grep'
 
 # show
-alias go='g show'
+alias go='git show'
 alias gom='gm show'
 
 # whatchanged
-alias gw='g whatchanged -p --pretty=medium'
+alias gw='git whatchanged -p --pretty=medium'
 
 # fetch
-alias gf='g fetch'
-alias gfu='g fetch upstream'
+alias gf='git fetch'
+alias gfu='git fetch upstream'
 
 # pull
-alias gp='g pull'
-alias gpu='g pull upstream'
+alias gp='git pull'
+alias gpu='git pull upstream'
 
 # remote
-alias gr='g remote'
-alias grv='g remote -v'
+alias gr='git remote'
+alias grv='git remote -v'
 
 # status
-alias gg='g status'
+alias gg='git status'
 
 # stash
-alias gt='g stash'
-alias gts='g stash show'
-alias gtp='g stash pop'
+alias gt='git stash'
+alias gts='git stash show'
+alias gtp='git stash pop'
 
 # checkout
-alias gco='g checkout'
-alias gcom='g checkout master'
-alias gcob='g checkout -b'
+alias gco='git checkout'
+alias gcom='git checkout master'
+alias gcob='git checkout -b'
 
 # diff
-alias gd='g diff'
+alias gd='git diff'
 alias gdm='gm diff'
 alias gdc='git diff --cached'
 alias gdcm='gm diff --cached'
 
 # add
-alias ga='g add'
-alias gaa='g add -A'
+alias ga='git add'
+alias gaa='git add -A'
 
 # cherry
-alias gcp='g cherry-pick'
+alias gcp='git cherry-pick'
 
 # commit
-alias gc='g commit'
-alias gca='g commit -a'
-alias gcA='g commit --amend'
-alias gcaA='g commit -a --amend'
+alias gc='git commit'
+alias gca='git commit -a'
+alias gcA='git commit --amend'
+alias gcaA='git commit -a --amend'
 
 # push
-alias gpp='g push'
-alias gppo='g push origin $(current_branch):$(current_branch)'
+alias gpp='git push'
+alias gppo='git push origin $(current_branch):$(current_branch)'
 
 # pull-request
 alias hpr='hub pull-request'
