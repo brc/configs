@@ -7,12 +7,15 @@ keysym grave = Escape Escape
 keysym slash = apostrophe quotedbl
 keysym apostrophe = slash question
 
-remove Lock = Caps_Lock
-remove Control = Control_L
-keysym Control_L = Caps_Lock
-keysym Caps_Lock = Control_L
-add Lock = Caps_Lock
-add Control = Control_L  
+! Don't swap CapsLock/Control when running under VirtualBox on OSX
+!
+!   remove Lock = Caps_Lock
+!   remove Control = Control_L
+!   keysym Control_L = Caps_Lock
+!   keysym Caps_Lock = Control_L
+!   add Lock = Caps_Lock
+!   add Control = Control_L  
+
 
 ! For apple bluetooth kbd:
 !   map "Command" key (which is "Super") to Alt
