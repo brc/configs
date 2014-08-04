@@ -1,7 +1,9 @@
 #!/bin/sh -e
 
 gitdir=$(git rev-parse --git-dir)
-trap "rm -f ${gitdir}/tags.$$" EXIT
+mkdir ${gitdir}/tags_lock 2>/dev/null || exit 0
+
+trap "rm -rf ${gitdir}/tags_lock; rm -f ${gitdir}/tags.$$" EXIT
 
 # how to conditionally/intelligently use ripper-tags here?
 ctags --tag-relative -R -f ${gitdir}/tags.$$ --exclude=${gitdir} \
