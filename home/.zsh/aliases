@@ -108,7 +108,11 @@ if [ $(hostname) = archie ]; then
 
     alias tm=tmux
     alias tma='tmux attach'
+
+    alias vppn='pgrep -lfa vpnc'
     alias rubvpn='sudo vpnc rubicon'
+    alias goudavpn='sudo vpnc gouda'
+    alias ricevpn='sudo vpnc rice'
     alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
     alias g2=g2sh.pl
