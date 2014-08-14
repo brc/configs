@@ -267,7 +267,7 @@ nmap ,gm 99k
 """""""""""""""
 "toggle/focus (far right)
 nmap ,tt :TagbarToggle<CR>
-nmap ,gt 99l
+nmap ,gT 99l
 
 " Window management
 """""""""""""""""""
