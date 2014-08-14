@@ -31,6 +31,7 @@
     sh    = show
     sho   = show
     ctags = !.git/hooks/ctags
+    emc   = !git-emc.sh
 
 [github]
     user = invsblduck
