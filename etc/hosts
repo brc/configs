@@ -4,25 +4,19 @@
 # soho shit
 192.168.1.1     routy routey
 
-# lab shit
-10.127.52.106   monkeybutler04 mb
-
 # public cloud shit
 198.61.212.8    chef-server irc
-166.78.183.153  bc-chef
-166.78.165.28   bc-api1 api1
-166.78.167.26   bc-api2 api2
-50.56.179.132   bc-nova1 nova1
-166.78.24.141   bc-nova2 nova2
-166.78.142.209  breu-chef
+#166.78.183.153  bc-chef
+#166.78.165.28   bc-api1 api1
+#166.78.167.26   bc-api2 api2
+#50.56.179.132   bc-nova1 nova1
+#166.78.24.141   bc-nova2 nova2
+#166.78.142.209  breu-chef
 
 # fakecloud shit
 172.16.0.1      fcrouter
 172.16.0.100    chef
-172.16.0.101    chef-stackforge chefsf
-172.16.0.181    infra1
-172.16.0.185    infra2
-172.16.0.205    comp1
-172.16.0.247    infra3
-172.16.0.240    sfaio1
-172.16.0.99     dev
+
+# gouda vegas shit
+10.130.112.9    vgas
+10.130.112.10   vgvc
