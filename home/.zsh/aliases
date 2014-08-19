@@ -117,27 +117,9 @@ if [ $(hostname) = archie ]; then
 
     alias g2=g2sh.pl
     alias irc='ssh chef-server'
-    alias bcchef='ssh bc-chef'
-    alias bcapi1='ssh bc-api1'
-    alias bcapi2='ssh bc-api2'
-    alias bcnova1='ssh bc-nova1'
-    alias bcnova2='ssh bc-nova2'
-    alias fish='ssh jenkins@build.monkeypuppetlabs.com'
-    alias mb='ssh jenkins@mb'
-    alias ge='ssh gebastion@gebastion'
     alias chef='ssh chef'
-    alias chefsf='ssh chef-stackforge'
-    alias sf1='ssh sfaio1'
-    alias f1='ssh infra1'
-    alias f2='ssh infra2'
-    alias f3='ssh infra3'
-    alias f4='ssh infra4'
-    alias c1='ssh comp1'
-    alias c2='ssh comp2'
-    alias c3='ssh comp3'
-    alias c4='ssh comp4'
-    alias dev='ssh $(vm_ip.sh dev-sandbox)'
-    alias d1='ssh $(vm_ip.sh docker)'
+    alias as-lsvg02='ssh as-lsvg02'
+    alias nf-lsvg02='ssh root@nf-lsvg02'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
@@ -146,12 +128,9 @@ if [ $(hostname) = archie ]; then
     alias r=ranger
     alias gi='cd /git/invsblduck'
     alias gib='cd /git/invsblduck/bin'
-    alias gir='cd /git/invsblduck/rcb-forks'
-    alias rcc='cd /git/rcbops/chef-cookbooks/cookbooks'
-    alias rcj='cd /git/rcbops/jenkins-chef-nova-dingus'
+    alias gec='cd /git/emcrubicon/campbb6'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias configs='cd /git/invsblduck/configs/home'
-    alias fcc='cd /git/stackforge'
 fi
 
 alias dm='env LESS="$LESS +G" dmesg -H'

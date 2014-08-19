@@ -18,5 +18,6 @@
 172.16.0.100    chef
 
 # gouda vegas shit
-10.130.112.9    vgas
-10.130.112.10   vgvc
+10.130.112.9    as-lsvg02
+10.130.112.10   vipr-lsvg02-evil
+172.29.120.145  nf-lsvg02
