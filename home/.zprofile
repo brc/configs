@@ -19,9 +19,7 @@ mypaths=(
     /usr/bin/vendor_perl
     /usr/bin/core_perl
     $(printf "%s/bin " "${gempaths[@]}")
-    /git/invsblduck/chef_dev_utils/rcb
-    /git/invsblduck/chef_dev_utils/stackforge
-    /git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap
+    /git/emcrubicon/campbb6/dev-utils/bin
     /git/invsblduck/fakecloud
     /git/powerline/scripts
 )
