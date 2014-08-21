@@ -56,10 +56,11 @@ ${terminfo[cud1]}"
 mode='%{${terminfo_down_sc}${vimode}${terminfo[rc]}%}'
 
 # variables for $PROMPT
+host="%{${fg[red]}%}%m%{${reset_color}%}"
 cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
-close="%{${fg[black]}%}>%{${reset_color}%} "        # >
+close="%{${fg[blue]}%}>%{${reset_color}%} "        # >
 
-PROMPT="${mode}${cwdpath}${close}"
+PROMPT="${mode}${host} ${cwdpath}${close}"
 
 GIT_PS1_SHOWDIRTYSTATE='true'
 GIT_PS1_SHOWSTASHSTATE='true'
