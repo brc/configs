@@ -25,14 +25,14 @@ alias gw='git whatchanged -p --pretty=medium'
 
 # fetch
 alias gf='git fetch'
-alias gfu='git fetch upstream'
+alias gfu='git fetch -v upstream'
 
 # pull
 alias gp='git pull'
 alias gpu='git pull upstream'
 
 # remote
-alias gr='git remote'
+#alias gr='git remote'  # conflicts with `grep -rsiI' alias
 alias grv='git remote -v'
 
 # status
@@ -58,6 +58,9 @@ alias gdcm='gm diff --cached'
 alias ga='git add'
 alias gaa='git add -A'
 
+# reset
+alias grh='git reset HEAD'
+
 # cherry
 alias gcp='git cherry-pick'
 
@@ -72,7 +75,7 @@ alias gpp='git push'
 alias gppo='git push origin $(current_branch):$(current_branch)'
 
 # pull-request
-alias hpr='hub pull-request'
+alias hpr='hub pull-request -b'
 
 # go to root of repo
 alias g/='cd $(git rev-parse --show-toplevel || echo ".")'
