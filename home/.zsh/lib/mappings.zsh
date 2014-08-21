@@ -47,16 +47,13 @@ bindkey "\eh"   run-help
 bindkey -s ^_d "^u xbacklight - 10 -time 1 -steps 1\n"
 bindkey -s ^_b "^u xbacklight + 10 -time 1 -steps 1\n"
 
-bindkey -s "\eg" "i|grep -i "
-bindkey -s "\eg" "i|grep -i "
-
 bindkey -s "\ea" "|awk '{print $}'^B^B"
+bindkey -s "\ec" "|count "
 bindkey -s "\eg" "|grep -i "
 bindkey -s "\el" "|less"
 bindkey -s "\en" ">/dev/null "
 bindkey -s "\eq" "pacman -Q"
+bindkey -s "\er" "|recolorize_grep.sh "
 bindkey -s "\es" "|sed 's///'^B^B^B"
 bindkey -s "\ew" "|while read x; do ; done^B^B^B^B^B^B"
-bindkey -s "\er" "|recolorize_grep.sh "
 bindkey -s "\ex" "|xargs "
-bindkey -s "\ec" "|count "
