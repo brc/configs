@@ -114,7 +114,7 @@ Plugin {
 Plugin {
     type = netstatus
     Config {
-        iface=wlp4s0
+        iface=enp0s3
     }
 }
 
