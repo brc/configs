@@ -57,6 +57,7 @@ alias gdcm='gm diff --cached'
 # add
 alias ga='git add'
 alias gaa='git add -A'
+alias gau='git add -u'
 
 # reset
 alias grh='git reset HEAD'
