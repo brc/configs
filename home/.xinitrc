@@ -1,22 +1,32 @@
 #exec gnome-session
-
 #xsetroot -cursor_name left_ptr &
-setxkbmap dvorak &
-lxpanel &
-#batti &
-xset +fp /usr/share/fonts/local
-xset fp rehash
 
-# Lower key-repeat rate to run in VirtualBox
+xrdb -merge /home/duck/.Xresources
+lxpanel &
+xset +fp /usr/share/fonts/local
+xset fp rehash &
+setxkbmap dvorak 
+xmodmap /home/duck/.xmodmaprc &
+terminator &
+
+#################################################
+# THINGS TO CHANGE FOR RUNNING UNDER VIRTUALBOX #
+#################################################
+
+# Lower key-repeat rate
 #xset r rate 180 100 &
 xset r rate 180 50 &
 
-xmodmap /home/duck/.xmodmaprc &
-xrdb -merge /home/duck/.Xresources
-terminator &
+# Shut off Xorg screensaver
 #xscreensaver </dev/null &>/dev/null &
+xset -dpms &
+xset s off &
 
-# For running in VirtualBox
+# Don't much with battery info
+#batti &
+
+# Start client services (for shared clipboard, seamless mode, etc)
 VBoxClient-all &
 
+#--
 exec openbox
