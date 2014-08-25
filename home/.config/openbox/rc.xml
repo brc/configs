@@ -42,7 +42,7 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>delorean-dark-theme-3.9</name>
+    <name>Squadron</name>
     <titleLayout>CNLIM</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
