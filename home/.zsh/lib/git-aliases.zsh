@@ -8,17 +8,17 @@ alias gm='git --no-pager'
 
 # log
 alias gl='git log --stat'
-alias glm='gm log'
+alias glm='git --no-pager log'
 
 alias gll='git log --oneline'
-alias gllm='gm log --oneline'
+alias gllm='git --no-pager log --oneline'
 
 alias glg='git log --grep'
-alias glgm='gm log --grep'
+alias glgm='git --no-pager log --grep'
 
 # show
 alias go='git show'
-alias gom='gm show'
+alias gom='git --no-pager show'
 
 # whatchanged
 alias gw='git whatchanged -p --pretty=medium'
@@ -27,9 +27,18 @@ alias gw='git whatchanged -p --pretty=medium'
 alias gf='git fetch'
 alias gfu='git fetch -v upstream'
 
+# merge
+alias gmum='git merge upstream/master'
+
 # pull
 alias gp='git pull'
 alias gpu='git pull upstream'
+
+# branch
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
 
 # remote
 #alias gr='git remote'  # conflicts with `grep -rsiI' alias
@@ -40,7 +49,8 @@ alias gg='git status'
 
 # stash
 alias gt='git stash'
-alias gts='git stash show'
+alias gtl='git --no-pager stash list'
+alias gts='git stash show -p'
 alias gtp='git stash pop'
 
 # checkout
@@ -50,9 +60,10 @@ alias gcob='git checkout -b'
 
 # diff
 alias gd='git diff'
-alias gdm='gm diff'
+alias gdm='git --no-pager diff'
 alias gdc='git diff --cached'
-alias gdcm='gm diff --cached'
+alias gdcm='git --no-pager diff --cached'
+alias gdum='git log -p HEAD..upstream/master'
 
 # add
 alias ga='git add'

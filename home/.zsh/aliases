@@ -48,7 +48,7 @@ alias count='wc -l'                     #
 alias chx='chmod a+x'                   #
 alias chw='sudo chmod a+w'              #
 alias chr='sudo chmod a-w'              #
-alias chb='sudo chown duck:users'       #
+alias chb='sudo chown duck:duck'        #
 alias untargzip='tar xvzf'
 alias untarbzip='tar xvjf'
 alias n='sudo ss -ltpn'
@@ -112,8 +112,8 @@ if [ $(hostname) = archie ]; then
     alias tma='tmux attach'
 
     alias vppn='pgrep -lfa vpnc'
-    alias rubvpn='sudo vpnc rubicon'
-    alias goudavpn='sudo vpnc gouda'
+    alias rubvpn='sudo vpnc stgr01'
+    alias goudavpn='sudo vpnc lsvg02'
     alias ricevpn='sudo vpnc rice'
     alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
@@ -122,15 +122,17 @@ if [ $(hostname) = archie ]; then
     alias chef='ssh chef'
     alias as-lsvg02='ssh as-lsvg02'
     alias nf-lsvg02='ssh root@nf-lsvg02'
+    alias nf-lsvg02-test='ssh root@nf-lsvg02-test'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
-    alias r=ranger
+    alias r="python3 `which ranger`"
     alias gi='cd /git/invsblduck'
     alias gib='cd /git/invsblduck/bin'
     alias gec='cd /git/emcrubicon/campbb6'
+    alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias configs='cd /git/invsblduck/configs/home'
 fi
