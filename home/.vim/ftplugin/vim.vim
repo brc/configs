@@ -13,3 +13,4 @@ imap <buffer> .e <lt>ESC>
 imap <buffer> .c <lt>CR>
 imap <buffer> .t <lt>TAB>
 imap <buffer> .b <lt>BS>
+imap <buffer> .s <lt>SPACE>
