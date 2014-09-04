@@ -23,10 +23,13 @@ title_inactive_fg_color = colour249
     cursor_color = "magenta"
     #cursor_shape = "underline"
     custom_command = "tmux -2 -u"
-    #foreground_color = "#FFFFFF"
+    foreground_color = "#FFFFFF"
     scroll_on_output = False
     scrollback_lines = 500
     use_custom_command = True
     use_theme_colors = False
     visible_bell = True
     word_chars = '-A-Za-z0-9,./?%&#:_~'
+
+#    background_color = "#FFFFFF"
+#    foreground_color = "#000000"
