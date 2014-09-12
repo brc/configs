@@ -64,3 +64,6 @@
 [submodule "home/.vim/bundle/Vim-Jinja2-Syntax"]
 	path = home/.vim/bundle/Vim-Jinja2-Syntax
 	url = https://github.com/Glench/Vim-Jinja2-Syntax
+[submodule "home/.vim/bundle/salt-vim"]
+	path = home/.vim/bundle/salt-vim
+	url = https://github.com/saltstack/salt-vim
