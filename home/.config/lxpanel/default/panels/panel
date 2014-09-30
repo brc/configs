@@ -61,12 +61,6 @@ Plugin {
         Button {
             id=firefox.desktop
         }
-        Button {
-            id=/usr/share/applications/virtualbox.desktop
-        }
-        Button {
-            id=/usr/share/applications/virt-manager.desktop
-        }
     }
 }
 
