@@ -2,24 +2,23 @@
 127.0.0.1       localhost.localdomain   localhost
 
 # soho shit
-192.168.1.1     routy routey
+192.168.1.1     routey
 
 # public cloud shit
 198.61.212.8    chef-server irc
-#166.78.183.153  bc-chef
-#166.78.165.28   bc-api1 api1
-#166.78.167.26   bc-api2 api2
-#50.56.179.132   bc-nova1 nova1
-#166.78.24.141   bc-nova2 nova2
-#166.78.142.209  breu-chef
 
 # fakecloud shit
 172.16.0.1      fcrouter
 172.16.0.100    chef
 
 # gouda vegas shit
-10.130.112.9    as-lsvg02
-10.130.112.10   vc-lsvg02-evil
-172.29.120.139  vc-lsvg02
-172.29.120.145  nf-lsvg02
-172.29.120.150  nf-lsvg02-test
+10.130.112.9    allspark-lsvg02
+10.130.112.10   vipr-lsvg02-evil
+172.29.120.139  vipr-lsvg02
+172.29.120.145  nile-lsvg02
+172.29.120.150  nile-lsvg02-test
+10.131.136.199  plato-lsvg02
+10.130.112.75   salt01-lsvg02
+10.130.112.76   salt02-lsvg02
+10.130.114.74   smtp02-lsvg02
+10.130.114.75   proxy01-lsvg02
