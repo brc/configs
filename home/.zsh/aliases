@@ -59,6 +59,7 @@ alias gra='grep -rsIi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
 alias t='tree -aCI .git'
 alias r='sudo -i'
 alias r2='ssh -l root'
+alias pubkey='cat ~/.ssh/id_rsa.pub'
 alias vv='vim ~/.vimrc'
 alias va='vim ~/.zsh/aliases'
 alias vp='vim ~/.zprofile'
@@ -74,6 +75,7 @@ alias vh='vim /etc/hosts'
 alias j='journalctl -xab |less +G'
 alias jf='journalctl -xfab'
 alias uf='systemctl list-unit-files'
+alias qs='sudo systemctl'
 alias tf='tail -f'
 
 if grep -iwq ubuntu /etc/issue; then
@@ -91,7 +93,7 @@ fi
 
 alias rcc='cd /var/chef/cache/cookbooks'
 
-if [ $(hostname) = archie ]; then
+if [[ $(hostname) =~ archie ]]; then
     alias f='fixshit.sh'
     alias wi='sudo wifi-menu'
     alias kf='pkill plugin-containe'
@@ -120,9 +122,14 @@ if [ $(hostname) = archie ]; then
     alias g2=g2sh.pl
     alias irc='ssh chef-server'
     alias chef='ssh chef'
-    alias as-lsvg02='ssh as-lsvg02'
-    alias nf-lsvg02='ssh root@nf-lsvg02'
-    alias nf-lsvg02-test='ssh root@nf-lsvg02-test'
+    alias allspark-lsvg02='ssh allspark-lsvg02'
+    alias nile-lsvg02='ssh root@nile-lsvg02'
+    alias nile-lsvg02-test='ssh root@nile-lsvg02-test'
+    alias plato-lsvg02='ssh 10.131.136.199'    # depends on ~/.ssh/config
+    alias salt01-lsvg02='ssh root@salt01-lsvg02'
+    alias salt02-lsvg02='ssh root@salt02-lsvg02'
+    alias proxy01-lsvg02='ssh root@proxy01-lsvg02'
+    alias smtp02-lsvg02='ssh root@smtp02-lsvg02'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
@@ -131,8 +138,11 @@ if [ $(hostname) = archie ]; then
     alias r="python3 `which ranger`"
     alias gi='cd /git/invsblduck'
     alias gib='cd /git/invsblduck/bin'
+    alias ge='cd /git/emcrubicon'
     alias gec='cd /git/emcrubicon/campbb6'
     alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
+    alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
+    alias gei='cd /git/emcrubicon/iaas'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias configs='cd /git/invsblduck/configs/home'
 fi
