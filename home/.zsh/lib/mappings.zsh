@@ -20,6 +20,7 @@ bindkey ^n      down-history
 bindkey ^y      yank
 bindkey "\ey"   yank-pop
 bindkey "\e."   insert-last-word
+bindkey "\ep"   _history-complete-older
 bindkey ^r      history-incremental-search-backward
 bindkey ^r      history-incremental-search-backward
 bindkey       undo

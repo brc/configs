@@ -29,6 +29,12 @@ zstyle ':completion:*:*:*:*:processes' \
 zstyle ':completion:*:*:kill:*:processes' \
     list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
+# enable readline equivalent of dabbrev-expand
+zstyle ':completion:history-words:*:history-words' stop yes
+zstyle ':completion:history-words:*:history-words' list no
+zstyle ':completion:history-words:*' remove-all-dups yes
+zstyle ':completion:history-words:*' menu yes
+
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' \
     tag-order local-directories directory-stack path-directories
