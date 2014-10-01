@@ -12,13 +12,15 @@
 172.16.0.100    chef
 
 # gouda vegas shit
-10.130.112.9    allspark-lsvg02
-10.130.112.10   vipr-lsvg02-evil
-172.29.120.139  vipr-lsvg02
-172.29.120.145  nile-lsvg02
-172.29.120.150  nile-lsvg02-test
-10.131.136.199  plato-lsvg02
-10.130.112.75   salt01-lsvg02
-10.130.112.76   salt02-lsvg02
-10.130.114.74   smtp02-lsvg02
-10.130.114.75   proxy01-lsvg02
+10.130.112.9    allspark-lsvg01
+10.130.112.10   vipr-lsvg01-evil
+172.29.120.139  vipr-lsvg01
+172.29.120.145  nile-lsvg01
+172.29.120.150  nile-lsvg01-test
+10.131.136.199  plato-lsvg01
+10.130.112.75   salt01-lsvg01
+10.130.112.76   salt02-lsvg01
+10.130.114.74   smtp02-lsvg01
+10.130.114.75   proxy01-lsvg01
+
+10.130.112.139  dc01.lsvg01.osaas.rcsops.com

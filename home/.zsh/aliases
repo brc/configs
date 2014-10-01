@@ -115,21 +115,21 @@ if [[ $(hostname) =~ archie ]]; then
 
     alias vppn='pgrep -lfa vpnc'
     alias rubvpn='sudo vpnc stgr01'
-    alias goudavpn='sudo vpnc lsvg02'
+    alias goudavpn='sudo vpnc lsvg01'
     alias ricevpn='sudo vpnc rice'
     alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
     alias g2=g2sh.pl
     alias irc='ssh chef-server'
     alias chef='ssh chef'
-    alias allspark-lsvg02='ssh allspark-lsvg02'
-    alias nile-lsvg02='ssh root@nile-lsvg02'
-    alias nile-lsvg02-test='ssh root@nile-lsvg02-test'
-    alias plato-lsvg02='ssh 10.131.136.199'    # depends on ~/.ssh/config
-    alias salt01-lsvg02='ssh root@salt01-lsvg02'
-    alias salt02-lsvg02='ssh root@salt02-lsvg02'
-    alias proxy01-lsvg02='ssh root@proxy01-lsvg02'
-    alias smtp02-lsvg02='ssh root@smtp02-lsvg02'
+    alias allspark-lsvg01='ssh allspark-lsvg01'
+    alias nile-lsvg01='ssh root@nile-lsvg01'
+    alias nile-lsvg01-test='ssh root@nile-lsvg01-test'
+    alias plato-lsvg01='ssh 10.131.136.199'    # depends on ~/.ssh/config
+    alias salt01-lsvg01='ssh root@salt01-lsvg01'
+    alias salt02-lsvg01='ssh root@salt02-lsvg01'
+    alias proxy01-lsvg01='ssh root@proxy01-lsvg01'
+    alias smtp02-lsvg01='ssh root@smtp02-lsvg01'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
