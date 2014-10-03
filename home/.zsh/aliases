@@ -130,6 +130,10 @@ if [[ $(hostname) =~ archie ]]; then
     alias salt02-lsvg01='ssh root@salt02-lsvg01'
     alias proxy01-lsvg01='ssh root@proxy01-lsvg01'
     alias smtp02-lsvg01='ssh root@smtp02-lsvg01'
+    alias ntp01-lsvg01='ssh root@ntp01-lsvg01'
+    alias ntp02-lsvg01='ssh root@ntp02-lsvg01'
+    alias dc01-lsvg01='ssh root@dc01-lsvg01'
+    alias dc02-lsvg01='ssh root@dc02-lsvg01'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
