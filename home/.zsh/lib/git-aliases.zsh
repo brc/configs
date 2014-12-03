@@ -30,6 +30,9 @@ alias gfu='git fetch -v upstream'
 # merge
 alias gmum='git merge upstream/master'
 
+# rebase
+alias grum='git rebase upstream/master'
+
 # pull
 alias gp='git pull'
 alias gpu='git pull upstream'
