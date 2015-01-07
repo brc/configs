@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<root>
+  <!-- Device definition for my ErgoDox -->
+  <devicevendordef>
+    <vendorname>MASSDROP</vendorname>
+    <vendorid>0x1d50</vendorid>
+  </devicevendordef>
+  <deviceproductdef>
+    <productname>ERGODOX</productname>
+    <productid>0x6028</productid>
+  </deviceproductdef>
+
+  <!-- Application definition for VirtualBox -->
+  <appdef>
+    <appname>VBOX</appname>
+    <equal>org.virtualbox.app.VirtualBoxVM</equal>
+  </appdef>
+
+  <!-- Disable Command+H (window hide) -->
+  <item>
+    <name>Disable "Hide" shortcut in Virtual Box</name>
+    <appendix>Don't fucking enable Command+H</appendix>
+    <identifier>private_dont_hide_vbox</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <only>VBOX</only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::H, ModifierFlag::COMMAND_L,
+      KeyCode::H
+    </autogen>
+  </item>
+
+</root>
+
