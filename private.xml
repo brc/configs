@@ -30,5 +30,342 @@
     </autogen>
   </item>
 
-</root>
+  <item>
+    <name>Brett's ErgoDox - Consolidate shift keys</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_shift</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::SHIFT_R,
+      KeyCode::SHIFT_L
+    </autogen>
+  </item>
 
+  <!-- Munge number row for programmer mode -->
+  <!-- 1 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 1</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_1</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_1, ModifierFlag::NONE,
+      KeyCode::KEY_3, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 1 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_1_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_1, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_5, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+
+  <!-- 2 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 2</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_2</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_2, ModifierFlag::NONE,
+      KeyCode::KEY_4, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 2 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_2_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_2, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_7
+    </autogen>
+  </item>
+
+  <!-- 3 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 3</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_3</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_3, ModifierFlag::NONE,
+      KeyCode::KEY_9, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 3 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_3_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_3, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_5
+    </autogen>
+  </item>
+
+  <!-- 4 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 4</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_4</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_4, ModifierFlag::NONE,
+      KeyCode::BRACKET_LEFT
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 4 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_4_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_4, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_3
+    </autogen>
+  </item>
+
+  <!-- 5 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 5</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_5</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_5, ModifierFlag::NONE,
+      KeyCode::BRACKET_LEFT, ModifierFlag::SHIFT_L,
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 5 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_5_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_5, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_1
+    </autogen>
+  </item>
+
+  <!-- 6 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 6</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_6</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_6, ModifierFlag::NONE,
+      KeyCode::KEY_1, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 6 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_6_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_6, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_9
+    </autogen>
+  </item>
+
+  <!-- 7 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 7</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_7</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_7, ModifierFlag::NONE,
+      KeyCode::KEY_8, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 7 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_7_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_7, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_0
+    </autogen>
+  </item>
+
+  <!-- 8 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 8</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_8</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_8, ModifierFlag::NONE,
+      KeyCode::BRACKET_RIGHT, ModifierFlag::SHIFT_L,
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 8 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_8_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_8, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_2
+    </autogen>
+  </item>
+
+  <!-- 9 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 9</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_9</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_9, ModifierFlag::NONE,
+      KeyCode::BRACKET_RIGHT
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 9 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_9_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_9, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_4
+    </autogen>
+  </item>
+
+  <!-- 0 -->
+  <item>
+    <name>Brett's ErgoDox numrow - 0</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_0</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_0, ModifierFlag::NONE,
+      KeyCode::KEY_0, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - 0 (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_0_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::KEY_0, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_6
+    </autogen>
+  </item>
+
+  <!-- Equal -->
+  <item>
+    <name>Brett's ErgoDox numrow - Equal (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_equal_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::EQUAL, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_8
+    </autogen>
+  </item>
+
+  <!-- Backslash -->
+  <item>
+    <name>Brett's ErgoDox numrow - Backslash</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_backslash</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BACKSLASH, ModifierFlag::NONE,
+      KeyCode::BACKSLASH, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - Backslash (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_backslash_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BACKSLASH, ModifierFlag::SHIFT_L,
+      KeyCode::BACKSLASH
+    </autogen>
+  </item>
+
+  <!-- Bracket left -->
+  <item>
+    <name>Brett's ErgoDox numrow - Bracket left</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_bracketleft</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BRACKET_LEFT, ModifierFlag::NONE,
+      KeyCode::KEY_2, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - Bracket left (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_bracketleft_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BRACKET_LEFT, ModifierFlag::SHIFT_L,
+      KeyCode::KEY_6, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+
+  <!-- Bracket right -->
+  <item>
+    <name>Brett's ErgoDox numrow - Bracket right</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_bracketright</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BRACKET_RIGHT, ModifierFlag::NONE,
+      KeyCode::KEY_7, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+  <item>
+    <name>Brett's ErgoDox numrow - Bracket right (shifted)</name>
+    <appendix>Weird mutation of programmer Dvorak for custom ErgoDox</appendix>
+    <identifier>private_ergodox_numrow_bracketright_shifted</identifier>
+    <device_only>DeviceVendor::MASSDROP, DeviceProduct::ERGODOX</device_only>
+    <autogen>
+      __KeyToKey__
+      KeyCode::BRACKET_RIGHT, ModifierFlag::SHIFT_L,
+      KeyCode::EQUAL, ModifierFlag::SHIFT_L
+    </autogen>
+  </item>
+
+</root>
