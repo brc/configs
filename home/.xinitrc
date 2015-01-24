@@ -1,33 +1,45 @@
-#exec gnome-session
+# change x11 cursor
 #xsetroot -cursor_name left_ptr &
 
-xrdb -merge /home/duck/.Xresources
-lxpanel &
+# add fonts
 xset +fp /usr/share/fonts/local
 xset fp rehash &
-setxkbmap dvorak 
+
+# start task panel
+lxpanel &
+
+# set xdefaults (urxvt)
+xrdb -merge /home/duck/.Xresources
+
+# fix keymap
+# (don't configure dvorak anymore (ergodox))
+#setxkbmap dvorak 
 xmodmap /home/duck/.xmodmaprc &
-terminator &
+
+# bump key repeat rate
+xset r rate 180 100 &
 
 #########################################
 # THINGS TO CHANGE FOR RUNNING UNDER VM #
 #########################################
 
-# Lower key-repeat rate
-#xset r rate 180 100 &
-xset r rate 180 50 &
+# lower key-repeat rate (vbox)
+#xset r rate 180 50 &
 
-# Shut off Xorg screensaver
+# shut off x11 screensaver
 #xscreensaver </dev/null &>/dev/null &
 xset -dpms &
 xset s off &
 
-# Don't much with battery info
+# don't much with battery info
 #batti &
 
-# Start client services (for shared clipboard, seamless mode, etc)
+# start client services (for shared clipboard, seamless mode, etc)
 #VBoxClient-all &
 vmware-user
 
-#--
+#########################################
+# open terminal and start wm            #
+#########################################
+terminator &
 exec openbox
