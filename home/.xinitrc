@@ -23,6 +23,9 @@ xset r rate 180 100 &
 # THINGS TO CHANGE FOR RUNNING UNDER VM #
 #########################################
 
+# increase mouse acceleration (vmware)
+xset m 8 3
+
 # lower key-repeat rate (vbox)
 #xset r rate 180 50 &
 
