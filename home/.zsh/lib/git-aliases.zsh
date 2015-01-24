@@ -8,13 +8,15 @@ alias gm='git --no-pager'
 
 # log
 alias gl='git log --stat'
-alias glm='git --no-pager log'
+alias glm='git --no-pager log --stat'
 
 alias gll='git log --oneline'
 alias gllm='git --no-pager log --oneline'
 
 alias glg='git log --grep'
 alias glgm='git --no-pager log --grep'
+
+alias glum='git log --stat upstream/master'
 
 # show
 alias go='git show'
