@@ -1,0 +1,12 @@
+[Unit]
+Description=vmware-vmblock-fuse
+
+[Service]
+ExecStart=/usr/bin/vmware-vmblock-fuse.sh start
+ExecStop=/usr/bin/vmware-vmblock-fuse.sh stop
+PIDFile=/var/lock/subsys/vmware-vmblock-fuse
+TimeoutSec=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

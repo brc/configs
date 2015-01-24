@@ -9,9 +9,9 @@ setxkbmap dvorak
 xmodmap /home/duck/.xmodmaprc &
 terminator &
 
-#################################################
-# THINGS TO CHANGE FOR RUNNING UNDER VIRTUALBOX #
-#################################################
+#########################################
+# THINGS TO CHANGE FOR RUNNING UNDER VM #
+#########################################
 
 # Lower key-repeat rate
 #xset r rate 180 100 &
@@ -26,7 +26,8 @@ xset s off &
 #batti &
 
 # Start client services (for shared clipboard, seamless mode, etc)
-VBoxClient-all &
+#VBoxClient-all &
+vmware-user
 
 #--
 exec openbox
