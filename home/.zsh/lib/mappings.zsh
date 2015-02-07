@@ -22,7 +22,6 @@ bindkey "\ey"   yank-pop
 bindkey "\e."   insert-last-word
 bindkey "\ep"   _history-complete-older
 bindkey ^r      history-incremental-search-backward
-bindkey ^r      history-incremental-search-backward
 bindkey       undo
 
 # Make the delete key work (or Fn + Delete on the Mac)
@@ -45,8 +44,8 @@ bindkey "\eh"   run-help
 #zle -N xbacklight_dim
 #bindkey -M viins ^_d xbacklight_dim
 
-bindkey -s ^_d "^u xbacklight - 10 -time 1 -steps 1\n"
-bindkey -s ^_b "^u xbacklight + 10 -time 1 -steps 1\n"
+#bindkey -s ^_d "^u xbacklight - 10 -time 1 -steps 1\n"
+#bindkey -s ^_b "^u xbacklight + 10 -time 1 -steps 1\n"
 
 bindkey -s "\ea" "|awk '{print $}'^B^B"
 bindkey -s "\ec" "|count "

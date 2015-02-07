@@ -24,7 +24,7 @@ xset r rate 180 100 &
 #########################################
 
 # increase mouse acceleration (vmware)
-xset m 8 3
+xset m 8 3 &
 
 # lower key-repeat rate (vbox)
 #xset r rate 180 50 &
@@ -39,7 +39,8 @@ xset s off &
 
 # start client services (for shared clipboard, seamless mode, etc)
 #VBoxClient-all &
-vmware-user
+vmware-user &
+#~/bin/xrandr-fusion-laptop.sh &
 
 #########################################
 # open terminal and start wm            #
