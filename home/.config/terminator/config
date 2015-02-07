@@ -10,7 +10,6 @@ title_inactive_fg_color = colour249
 
 [keybindings]
     full_screen =
-    zoom_in = <Ctrl>equal
 
 [profiles]
 [[default]]
