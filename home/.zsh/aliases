@@ -151,6 +151,7 @@ if [[ $(hostname) =~ archie ]]; then
     alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
     alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
     alias gecp='cd /git/emcrubicon/campbb6/pantry-projects/gouda-salt'
+    alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
     alias gei='cd /git/emcrubicon/iaas'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias configs='cd /git/invsblduck/configs/home'
