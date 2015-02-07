@@ -1,13 +1,50 @@
-keysym equal = backslash bar
-keysym backslash = equal plus
+! Don't swap these when using ErgoDox
+!
+!   keysym equal = backslash bar
+!   keysym backslash = equal plus
+!
+!   keysym Escape = grave asciitilde
+!   keysym grave = Escape Escape
+!
+!   keysym slash = apostrophe quotedbl
+!   keysym apostrophe = slash question
 
-keysym Escape = grave asciitilde
-keysym grave = Escape Escape
 
-keysym slash = apostrophe quotedbl
-keysym apostrophe = slash question
+! ErgoDox mappings for programmer dvorak
+!
+! Don't arrange these when running under VirtualBox on OSX
+! (the raw keysyms are already intercepted by Karabiner on the outside)
+!
+!   keysym 1 = numbersign percent
+!   keysym 2 = dollar 7
+!   keysym 3 = parenleft 5
+!   keysym 4 = bracketleft 3
+!   keysym 5 = braceleft 1
+!   keysym 6 = exclam 9
+!   keysym 7 = asterisk 0
+!   keysym 8 = braceright 2
+!   keysym 9 = bracketright 4
+!   keysym 0 = parenright 6
+!   keysym equal = equal 8
+!   keysym backslash = bar backslash
+!   keysym bracketleft = at asciicircum
+!   keysym bracketright = ampersand plus
+!
+keysym KP_Home = KP_7
+keysym KP_Up = KP_8
+keysym KP_Prior = KP_9
+keysym KP_Left = KP_4
+keysym KP_Begin = KP_5
+keysym KP_Right = KP_6
+keysym KP_End = KP_1
+keysym KP_Down = KP_2
+keysym KP_Next = KP_3
+keysym KP_Insert = KP_0
+keysym KP_Delete = KP_Decimal
+
 
 ! Don't swap CapsLock/Control when running under VirtualBox on OSX
+! (the raw keysyms are already swapped in OSX System Preferences)
 !
 !   remove Lock = Caps_Lock
 !   remove Control = Control_L
@@ -18,6 +55,6 @@ keysym apostrophe = slash question
 
 
 ! For apple bluetooth kbd:
-!   map "Command" key (which is "Super") to Alt
+! map "Command" key (which is "Super") to Alt
 remove Mod4 = Super_L
 add Mod1 = Super_L
