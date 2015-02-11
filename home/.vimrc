@@ -177,6 +177,8 @@ endif
 " ###########################################################################
 " ###########################################################################
 
+" timeout on keymappings: true
+" wait half-second for mappings and tenth-second for keycodes
 set timeout timeoutlen=500 ttimeoutlen=100
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -240,34 +242,29 @@ cmap     <C-k>      <Nop>
 "nnoremap <silent> ygi :call Setup_paste()<CR>gi
 "nnoremap <silent> ygI :call Setup_paste()<CR>gI
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" NB: Some commands below use raw control characters (^O, ^W, etc)
-"""     (ie., don't copy/paste them with a mouse)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
 " NERDTree window
 """""""""""""""""
 "toggle/focus (far left)
 nmap ,nn :NERDTreeToggle<CR>
-nmap ,gn 99h
+nmap ,gn 99<C-w>h
 
 " QuickFix window
 """""""""""""""""
 "toggle/focus (very bottom)
 nmap ,qq :call ToggleQuickfixList()<CR>
-nmap ,gq 99j
+nmap ,gq 99<C-w>j
 
 " MBE window
 """"""""""""
 "toggle/focus (very top)
 nmap ,mm :MBEToggle<CR>
-nmap ,gm 99k
+nmap ,gm 99<C-w>k
 
 " Tagbar window
 """""""""""""""
 "toggle/focus (far right)
 nmap ,tt :TagbarToggle<CR>
-nmap ,gT 99l
+nmap ,gT 99<C-w>l
 
 " Window management
 """""""""""""""""""
@@ -280,7 +277,7 @@ nnoremap ,ww <c-w>p
 nmap <F1> :set paste<CR>
 nmap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
-"inoremap <F1> :call Setup_paste()<CR>
+"inoremap <F1> <C-o>:call Setup_paste()<CR>
 
 " yank
 """"""
@@ -303,14 +300,14 @@ map <S-F12> :wa<CR>
 " Search highlighting
 """""""""""""""""""""
 map <F11> :nohl<CR>
-imap <F11> :nohl<CR>
+imap <F11> <C-o>:nohl<CR>
 map <S-F11> :set hls<CR>
-imap <S-F11> :set hls<CR>
+imap <S-F11> <C-o>:set hls<CR>
 
 " Pan left/right
 """"""""""""""""
-map l z10l
-map h z10h
+map <ESC>l z10l
+map <ESC>h z10h
 
 " Toggle folds
 """"""""""""""
