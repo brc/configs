@@ -17,6 +17,7 @@ alias glg='git log --grep'
 alias glgm='git --no-pager log --grep'
 
 alias glum='git log --stat upstream/master'
+alias glud='git log --stat upstream/devel'
 
 # show
 alias go='git show'
@@ -31,9 +32,11 @@ alias gfu='git fetch -v upstream'
 
 # merge
 alias gmum='git merge upstream/master'
+alias gmud='git merge upstream/devel'
 
 # rebase
 alias grum='git rebase upstream/master'
+alias grud='git rebase upstream/devel'
 
 # pull
 alias gp='git pull'
@@ -47,6 +50,7 @@ alias gbD='git branch -D'
 
 # remote
 #alias gr='git remote'  # conflicts with `grep -rsiI' alias
+alias grau='git remote add upstream'
 alias grv='git remote -v'
 
 # status
@@ -61,6 +65,7 @@ alias gtp='git stash pop'
 # checkout
 alias gco='git checkout'
 alias gcom='git checkout master'
+alias gcod='git checkout devel'
 alias gcob='git checkout -b'
 
 # diff
@@ -69,6 +74,7 @@ alias gdm='git --no-pager diff'
 alias gdc='git diff --cached'
 alias gdcm='git --no-pager diff --cached'
 alias gdum='git log -p HEAD..upstream/master'
+alias gdud='git log -p HEAD..upstream/devel'
 
 # add
 alias ga='git add'
