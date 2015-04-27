@@ -1,6 +1,3 @@
-map <buffer> <LocalLeader>im i{% from '/map.jinja' import foo with context -%}<ESC>6Ba
-imap <buffer> <LocalLeader>im {% from '/map.jinja' import foo with context -%}<ESC>6Ba
-
 imap <buffer> <LocalLeader>br {{}}<ESC>hi
 
 map <buffer> <LocalLeader>r i{#  -#}<ESC>3hi
@@ -26,3 +23,10 @@ imap <buffer> <LocalLeader>el {% else -%}<CR>
 
 map <buffer> <LocalLeader>for i{% for x in  -%}<CR>{% endfor %}<ESC>k$3hi
 imap <buffer> <LocalLeader>for {% for x in  -%}<CR>{% endfor %}<ESC>k$3hi
+
+map <buffer> <LocalLeader>mac i{% macro () -%}<CR>{% endmacro %}<ESC>k$bbi
+imap <buffer> <LocalLeader>mac {% macro () -%}<CR>{% endmacro %}<ESC>k$bbi
+
+map <buffer> <LocalLeader>im i{% from '.jinja' import foo with context -%}<ESC>6Ba
+imap <buffer> <LocalLeader>im {% from '.jinja' import foo with context -%}<ESC>6Ba
+
