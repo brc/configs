@@ -245,31 +245,32 @@ cmap     <C-k>      <Nop>
 " NERDTree window
 """""""""""""""""
 "toggle/focus (far left)
-nmap ,nn :NERDTreeToggle<CR>
-nmap ,gn 99<C-w>h
+nmap <LocalLeader>nn :NERDTreeToggle<CR>
+nmap <LocalLeader>gn 99<C-w>h
 
 " QuickFix window
 """""""""""""""""
 "toggle/focus (very bottom)
-nmap ,qq :call ToggleQuickfixList()<CR>
-nmap ,gq 99<C-w>j
+nmap <LocalLeader>qq :call ToggleQuickfixList()<CR>
+nmap <LocalLeader>gq 99<C-w>j
 
 " MBE window
 """"""""""""
 "toggle/focus (very top)
-nmap ,mm :MBEToggle<CR>
-nmap ,gm 99<C-w>k
+nmap <LocalLeader>mm :MBEToggle<CR>
+nmap <LocalLeader>gm 99<C-w>k
 
 " Tagbar window
 """""""""""""""
 "toggle/focus (far right)
-nmap ,tt :TagbarToggle<CR>
-nmap ,gT 99<C-w>l
+nmap <LocalLeader>tt :TagbarToggle<CR>
+nmap <LocalLeader>gt 99<C-w>l
 
 " Window management
 """""""""""""""""""
-nmap ,w <c-w>
-nnoremap ,ww <c-w>p
+nmap <LocalLeader>w <c-w>
+nmap <LocalLeader>we <c-w>=
+nnoremap <LocalLeader>ww <c-w>p
 
 " Paste
 """""""
@@ -312,7 +313,11 @@ map <ESC>h z10h
 " Toggle folds
 """"""""""""""
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-map ,f zi
+map <LocalLeader>f zi
+
+" Refresh diff highlighting
+"""""""""""""""""""""""""""
+map <LocalLeader>du :diffupdate<CR>
 
 " Vimgrep
 """""""""
@@ -325,16 +330,16 @@ nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 
 " Fugitive
 """"""""""
-nmap ,gt :Gstatus<CR>
-nmap ,gl :Glog --<CR>
-nmap ,gL :Glog -- %
-nmap ,gr :Ggrep 
-nmap ,gb :Gblame<CR>
-nmap ,ge :Gedit<CR>
-nmap ,gw :Gwrite<CR>
-nmap ,gR :Gread<CR>
-nmap ,gd :Gdiff<CR>
-nmap ,gc :Gcommit<CR>
+nmap <LocalLeader>gg :Gstatus<CR>
+nmap <LocalLeader>gl :Glog --<CR>
+nmap <LocalLeader>gL :Glog -- %
+nmap <LocalLeader>gr :Ggrep<SPACE>
+nmap <LocalLeader>gb :Gblame<CR>
+nmap <LocalLeader>ge :Gedit<CR>
+nmap <LocalLeader>gw :Gwrite<CR>
+nmap <LocalLeader>gR :Gread<CR>
+nmap <LocalLeader>gd :Gdiff<CR>
+nmap <LocalLeader>gc :Gcommit<CR>
 
 " vim-easy-align
 """"""""""""""""
