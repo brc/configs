@@ -86,25 +86,6 @@ augroup resCur
   autocmd BufWinEnter * call ResCur()
 augroup END
 
-
-" unimpairedPaste from Tim Pope
-" (set `paste' for current insert only)
-"
-"function! Setup_paste() abort
-"  let s:paste = &paste
-"  set paste
-"endfunction
-"
-"augroup unimpaired_paste
-"  autocmd!
-"  autocmd InsertLeave *
-"        \ if exists('s:paste') |
-"        \ let &paste = s:paste |
-"        \ unlet s:paste |
-"        \ endif
-"augroup END
-
-
 " Automatically show global/local quickfix windows
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
@@ -230,17 +211,6 @@ cnoremap <ESC>f     <S-Right>
 "don't let these screw up the command-line if pressed on accident:
 cmap     <ESC>d     <Nop>
 cmap     <C-k>      <Nop>
-
-" unimpairedPaste
-"""""""""""""""""
-"nnoremap <silent> yp :call Setup_paste()<CR>a
-"nnoremap <silent> yP :call Setup_paste()<CR>i
-"nnoremap <silent> yo :call Setup_paste()<CR>o
-"nnoremap <silent> yO :call Setup_paste()<CR>O
-"nnoremap <silent> yA :call Setup_paste()<CR>A
-"nnoremap <silent> yI :call Setup_paste()<CR>I
-"nnoremap <silent> ygi :call Setup_paste()<CR>gi
-"nnoremap <silent> ygI :call Setup_paste()<CR>gI
 
 " NERDTree window
 """""""""""""""""
@@ -382,6 +352,13 @@ let g:toggle_list_no_mappings = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " show current branch
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Unimpaired
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" make :cnext and :cprevious easier on my keymap
+map ]j :cnext<CR>
+map ]k :cprevious<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Gist
