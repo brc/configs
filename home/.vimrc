@@ -94,6 +94,9 @@ autocmd QuickFixCmdPost    l* nested lwindow
 " (to fix things when tagbar is active)
 autocmd FileType qf wincmd J
 
+" highlight current line in NERDTree
+autocmd FileType nerdtree :setl cursorline
+
 
 " ###########################################################################
 " ### SYNTAX HIGHLIGHTING
