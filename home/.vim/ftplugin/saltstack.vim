@@ -40,6 +40,9 @@ imap <buffer> <LocalLeader>bk - backup: minion
 map <buffer> <LocalLeader>fm i:<CR>file.managed:<CR>- source: salt://<CR>- template: jinja<ESC>3kI
 imap <buffer> <LocalLeader>fm :<CR>file.managed:<CR>- source: salt://<CR>- template: jinja<ESC>3kI
 
+map <buffer> <LocalLeader>fd i:<CR>file.directory<ESC>kI
+imap <buffer> <LocalLeader>fd :<CR>file.directory<ESC>kI
+
 map <buffer> <LocalLeader>fa i:<CR>file.absent<ESC>kI
 imap <buffer> <LocalLeader>fa :<CR>file.absent<ESC>kI
 

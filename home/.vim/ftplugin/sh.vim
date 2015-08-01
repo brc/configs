@@ -1,3 +1,4 @@
+let is_bash = 1
 " enable function, heredoc, if/else/do folding
 let g:sh_fold_enabled = 7
 
