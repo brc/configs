@@ -224,8 +224,14 @@ nmap <LocalLeader>gn 99<C-w>h
 " QuickFix window
 """""""""""""""""
 "toggle/focus (very bottom)
-nmap <LocalLeader>qq :call ToggleQuickfixList()<CR>
-nmap <LocalLeader>gq 99<C-w>j
+nmap <LocalLeader>ff :call ToggleQuickfixList()<CR>
+nmap <LocalLeader>gf 99<C-w>j
+
+"dynamic height
+au FileType qf call AdjustWindowHeight(3, 10)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
 
 " MBE window
 """"""""""""
