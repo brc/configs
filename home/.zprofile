@@ -2,10 +2,11 @@
 # ~/.zprofile
 #
 
-export GEM_HOME=~/.gem/ruby/2.1.0
-system_gems=/usr/lib/ruby/gems/2.1.0
+export GEM_HOME=~/.gem/ruby/2.2.0
+system_gems=/usr/lib/ruby/gems/2.2.0
 gempaths=(
     ~/.gem/ruby/2.0.0
+    ~/.gem/ruby/2.1.0
     ${GEM_HOME}
     ${system_gems}
 )
@@ -33,6 +34,7 @@ stty erase ^H
 export EDITOR=vim
 
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export LC_COLLATE=C
 export LC_CTYPE=C
 
@@ -54,6 +56,10 @@ eval "$(dircolors -b ~/.dircolors)"
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
+
+#export VAGRANT_DEFAULT_PROVIDER=libvirt
+export VAGRANT_VM_MEM=1536
+export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
 
 # setup fpath
 fpath=(~/.zsh/fpath $fpath)
