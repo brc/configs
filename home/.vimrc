@@ -130,7 +130,7 @@ color molokai
 " Custom highlights
 """""""""""""""""""
 hi Search       cterm=underline,bold ctermfg=yellow ctermbg=magenta
-"hi WarningMsg   ctermfg=yellow ctermbg=blue
+hi WarningMsg   ctermfg=yellow ctermbg=red
 "hi ColorColumn  ctermbg=blue ctermfg=yellow
 
 " Vimdiff mode
@@ -309,11 +309,14 @@ nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 
 " Fugitive
 """"""""""
+let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
+
 nmap <LocalLeader>gg :Gstatus<CR>
 nmap <LocalLeader>gl :Glog --<CR>
 nmap <LocalLeader>gL :Glog -- %
 nmap <LocalLeader>gr :Ggrep<SPACE>
 nmap <LocalLeader>gb :Gblame<CR>
+nmap <LocalLeader>gB :Gbrowse!<CR>
 nmap <LocalLeader>ge :Gedit<CR>
 nmap <LocalLeader>gw :Gwrite<CR>
 nmap <LocalLeader>gR :Gread<CR>
