@@ -57,6 +57,9 @@ eval "$(dircolors -b ~/.dircolors)"
 export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 
+#export PYTHONDONTWRITEBYTECODE=1
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 #export VAGRANT_DEFAULT_PROVIDER=libvirt
 export VAGRANT_VM_MEM=1536
 export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
