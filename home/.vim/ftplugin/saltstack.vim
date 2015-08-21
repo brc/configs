@@ -1,4 +1,5 @@
 source ~/.vim/ftplugin/jinja.vim
+setlocal fdm=indent
 
 "
 " jinja
