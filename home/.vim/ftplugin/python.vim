@@ -1,1 +1,2 @@
+setlocal omnifunc=pythoncomplete#Complete
 let python_space_error_highlight=1
