@@ -70,6 +70,9 @@
 [submodule "home/.vim/bundle/vim-puppet"]
 	path = home/.vim/bundle/vim-puppet
 	url = https://github.com/rodjek/vim-puppet.git
-[submodule "home/.vim/bundle/neocomplete.vim"]
-	path = home/.vim/bundle/neocomplete.vim
-	url = https://github.com/Shougo/neocomplete.vim.git
+[submodule "home/.vim/bundle/ultisnips"]
+	path = home/.vim/bundle/ultisnips
+	url = https://github.com/SirVer/ultisnips.git
+[submodule "home/.vim/bundle/YouCompleteMe"]
+	path = home/.vim/bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe.git
