@@ -1,5 +1,5 @@
 setlocal sw=2 sts=2 wrap showbreak=+ si tw=79
-setlocal omnifunc=xmlcomplete#CompleteTags
+"setlocal omnifunc=xmlcomplete#CompleteTags
 
 map <F7> :w<CR>:!clear;xmllint --valid --noout <C-r>%<CR>
 map <F5> :w<CR>:!clear; xsltproc -o `basename <C-r>% xml`html --stringparam html.stylesheet style.css /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl <C-r>%<CR> 
