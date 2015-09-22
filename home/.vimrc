@@ -64,9 +64,13 @@ set cpoptions-=y  " yank command cannot be redone with '.'
 set viminfo='10,\"100,:50,%,h,f1,n~/.viminfo
 
 filetype plugin indent on
-syntax on
+
+" Override whatever 'fo' string filetype plugins set
+" (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
+autocmd FileType * setlocal formatoptions+=qoj
 
 let maplocalleader = ","
+syntax on
 
 
 " ###########################################################################

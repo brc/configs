@@ -1,10 +1,12 @@
+setlocal comments=s1:{#,mb:#,ex:#}
+
 imap <buffer> <LocalLeader>br {{}}<ESC>hi
 
 map <buffer> <LocalLeader>r i{#  -#}<ESC>3hi
 imap <buffer> <LocalLeader>r {#  -#}<ESC>3hi
 
-map <buffer> <LocalLeader>cb i{#-<CR> #<CR>#}<ESC>ka<SPACE>
-imap <buffer> <LocalLeader>cb {#-<CR> #<CR>#}<ESC>ka<SPACE>
+map <buffer> <LocalLeader>cb i{#<CR>}<ESC>0r-kA<SPACE>
+imap <buffer> <LocalLeader>cb {#<CR>}<ESC>0r-kA<SPACE>
 
 map <buffer> <LocalLeader>set i{% set  = -%}<ESC>2bhi
 imap <buffer> <LocalLeader>set {% set  = -%}<ESC>2bhi
