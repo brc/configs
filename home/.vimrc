@@ -385,18 +385,23 @@ let g:gist_show_privates = 1
 let g:gist_open_browser_after_post = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" YouCompleteMe
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Don't use <tab> to cycle thru PUM, use ^n and ^p as we're used to doing.
+" This also solves problems with using UltiSnips simultaneously, which uses
+" <tab> as its default trigger.
+let g:ycm_key_list_select_completion=['<C-n>']
+let g:ycm_key_list_previous_completion=['<C-p>']
+
+" read tags file
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ UltiSnips
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Track the engine.
-"Plugin 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-"lugin 'honza/vim-snippets'
-
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
