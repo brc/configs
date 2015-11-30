@@ -14,7 +14,7 @@ set colorcolumn=80
 set diffopt=filler,vertical
 set expandtab
 set fileformat=unix
-set grepprg=grep\ -rsiI\ --exclude-dir=.git
+set grepprg=grep\ -sIRin\ --exclude-dir=.git\ --exclude-dir=.tox
 set history=15
 set hlsearch
 set ignorecase
@@ -26,6 +26,7 @@ set ruler
 set scrolloff=5
 set shiftround
 set shiftwidth=4
+set showcmd
 set showmatch
 set showmode
 set sidescroll=10
@@ -34,17 +35,13 @@ set smartcase
 set smarttab
 set softtabstop=4
 set tabstop=8
+set ttyfast
 "set textwidth=0
-set undolevels=75
+set undofile
 set visualbell
 set wildmenu
 set wildmode=list,longest,full
 set writebackup
-
-set cpoptions-=J  " sentences do NOT have to end with two spaces
-set cpoptions-=u  " vim undo, not vi-compatible
-set cpoptions-=l  " backslash in a range /[] is magical (not literal)
-set cpoptions-=y  " yank command cannot be redone with '.'
 
 "set guioptions-=m
 "set guioptions-=M
@@ -219,6 +216,10 @@ cnoremap <ESC>f     <S-Right>
 cmap     <ESC>d     <Nop>
 cmap     <C-k>      <Nop>
 
+" Search and replace
+""""""""""""""""""""
+nnoremap <LocalLeader>ra :%s/<C-r><C-w>//gc<Left><Left><Left>
+
 " NERDTree window
 """""""""""""""""
 "toggle/focus (far left)
@@ -270,7 +271,7 @@ nmap Y y$
 " Writing/quiting files
 """""""""""""""""""""""
 map <F8> :wq<CR>
-map <S-F8> :wqa<CR>
+imap <F8> <ESC>:wq<CR>
 
 map <F9> :q<CR>
 map <S-F9> :qa<CR>
@@ -279,12 +280,13 @@ map <F10> :q!
 map <S-F10> :qa!
 
 map <F12> :w<CR>
-map <S-F12> :wa<CR>
+imap <F12> <ESC>:w<CR>
 
 " Search highlighting
 """""""""""""""""""""
 map <F11> :nohl<CR>
 imap <F11> <C-o>:nohl<CR>
+
 map <S-F11> :set hls<CR>
 imap <S-F11> <C-o>:set hls<CR>
 
@@ -305,6 +307,7 @@ map <LocalLeader>du :diffupdate<CR>
 " Vimgrep
 """""""""
 nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
+"nnoremap gr :silent grep!  \| redraw!<S-Left><S-Left><S-Left>
 
 " Prevent window death
 """"""""""""""""""""""
