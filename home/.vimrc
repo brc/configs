@@ -316,8 +316,6 @@ nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 
 " Fugitive
 """"""""""
-let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
-
 nmap <LocalLeader>gg :Gstatus<CR>
 nmap <LocalLeader>gl :Glog --<CR>
 nmap <LocalLeader>gL :Glog -- %
@@ -369,8 +367,8 @@ let g:toggle_list_no_mappings = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Fugitive
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" show current branch
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Unimpaired
