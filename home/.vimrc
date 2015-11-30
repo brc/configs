@@ -67,7 +67,7 @@ filetype plugin indent on
 
 " Override whatever 'fo' string filetype plugins set
 " (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
-autocmd FileType * setlocal formatoptions+=qoj
+autocmd FileType * setlocal formatoptions+=qroj
 
 let maplocalleader = ","
 syntax on

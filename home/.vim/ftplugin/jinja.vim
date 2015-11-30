@@ -1,6 +1,13 @@
 setlocal comments=s1:{#,mb:#,ex:#}
+let b:did_indent = 1
 
+imap <buffer> <LocalLeader>cc neh
+
+map <buffer> <LocalLeader>br i{{}}<ESC>hi
 imap <buffer> <LocalLeader>br {{}}<ESC>hi
+
+map <buffer> <LocalLeader>tt i{%  -%}<ESC>3hi
+imap <buffer> <LocalLeader>tt {%  -%}<ESC>3hi
 
 map <buffer> <LocalLeader>r i{#  -#}<ESC>3hi
 imap <buffer> <LocalLeader>r {#  -#}<ESC>3hi

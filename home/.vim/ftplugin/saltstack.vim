@@ -6,12 +6,12 @@ source ~/.vim/ftplugin/jinja.vim
 map <buffer> <LocalLeader>im i{% from '/map.jinja' import foo with context -%}<ESC>6Ba
 imap <buffer> <LocalLeader>im {% from '/map.jinja' import foo with context -%}<ESC>6Ba
 
-"map <buffer> <LocalLeader>gg isalt['grains.get']('', {})<ESC>F'i
-"imap <buffer> <LocalLeader>gg salt['grains.get']('', {})<ESC>F'i
+" override :Ggrep mapping
+map <buffer> <LocalLeader>gr isalt['grains.get']('')<ESC>hi
+imap <buffer> <LocalLeader>gr salt['grains.get']('')<ESC>hi
 
 map <buffer> <LocalLeader>pg isalt['pillar.get']('', {})<ESC>F'i
 imap <buffer> <LocalLeader>pg salt['pillar.get']('', {})<ESC>F'i
-
 
 "
 " attributes/requisites
