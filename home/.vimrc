@@ -361,8 +361,8 @@ let g:tagbar_iconchars = ['+', '-']
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ togglelist.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" disable default plugin bindings
-let g:toggle_list_no_mappings = 1
+let g:toggle_list_no_mappings = 1       " disable default plugin bindings
+let g:toggle_list_copen_command='Copen' " use Dispatch Copen command
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Fugitive
