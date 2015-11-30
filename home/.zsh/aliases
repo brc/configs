@@ -2,14 +2,14 @@
 
 # aliases
 alias ls='ls -h --color=auto'   # yay
-alias a='ls -a'                 #
-alias ad='ls -ad'               #
-alias a.='ls -a .*'             #
-alias ad.='ls -adF .*'          #
+alias a='ls -lF'                #
+alias ad='ls -lFd'              #
+alias a.='ls -lF .*'            #
+alias ad.='ls -ldF .*'          #
 alias aa='ls -alF'              #
-alias at='ls -aFtr'             #
+alias at='ls -lFtr'             #
 alias aat='ls -alFtr'           #
-alias as='ls -aFSr'             #
+alias as='ls -lFSr'             #
 alias aas='ls -alFSr'           #
 alias aad='ls -aldF'            #
 alias aa.='ls -alF .*'          #
@@ -115,8 +115,8 @@ if [[ $(hostname) =~ archie ]]; then
     alias ricevpn='sudo vpnc rice'
     alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
-    alias g2=g2sh.pl
-    alias irc='ssh chef-server'
+    alias ww=g2sh.pl
+    alias irc='ssh irc'
     alias chef='ssh chef'
     #alias allspark-lsvg01='ssh allspark-lsvg01'
     #alias allspark-stng01='ssh allspark-stng01'
@@ -150,6 +150,7 @@ if [[ $(hostname) =~ archie ]]; then
     alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
     alias gece='cd /git/emcrubicon/campbb6/ecs'
     alias gei='cd /git/emcrubicon/iaas'
+    alias det='cd /data/emc/tmp'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias configs='cd /git/invsblduck/configs/home'
 
