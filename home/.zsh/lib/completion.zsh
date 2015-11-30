@@ -24,7 +24,7 @@ zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 zstyle ':completion:*:*:*:*:processes' \
-    command "ps -u `whoami` -o pid,user,comm -w -w"
+    command "ps -ax -o pid,user,comm,args |grep -v ' \[.*]\$'"
 
 zstyle ':completion:*:*:kill:*:processes' \
     list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
@@ -46,6 +46,7 @@ _global_ssh_hosts=()
 _ssh_hosts=()
 _ssh_config=()
 _etc_hosts=()
+_dns_hosts=()
 
 [ -r /etc/ssh/ssh_known_hosts ] && \
     _global_ssh_hosts=(${${${${(f)"$(</etc/ssh/ssh_known_hosts)"}:#[\|]*}%%\ *}%%,*})
@@ -59,11 +60,15 @@ _etc_hosts=()
 [ -r /etc/hosts ] && \
     : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}}
 
+[ -r ~/.zsh/cache/dns_hosts ] && \
+    _dns_hosts=($(cat ~/.zsh/cache/dns_hosts))
+
 hosts=(
   "$_ssh_config[@]"
   "$_global_ssh_hosts[@]"
   "$_ssh_hosts[@]"
   "$_etc_hosts[@]"
+  "$_dns_hosts[@]"
   "$HOST"
   localhost
 )
@@ -99,3 +104,6 @@ expand-or-complete-prefix-with-dots() {
 }
 zle -N expand-or-complete-prefix-with-dots
 bindkey "^I" expand-or-complete-prefix-with-dots
+
+# allow g2sh to complete hostnames
+compdef _hosts g2sh.pl
