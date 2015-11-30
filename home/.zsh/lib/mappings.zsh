@@ -1,6 +1,9 @@
 # vi mode
 bindkey -v
 
+# lower key timeout to 0.1 seconds so we can switch between vi modes faster
+KEYTIMEOUT=1
+
 # emacs bindings
 bindkey ^b      backward-char
 bindkey ^f      forward-char
