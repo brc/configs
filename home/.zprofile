@@ -30,7 +30,10 @@ if [ -n "$TMUX" ]; then
     export TERM=screen-256color
 fi
 
+# for most pttys i use (xterm, xterm-color, screen, etc),
+# the kbs sequence is ^H in the terminfo.
 stty erase ^H
+
 export EDITOR=vim
 
 export LANG=en_US.UTF-8
