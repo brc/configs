@@ -21,6 +21,6 @@ map <buffer> <LocalLeader>in i- include:<SPACE>
 imap <buffer> ..in - { include: .yml, }<ESC>3bi
 map <buffer> ..in i- { include: .yml, }<ESC>3bi
 
-map <buffer> <F5> :!emc-reposync.sh<CR>
+map <buffer> <F10> :!emc-reposync.sh<CR>
 
 imap <buffer> <LocalLeader>hv hostvars

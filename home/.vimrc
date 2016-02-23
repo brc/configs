@@ -269,25 +269,25 @@ nmap Y y$
 
 " Writing/quiting files
 """""""""""""""""""""""
-map <F8> :wq<CR>
+map <F5> :w<CR>
+imap <F5> <ESC>:w<CR>
+
+map  <F8> :wq<CR>
 imap <F8> <ESC>:wq<CR>
 
-map <F9> :q<CR>
-map <S-F9> :qa<CR>
+map <F4> :q<CR>
+map <S-F4> :qa<CR>
 
-map <F10> :q!
-map <S-F10> :qa!
-
-map <F12> :w<CR>
-imap <F12> <ESC>:w<CR>
+map <F7> :q!
+map <S-F7> :qa!
 
 " Search highlighting
 """""""""""""""""""""
-map <F11> :nohl<CR>
-imap <F11> <C-o>:nohl<CR>
+map <F9> :nohl<CR>
+imap <F9> <C-o>:nohl<CR>
 
-map <S-F11> :set hls<CR>
-imap <S-F11> <C-o>:set hls<CR>
+map <S-F9> :set hls<CR>
+imap <S-F9> <C-o>:set hls<CR>
 
 " Pan left/right
 """"""""""""""""

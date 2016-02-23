@@ -4,9 +4,9 @@ let ruby_fold=1
 "
 " infrastructure
 "
-map <buffer> <F5> :w<CR>:!clear; date; ruby <C-r>%<CR>
-map <buffer> <S-F5> :w<CR>:!clear; date; ruby <C-r>%
-map <buffer> <F7> :w<CR>:!clear; date; ruby -wc <C-r>%<CR>
+map <buffer> <F10> :w<CR>:!clear; date; ruby -wc <C-r>%<CR>
+map <buffer> <F11> :w<CR>:!clear; date; ruby <C-r>%<CR>
+map <buffer> <S-F11> :w<CR>:!clear; date; ruby <C-r>%
 
 map <buffer> <LocalLeader>ubr i#!/usr/bin/ruby<CR><BS><CR>
 imap <buffer> <LocalLeader>ubr #!/usr/bin/ruby<CR><BS>

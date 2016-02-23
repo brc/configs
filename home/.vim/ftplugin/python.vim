@@ -13,4 +13,4 @@ let s:gitroot = systemlist('git rev-parse --show-toplevel')[0]
 execute 'setlocal makeprg=tox\ -c\ ' . s:gitroot . '/tox.ini'
 
 " tpope's Dispatch plugin provides 'Make' command
-map <buffer> <F6> :Make<CR>
+map <buffer> <F10> :Make<CR>

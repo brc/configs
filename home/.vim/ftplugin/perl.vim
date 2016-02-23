@@ -4,9 +4,9 @@ setlocal keywordprg=perldoc\ -f
 
 inoremap # y<BS>#
 
-map <buffer> <F5> :w<CR>:!clear; date; perl <C-r>%<CR>
-map <buffer> [31;2~ :w<CR>:!clear; date; perl <C-r>% 
-map <buffer> <F7> :w<CR>:!clear; date; perl -wc <C-r>%<CR>
+map <buffer> <F11> :w<CR>:!clear; date; perl <C-r>%<CR>
+map <buffer> <S-F11> :w<CR>:!clear; date; perl <C-r>% 
+map <buffer> <F10> :w<CR>:!clear; date; perl -wc <C-r>%<CR>
 
 imap <buffer> <LocalLeader>l <ESC>A
 

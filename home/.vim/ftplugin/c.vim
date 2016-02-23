@@ -14,8 +14,8 @@ map <buffer> <LocalLeader>co i/*  */hhi
 
 imap <buffer> <LocalLeader>pf printf("");2hi
 
-map <buffer> <F5> :!clear; ./`basename % .c`
-map <buffer> <F7> :w:!clear; gcc -Wall -o `basename % .c` %
+map <buffer> <F10> :w:!clear; gcc -Wall -o `basename % .c` %
+map <buffer> <F11> :!clear; ./`basename % .c`
 
 imap <buffer> <LocalLeader>br {}O
 map <buffer> <LocalLeader>br $bo{}O
