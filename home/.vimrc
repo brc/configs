@@ -51,14 +51,13 @@ set writebackup
 "set guifont=vt100:h10
 
 "" Tell vim to remember certain things when we exit
-""   '10         marks will be remembered for up to 10 previously edited files
-""   "100        will save up to 100 lines for each register
-""   :50         up to 50 lines of command-line history will be remembered
+""   '100        marks will be remembered for up to 100 previously edited files
+""   :500        up to 500 lines of command-line history will be remembered
 ""   %           saves and restores buffer list
 ""   h           disable 'hlsearch' highlighting when starting
 ""   f1          store global marks (A-Z and 0-9)
 ""   n           name used for the viminfo file (must be the last option)
-set viminfo='10,\"100,:50,%,h,f1,n~/.viminfo
+set viminfo='100,:500,%,h,f1,n~/.viminfo
 
 filetype plugin indent on
 
