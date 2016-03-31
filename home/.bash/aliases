@@ -14,6 +14,19 @@ alias aas='ls -alFSr'           #
 alias aad='ls -aldF'            #
 alias aa.='ls -alF .*'          #
 alias aad.='ls -aldF .*'        #
+                                #
+alias wa='sudo ls -lF'          #
+alias wad='sudo ls -lFd'        #
+alias wa.='sudo ls -lF .*'      #
+alias wad.='sudo ls -ldF .*'    #
+alias waa='sudo ls -alF'        #
+alias wat='sudo ls -lFtr'       #
+alias waat='sudo ls -alFtr'     #
+alias was='sudo ls -lFSr'       #
+alias waas='sudo ls -alFSr'     #
+alias waad='sudo ls -aldF'      #
+alias waa.='sudo ls -alF .*'    #
+alias waad.='sudo ls -aldF .*'  #
 
 alias rm='rm -i'  # woopsy
 alias mv='mv -i'  #
@@ -57,11 +70,13 @@ alias pd=pushd
 alias tf='tail -f'
 alias d='env LESS="$LESS +G" dmesg'
 
+alias ww=~/g2sh.pl
+
 if grep -iwq ubuntu /etc/issue; then
     alias aptdate='sudo apt-get update'
     alias cache='apt-cache search'
     alias pmi='sudo apt-get install'
-elif grep -iwq centos /etc/issue; then
+elif uname -a |grep -q '\.el[0-9]+\.'; then
     alias cache='sudo yum search'
     alias pmi='sudo yum install'
 elif grep -iwq arch /etc/issue; then
@@ -69,8 +84,6 @@ elif grep -iwq arch /etc/issue; then
     alias cache='pacman -Ss'
     alias pmi='sudo pacman -S'
 fi
-
-    alias ww=~/g2sh.pl
 
 if [[ $(hostname) =~ archie ]]; then
     alias kc='knife client list'
@@ -84,5 +97,4 @@ if [[ $(hostname) =~ archie ]]; then
 
     #alias ke='knife environment list' # function
     alias kee='knife environment edit'
-
 fi
