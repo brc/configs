@@ -24,7 +24,7 @@ alias go='git show'
 alias gom='git --no-pager show'
 
 # whatchanged
-alias gw='git whatchanged -p --pretty=medium'
+alias gwc='git whatchanged -p --pretty=medium'
 
 # fetch
 alias gf='git fetch'
@@ -100,8 +100,14 @@ alias gppo='git push origin $(current_branch):$(current_branch)'
 # pull-request
 alias hpr='hub pull-request -b'
 
-# go to root of repo
+# cd to root of repo
 alias g/='cd $(git rev-parse --show-toplevel || echo ".")'
+
+# rank authors by num commits
+alias gw='git who'
+
+# show churn areas
+alias gww='git where'
 
 # Work In Progress (wip)
 # These features allow to pause a branch development and switch to another one (wip)

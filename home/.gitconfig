@@ -15,23 +15,10 @@
     branch = true
 
 [alias]
-    a     = add
-    aa    = add -A
-    b     = branch
-    c     = commit
-    ca    = commit -a
-    co    = checkout
-    cob   = checkout -b
-    com   = checkout master
-    d     = diff
-    dc    = diff --cached
-    fu    = fetch upstream
-    p     = push
-    s     = status
-    sh    = show
-    sho   = show
     ctags = !.git/hooks/ctags
     emc   = !git-emc.sh
+    who   = !git-who.sh
+    where = !git-where.sh
 
 [github]
     user = invsblduck
