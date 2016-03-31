@@ -26,6 +26,7 @@ bindkey "\ey"   yank-pop
 bindkey "\e."   insert-last-word
 bindkey "\ep"   _history-complete-older
 bindkey ^r      history-incremental-search-backward
+bindkey ^x^e    edit-command-line
 bindkey       undo
 
 # Make the delete key work (or Fn + Delete on the Mac)
@@ -35,7 +36,8 @@ bindkey "\e3;5~" delete-char
 bindkey "\e[3~" delete-char
 
 # other misc mappings
-bindkey -M vicmd 'Y' vi-yank-eol
+bindkey -M vicmd Y vi-yank-eol
+bindkey -M vicmd v edit-command-line
 bindkey '^[[Z'  reverse-menu-complete
 bindkey "\eh"   run-help
 bindkey -M menuselect ^m .accept-line
