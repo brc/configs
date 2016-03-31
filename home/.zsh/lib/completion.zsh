@@ -107,3 +107,5 @@ bindkey "^I" expand-or-complete-prefix-with-dots
 
 # allow g2sh to complete hostnames
 compdef _hosts g2sh.pl
+compdef _hosts s.sh
+compdef _hosts emc-ostool.sh
