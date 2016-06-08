@@ -219,11 +219,10 @@ cmap     <C-k>      <Nop>
 """"""""""""""""""""
 nnoremap <LocalLeader>ra :%s/<C-r><C-w>//gc<Left><Left><Left>
 
-" NERDTree window
-"""""""""""""""""
-"toggle/focus (far left)
-nmap <LocalLeader>nn :NERDTreeToggle<CR>
-nmap <LocalLeader>gn 99<C-w>h
+" Netrw browser
+"""""""""""""""
+" (like vim-vinegar)
+nnoremap - :silent edit <C-R>=empty(expand('%')) ? '.' : expand('%:p:h')<CR><CR>
 
 " QuickFix window
 """""""""""""""""
