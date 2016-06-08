@@ -38,6 +38,7 @@ set tabstop=8
 set ttyfast
 "set textwidth=0
 set undofile
+set updatetime=1000
 set visualbell
 set wildmenu
 set wildmode=list,longest,full
