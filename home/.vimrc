@@ -35,6 +35,8 @@ set smartcase
 set smarttab
 set softtabstop=4
 set tabstop=8
+" (wait half-second for mappings and tenth-second for keycodes)
+set timeout timeoutlen=500 ttimeoutlen=100
 set ttyfast
 "set textwidth=0
 set undofile
@@ -44,6 +46,25 @@ set wildmenu
 set wildmode=list,longest,full
 set writebackup
 
+" Things to remember when we exit
+"""""""""""""""""""""""""""""""""
+" '100        marks will be remembered for up to 100 previously edited files
+" :500        up to 500 lines of command-line history will be remembered
+" %           saves and restores buffer list
+" h           disable 'hlsearch' highlighting when starting
+" f1          store global marks (A-Z and 0-9)
+" n           name used for the viminfo file (must be the last option)
+set viminfo='100,:500,%,h,f1,n~/.viminfo
+
+" UTF-8
+"""""""
+if has("multi_byte")
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  "setglobal bomb
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
+
 "set guioptions-=m
 "set guioptions-=M
 "set guioptions-=T
@@ -51,58 +72,13 @@ set writebackup
 "set guioptions+=c
 "set guifont=vt100:h10
 
-"" Tell vim to remember certain things when we exit
-""   '100        marks will be remembered for up to 100 previously edited files
-""   :500        up to 500 lines of command-line history will be remembered
-""   %           saves and restores buffer list
-""   h           disable 'hlsearch' highlighting when starting
-""   f1          store global marks (A-Z and 0-9)
-""   n           name used for the viminfo file (must be the last option)
-set viminfo='100,:500,%,h,f1,n~/.viminfo
-
-filetype plugin indent on
-
-" Override whatever 'fo' string filetype plugins set
-" (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
-autocmd FileType * setlocal formatoptions+=qroj
-
-let maplocalleader = ","
-syntax on
-
-
-" ###########################################################################
-" ### FUNCTIONS / AUTOCOMMANDS
-" ###########################################################################
-"
-" Restore cursor position when opening file
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
-
-" Automatically show global/local quickfix windows
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
-
-" force the quickfix window to the BOTTOM
-" (to fix things when tagbar is active)
-autocmd FileType qf wincmd J
-
-" highlight current line in NERDTree
-autocmd FileType nerdtree :setl cursorline
-
 
 " ###########################################################################
 " ### SYNTAX HIGHLIGHTING
 " ###########################################################################
-"
+
+syntax on
+
 "hi Comment      term=none       ctermfg=cyan       cterm=bold
 "hi Constant     term=underline  ctermfg=magenta    cterm=none
 "hi Identifier   term=underline  ctermfg=green      cterm=none
@@ -122,7 +98,6 @@ autocmd FileType nerdtree :setl cursorline
 " Molokai: bring the 256 color version as close as possible to the the default
 " (dark) GUI version
 "let g:rehash256 = 1
-
 color molokai
 
 " TODO: configure this so it checks xrandr for VGA output
@@ -146,25 +121,30 @@ hi WarningMsg   ctermfg=yellow ctermbg=red
 
 
 " ###########################################################################
-" ### UTF-8
-" ###########################################################################
-if has("multi_byte")
-  set encoding=utf-8
-  setglobal fileencoding=utf-8
-  "setglobal bomb
-  set fileencodings=ucs-bom,utf-8,latin1
-endif
-
-
-" ###########################################################################
-" ###########################################################################
-" #########  KEYBOARD MAPPING  #############################################
-" ###########################################################################
+" ### CUSTOMIZE THINGS!
 " ###########################################################################
 
-" timeout on keymappings: true
-" wait half-second for mappings and tenth-second for keycodes
-set timeout timeoutlen=500 ttimeoutlen=100
+filetype plugin indent on
+
+" Override whatever 'fo' string filetype plugins set
+" (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
+autocmd FileType * setlocal formatoptions+=qroj
+
+let maplocalleader = ","
+
+" Restore cursor position when opening file
+"""""""""""""""""""""""""""""""""""""""""""
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fix internal keycodes when running under TERM=screen in tmux
@@ -222,20 +202,60 @@ nnoremap <LocalLeader>ra :%s/<C-r><C-w>//gc<Left><Left><Left>
 
 " Netrw browser
 """""""""""""""
-" (like vim-vinegar)
+"(like vim-vinegar)
 nnoremap - :silent edit <C-R>=empty(expand('%')) ? '.' : expand('%:p:h')<CR><CR>
 
 " QuickFix window
 """""""""""""""""
-"toggle/focus (very bottom)
-nmap <LocalLeader>ff :call ToggleQuickfixList()<CR>
-nmap <LocalLeader>gf 99<C-w>j
+"force the qf window to a dynamic height
+"au WinEnter * call ResizeQuickfixWindow(3, 10)
+function! ResizeQuickfixWindow(minheight, maxheight)
+    set lazyredraw      " redraw after executing the function.
+    set ei=WinEnter     " ignore WinEnter events for now.
+    let jumpPrev = 0    " whether we need to jump back to a previous window
 
-"dynamic height
+    " if current window is NOT quickfix window
+    if (getbufvar(winbufnr(winnr()), "&buftype") != "quickfix")
+        " iterate ALL windows to find quickfix window (if it exists)
+        let jumpPrev = 1  " make sure we jump back to our non-QF window
+        let i = 1
+        while (winbufnr(i) != -1)
+            if (getbufvar(winbufnr(i), "&buftype") == "quickfix")
+                " jump to the QF window
+                exe i . "wincmd w"
+                break
+            endif
+            let i += 1
+        endwhile
+    endif
+
+    " set the damn height.
+    exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+
+    " return to our previous window (if we came from one)
+    if jumpPrev
+        wincmd p
+    endif
+
+    unlet jumpPrev
+    set ei-=WinEnter
+    set nolazyredraw
+endfunction
+
 au FileType qf call AdjustWindowHeight(3, 10)
 function! AdjustWindowHeight(minheight, maxheight)
-  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+    exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
 endfunction
+"force the quickfix window to the BOTTOM
+"(to fix things when tagbar is active)
+"autocmd FileType qf botright cwindow
+autocmd FileType qf wincmd J
+"automatically show global/local quickfix windows
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
+"toggle/focus (very bottom)
+nmap <LocalLeader>ff :call ToggleQuickfixList()<CR>
+nmap <LocalLeader>gf <C-w>b
 
 " MBE window
 """"""""""""
@@ -243,41 +263,32 @@ endfunction
 nmap <LocalLeader>mm :MBEToggle<CR>
 nmap <LocalLeader>gm 99<C-w>k
 
-" Tagbar window
-"""""""""""""""
-"toggle/focus (far right)
-nmap <LocalLeader>tt :TagbarToggle<CR>
-nmap <LocalLeader>gt 99<C-w>l
-
 " Window management
 """""""""""""""""""
 nmap <LocalLeader>w <c-w>
 nmap <LocalLeader>we <c-w>=
 nnoremap <LocalLeader>ww <c-w>p
 
-" Paste
-"""""""
+" Yank
+""""""
+nmap Y y$
+
+" Put
+"""""
 "toggle
 nmap <F1> :set paste<CR>
 nmap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
 "inoremap <F1> <C-o>:call Setup_paste()<CR>
 
-" yank
-""""""
-nmap Y y$
-
 " Writing/quiting files
 """""""""""""""""""""""
 map <F4> :w<CR>
 imap <F4> <ESC>:w<CR>
-
 map  <F7> :wq<CR>
 imap <F7> <ESC>:wq<CR>
-
 map <F5> :q<CR>
 map <S-F5> :qa<CR>
-
 map <F8> :q!
 map <S-F8> :qa!
 
@@ -285,7 +296,6 @@ map <S-F8> :qa!
 """""""""""""""""""""
 map <F9> :nohl<CR>
 imap <F9> <C-o>:nohl<CR>
-
 map <S-F9> :set hls<CR>
 imap <S-F9> <C-o>:set hls<CR>
 
@@ -303,18 +313,51 @@ map <LocalLeader>f zi
 """""""""""""""""""""""""""
 map <LocalLeader>du :diffupdate<CR>
 
-" Vimgrep
-"""""""""
-nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
-"nnoremap gr :silent grep!  \| redraw!<S-Left><S-Left><S-Left>
-
 " Prevent window death
 """"""""""""""""""""""
 nmap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
 nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 
-" Fugitive
-""""""""""
+
+" ###########################################################################
+" ###########################################################################
+" #########  PLUGIN CONFIGURATION  ##########################################
+" ###########################################################################
+" ###########################################################################
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Ack (ack.vim)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" create key mapping and use 'ag' if possible
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+    nnoremap gr :Ack!<Space>
+else
+    nnoremap gr :vimgrep //j **<Left><Left><Left><Left><Left>
+endif
+
+" change default bindings to something not awful
+let g:ack_mappings = {
+    \ "t": "<C-w>gF",
+    \ "T": "<C-w>gFgT",
+    \ "go": "<CR>",
+    \ "gO": "<CR><C-w>p",
+    \ "gh": "<C-w><CR>",
+    \ "gH": "<C-w><CR><C-w>b",
+    \ "gv": "<C-w>k:vnew<CR><C-w>b<CR>",
+    \ "gV": "<C-w><CR><C-W>H<C-W>b<C-W>J" }
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Easy Align (vim-easy-align)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vmap <Enter> <Plug>(EasyAlign)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Fugitive (vim-fugitive)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
+
 nmap <LocalLeader>gg :Gstatus<CR>
 nmap <LocalLeader>gl :Glog --<CR>
 nmap <LocalLeader>gL :Glog -- %
@@ -327,29 +370,30 @@ nmap <LocalLeader>gR :Gread<CR>
 nmap <LocalLeader>gd :Gdiff<CR>
 nmap <LocalLeader>gc :Gcommit<CR>
 
-" vim-easy-align
-""""""""""""""""
-vmap <Enter> <Plug>(EasyAlign)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Gist (gist-vim)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:gist_post_private = 1
+let g:gist_show_privates = 1
+let g:gist_open_browser_after_post = 1
 
-
-" ###########################################################################
-" ###########################################################################
-" #########  PLUGIN CONFIGURATION  ##########################################
-" ###########################################################################
-" ###########################################################################
-"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ NERDTree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " don't use unicode arrow glyphs
 "let NERDTreeDirArrows = 0
+
 let NERDTreeHijackNetrw = 1
 let NERDTreeShowBookmarks = 1
 let NERDTreeShowHidden = 1
 let NERDTreeMinimalUI = 1
+
 " swap highlighting of directories and symlinks
 hi link NERDTreeDir Macro
 hi link NERDTreeLink Directory
+
+" highlight current line in NERDTree
+autocmd FileType nerdtree :setl cursorline
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Tagbar
@@ -357,50 +401,45 @@ hi link NERDTreeLink Directory
 " don't use unicode arrow glyphs
 let g:tagbar_iconchars = ['+', '-'] 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" togglelist.vim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:toggle_list_no_mappings = 1       " disable default plugin bindings
-let g:toggle_list_copen_command='Copen' " use Dispatch Copen command
+" toggle/focus (far right)
+nmap <LocalLeader>tt :TagbarToggle<CR>
+nmap <LocalLeader>gt 99<C-w>l
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Fugitive
+""" Toggle List (vim-togglelist)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
+" disable default plugin bindings
+let g:toggle_list_no_mappings = 1
+
+" use Dispatch Copen command
+let g:toggle_list_copen_command='Copen'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Unimpaired
+""" UltiSnips
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" trigger
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+
+" this lets :UltiSnipsEdit split your window
+let g:UltiSnipsEditSplit="vertical"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Unimpaired (vim-unimpaired)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " make :cnext and :cprevious easier on my keymap
 map ]j :cnext<CR>
 map ]k :cprevious<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Gist
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gist_post_private = 1
-let g:gist_show_privates = 1
-let g:gist_open_browser_after_post = 1
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Don't use <tab> to cycle thru PUM, use ^n and ^p as we're used to doing.
-" This also solves problems with using UltiSnips simultaneously, which uses
+" don't use <tab> to cycle thru PUM, use ^n and ^p as we're used to doing.
+" this also solves problems with using UltiSnips simultaneously, which uses
 " <tab> as its default trigger.
 let g:ycm_key_list_select_completion=['<C-n>']
 let g:ycm_key_list_previous_completion=['<C-p>']
 
 " read tags file
 let g:ycm_collect_identifiers_from_tags_files = 1
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" UltiSnips
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger="<Tab>"
-let g:UltiSnipsJumpForwardTrigger="<Tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
