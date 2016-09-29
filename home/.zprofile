@@ -2,15 +2,19 @@
 # ~/.zprofile
 #
 
-export GEM_HOME=~/.gem/ruby/2.2.0
-system_gems=/usr/lib/ruby/gems/2.2.0
+ruby_version=2.3.0
+export GEM_HOME=~/.gem/ruby/${ruby_version}
+system_gems=/usr/lib/ruby/gems/${ruby_version}
 gempaths=(
     ~/.gem/ruby/2.0.0
     ~/.gem/ruby/2.1.0
+    ~/.gem/ruby/2.2.0
     ${GEM_HOME}
     ${system_gems}
 )
 export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
+
+export GOPATH=/data/go
 
 mypaths=(
     ~/bin
@@ -23,6 +27,7 @@ mypaths=(
     /git/emcrubicon/campbb6/dev-utils/bin
     /git/invsblduck/fakecloud
     /git/powerline/scripts
+    ${GOPATH}/bin
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
