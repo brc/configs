@@ -32,9 +32,10 @@ alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
 
-alias grep='egrep --color=auto'     # actual commands
+alias diff=colordiff                # actual commands
 alias ftp=lftp                      #
-alias diff=colordiff                #
+alias gdb='gdb -q'                  #
+alias grep='egrep --color=auto'     #
 alias vi=vim                        #
                                        
 alias p='pstree -U'                     #  made-up aliases for common tasks
@@ -53,9 +54,11 @@ alias untarbzip='tar xvjf'
 alias n='sudo ss -ltpn'
 alias td='sudo tcpdump -nn'
 alias gr='grep -RIsi --exclude-dir=.git --exclude-dir=.tox'
-alias gri='grep -RIs'
+alias gri='grep -RIs --exclude-dir=.git --exclude-dir=.tox' # no -i
 alias gra='grep -RIsi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
-alias t='tree -aCI .git\|.tox'
+alias grx='gr --exclude-dir'
+alias t='tree -CI .git\|.tox'
+alias tt='tree -aCI .git\|.tox'
 alias r2='ssh -l root'
 alias vv='vim ~/.vimrc'
 alias va='vim ~/.zsh/aliases'
@@ -63,6 +66,7 @@ alias vp='vim ~/.zprofile'
 alias vrc='vim ~/.zshrc'
 alias vm='vim ~/.zsh/lib/mappings.zsh'
 alias vag='vim ~/.zsh/lib/git-aliases.zsh'
+alias vssh='vim ~/.ssh/config'
 alias na='. ~/.zsh/aliases'
 alias np='. ~/.zprofile'
 alias nrc='. ~/.zshrc'
@@ -149,9 +153,10 @@ if [[ $(hostname) =~ archie ]]; then
     alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
     alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
     alias gecp='cd /git/emcrubicon/campbb6/pantry-projects'
+    alias gecpd='cd /git/emcrubicon/campbb6/pantry-dev'
+    alias gecsh='cd /git/emcrubicon/campbb6/pantry-dev/service-improvement-handbook'
     alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
     alias gece='cd /git/emcrubicon/campbb6/pantry-projects/ecs2-salt'
-    alias gei='cd /git/emcrubicon/iaas'
     alias det='cd /data/emc/tmp'
     alias detu='cd /data/emc/tmp/users-formula/test/roots'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
@@ -164,3 +169,4 @@ fi
 alias dm='env LESS="$LESS +G" dmesg -H'
 alias dt='dmesg -Hw'
 
+alias seces='elastic-go --baseurl http://seces01.drhm01.core.rcsops.com:9200/'
