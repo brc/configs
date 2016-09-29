@@ -67,6 +67,17 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 export VAGRANT_VM_MEM=1536
 export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
 
+# configure basic history
+export HISTSIZE=10000
+export SAVEHIST=9990        # smaller than HISTSIZE for hist_expire_dups_first
+export HISTFILE=~/.zsh/history
+setopt extended_history         # ":start:elapsed;command" format
+setopt inc_append_history       # write history immediately (not after exit)
+setopt hist_ignore_dups         # don't record consecutively duplicate events
+setopt hist_expire_dups_first   # rotate global dups out first
+setopt hist_find_no_dups        # skip dups during history search
+setopt hist_verify              # expand history before executing command
+
 # setup fpath
 fpath=(~/.zsh/fpath $fpath)
 
@@ -113,12 +124,6 @@ source ~/.zsh/prompts/duck.zsh
 
 # Uncomment following line if you want to disable autosetting terminal title.
 # DISABLE_AUTO_TITLE="true"
-
-# Uncomment following line if you want to  shown in the command execution time stamp 
-# in the history command output. The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|
-# yyyy-mm-dd
-#HIST_STAMPS="yyyy-mm-dd"
-
 
 
 if which fortune >/dev/null; then
