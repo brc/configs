@@ -40,7 +40,7 @@ bindkey -M vicmd Y vi-yank-eol
 bindkey -M vicmd v edit-command-line
 bindkey '^[[Z'  reverse-menu-complete
 bindkey "\eh"   run-help
-bindkey -M menuselect ^m .accept-line
+#bindkey -M menuselect ^m .accept-line      # don't press Return twice
 
 
 # input macros

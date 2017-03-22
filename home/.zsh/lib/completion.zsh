@@ -3,7 +3,7 @@
 WORDCHARS=''
 
 setopt no_list_beep     # don't fucking flash before showing menu
-setopt no_menu_complete # don't autoselect the first completion entry
+#setopt no_menu_complete # don't autoselect the first completion entry
 
 setopt always_to_end    # move cursor to end of word after completion
 setopt auto_list        # automatically list choices on ambiguous completion
@@ -11,7 +11,7 @@ setopt auto_menu        # show completion menu on succesive tab press
 setopt auto_param_keys  # intelligently remove completed chars for subkey chars
 setopt auto_param_slash # add slash instead of space if completing dir name
 #setopt auto_remove_slash # remove trailing slash when next char is cmd delimeter
-setopt glob_complete    # trigger menu comp for globs instead of exapanding
+#setopt glob_complete    # trigger menu comp for globs instead of exapanding
 setopt list_ambiguous   # auto insert unambigous parts of completions w/o menu
 setopt list_types       # show trailing character in listing to id file type
 
