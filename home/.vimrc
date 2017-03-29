@@ -253,8 +253,7 @@ autocmd FileType qf wincmd J
 "automatically show global/local quickfix windows
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-"toggle/focus (very bottom)
-nmap <LocalLeader>ff :call ToggleQuickfixList()<CR>
+"focus (very bottom)
 nmap <LocalLeader>gf <C-w>b
 
 " MBE window
@@ -404,15 +403,6 @@ let g:tagbar_iconchars = ['+', '-']
 " toggle/focus (far right)
 nmap <LocalLeader>tt :TagbarToggle<CR>
 nmap <LocalLeader>gt 99<C-w>l
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Toggle List (vim-togglelist)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" disable default plugin bindings
-let g:toggle_list_no_mappings = 1
-
-" use Dispatch Copen command
-let g:toggle_list_copen_command='Copen'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ UltiSnips
