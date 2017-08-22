@@ -2,7 +2,7 @@
 # ~/.zprofile
 #
 
-ruby_version=2.3.0
+ruby_version=2.4.0
 export GEM_HOME=~/.gem/ruby/${ruby_version}
 system_gems=/usr/lib/ruby/gems/${ruby_version}
 gempaths=(
