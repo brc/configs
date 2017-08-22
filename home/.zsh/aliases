@@ -95,51 +95,35 @@ fi
 alias rcc='cd /var/chef/cache/cookbooks'
 
 if [[ $(hostname) =~ archie ]]; then
-    #alias f='fixshit.sh'
-    alias wi='sudo wifi-menu'
-    alias kf='pkill plugin-containe'
+    # alias f='fixshit.sh'
+    # alias wi='sudo wifi-menu'
+    # alias kf='pkill plugin-containe'
 
-    alias kc='knife client list'
-    alias kcc='knife client show'
-    alias kcd='knife client delete'
+    # alias kc='knife client list'
+    # alias kcc='knife client show'
+    # alias kcd='knife client delete'
 
-    alias kn='knife node list'
-    alias knn='knife node show'
-    alias kne='knife node edit'
-    alias knd='knife node delete'
+    # alias kn='knife node list'
+    # alias knn='knife node show'
+    # alias kne='knife node edit'
+    # alias knd='knife node delete'
 
-    #alias ke='knife environment list' # function
-    alias kee='knife environment edit'
+    # alias ke='knife environment list' # function
+    # alias kee='knife environment edit'
 
     alias tm=tmux
     alias tma='tmux attach'
 
-    alias vppn='pgrep -lfa vpnc'
-    alias rubvpn='sudo vpnc drhm02'
-    alias goudavpn='sudo vpnc lsvg01'
-    alias ricevpn='sudo vpnc rice'
-    alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
+    # alias vppn='pgrep -lfa vpnc'
+    # alias rubvpn='sudo vpnc drhm02'
+    # alias goudavpn='sudo vpnc lsvg01'
+    # alias ricevpn='sudo vpnc rice'
+    # alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
     alias ww=g2sh.pl
     alias wo=/data/fire/s.sh
     alias irc='ssh irc'
     alias chef='ssh chef'
-    #alias allspark-lsvg01='ssh allspark-lsvg01'
-    #alias allspark-stng01='ssh allspark-stng01'
-    #alias nile-lsvg01='ssh root@nile-lsvg01'
-    #alias nile-lsvg01-test='ssh root@nile-lsvg01-test'
-    #alias plato-lsvg01='ssh root@10.131.136.199'
-    #alias salt01-lsvg01='ssh root@salt01-lsvg01'
-    #alias salt02-lsvg01='ssh root@salt02-lsvg01'
-    #alias proxy01-lsvg01='ssh root@proxy01-lsvg01'
-    #alias smtp01-lsvg01='ssh root@smtp01-lsvg01'
-    #alias smtp02-lsvg01='ssh root@smtp02-lsvg01'
-    #alias ntp01-lsvg01='ssh root@ntp01-lsvg01'
-    #alias ntp02-lsvg01='ssh root@ntp02-lsvg01'
-    #alias dc01-lsvg01='ssh root@dc01-lsvg01'
-    #alias dc02-lsvg01='ssh root@dc02-lsvg01'
-    #alias dns01-lsvg01='ssh root@dns01-lsvg01'
-    #alias dns02-lsvg01='ssh root@dns02-lsvg01'
 
     alias fc='sudo fakecloud'
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
