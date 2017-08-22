@@ -120,7 +120,7 @@ if [[ $(hostname) =~ archie ]]; then
     # alias ricevpn='sudo vpnc rice'
     # alias thinwin='rdesktop -g1024x768 -u bret6285 thinwin.rackspace.corp'
 
-    alias ww=g2sh.pl
+    alias ww=gnash
     alias wo=/data/fire/s.sh
     alias irc='ssh irc'
     alias chef='ssh chef'
