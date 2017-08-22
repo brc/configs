@@ -62,7 +62,7 @@ export LESS_TERMCAP_se=$'\E[0m'         # end
 eval "$(dircolors -b ~/.dircolors)"
 
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
-export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
+#export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 
 #export PYTHONDONTWRITEBYTECODE=1
@@ -70,7 +70,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 #export VAGRANT_DEFAULT_PROVIDER=libvirt
 export VAGRANT_VM_MEM=1536
-export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
+#export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
 
 # configure basic history
 export HISTSIZE=10000
