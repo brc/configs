@@ -88,8 +88,8 @@ elif grep -iwq centos /etc/issue; then
     alias pmi='sudo yum install'
 elif grep -iwq arch /etc/issue; then
     alias aptdate='sudo pacman -Syy'
-    alias cache='pacman -Ss'
-    alias pmi='sudo pacman -S'
+    alias cache='pacaur -Ss'
+    alias pmi='pacaur -S'
 fi
 
 alias rcc='cd /var/chef/cache/cookbooks'
