@@ -130,27 +130,43 @@ if [[ $(hostname) =~ archie ]]; then
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
     alias r="python3 `which ranger`"
+
     alias gi='cd /git/invsblduck'
     alias gib='cd /git/invsblduck/bin'
-    alias ge='cd /git/emcrubicon'
-    alias gec='cd /git/emcrubicon/campbb6'
-    alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
-    alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
-    alias gecp='cd /git/emcrubicon/campbb6/pantry-projects'
-    alias gecpd='cd /git/emcrubicon/campbb6/pantry-dev'
-    alias gecsh='cd /git/emcrubicon/campbb6/pantry-dev/service-improvement-handbook'
-    alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
-    alias gece='cd /git/emcrubicon/campbb6/pantry-projects/ecs2-salt'
-    alias det='cd /data/emc/tmp'
-    alias detu='cd /data/emc/tmp/users-formula/test/roots'
     alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias fcc='cd /git/invsblduck/fakecloud_configs/dotfiles'
     alias configs='cd /git/invsblduck/configs/home'
 
+    # rubicon bullshit
+    alias ge='cd /git/emcrubicon'
+    alias gec='cd /git/emcrubicon/campbb6'
+    alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
+    alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
+    alias gep='cd /git/emcrubicon/pantry-projects'
+    alias gecp='cd /git/emcrubicon/campbb6/pantry-projects'
+    alias gepd='cd /git/emcrubicon/pantry-dev'
+    alias gecpd='cd /git/emcrubicon/campbb6/pantry-dev'
+    alias gecsh='cd /git/emcrubicon/campbb6/pantry-dev/service-improvement-handbook'
+    alias ger='cd /git/emcrubicon/rubicon-saltstack'
+    alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
+    alias gece='cd /git/emcrubicon/campbb6/pantry-projects/ecs2-salt'
+    alias det='cd /data/emc/tmp'
+    alias detu='cd /data/emc/tmp/users-formula/test/roots'
     alias ess='emc-saltsync.sh'
+    alias cdev='cd /data/emc/salt/dev/graft_root'
+    alias ckick='cd /data/emc/salt/dev/graft_root'
+    alias cmin='docker exec -it dev_minion_1 /bin/bash'
+    alias cmm='docker exec -it dev_master_1 /bin/bash'
+    alias ccpg='docker exec -it dev_minion_1 salt-call pillar.get'
+    alias ccpi='docker exec -it dev_minion_1 salt-call pillar.items'
+
+    # liberty bullshit
+    alias glu='cd /git/lm/uscm-devops'
+    alias glug='cd /git/lm/uscm-devops/jenkins-global-groovy/vars'
+    alias glup='cd /git/lm/uscm-devops/jenkins-python'
 fi
 
 alias dm='env LESS="$LESS +G" dmesg -H'
 alias dt='dmesg -Hw'
 
-alias seces='elastic-go --baseurl http://seces01.drhm01.core.rcsops.com:9200/'
+alias find-vim-swaps="find . -type f -name '.*.sw[pon]'"
