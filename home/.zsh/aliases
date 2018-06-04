@@ -53,9 +53,9 @@ alias untargzip='tar xvzf'
 alias untarbzip='tar xvjf'
 alias n='sudo ss -ltpn'
 alias td='sudo tcpdump -nn'
-alias gr='grep -RIsi --exclude-dir=.git --exclude-dir=.tox'
-alias gri='grep -RIs --exclude-dir=.git --exclude-dir=.tox' # no -i
-alias gra='grep -RIsi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
+alias gr='grep -RIi --exclude-dir=.git --exclude-dir=.tox'
+alias gri='grep -RI --exclude-dir=.git --exclude-dir=.tox' # no -i
+alias gra='grep -RIi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
 alias grx='gr --exclude-dir'
 alias t='tree -CI .git\|.tox'
 alias tt='tree -aCI .git\|.tox'
@@ -161,9 +161,13 @@ if [[ $(hostname) =~ archie ]]; then
     alias ccpi='docker exec -it dev_minion_1 salt-call pillar.items'
 
     # liberty bullshit
-    alias glu='cd /git/lm/uscm-devops'
-    alias glug='cd /git/lm/uscm-devops/jenkins-global-groovy/vars'
-    alias glup='cd /git/lm/uscm-devops/jenkins-python'
+    alias glu='cd /git/liberty/uscm-devops'
+    alias glug='cd /git/liberty/uscm-devops/jenkins-global-groovy/vars'
+    alias glup='cd /git/liberty/uscm-devops/jenkins-python'
+
+    # lmi bullshit
+    alias pf='cd /data/lmi/os/pf9'
+    alias poc='cd /git/lmi/ie/platform9/poc/scripts'
 fi
 
 alias dm='env LESS="$LESS +G" dmesg -H'

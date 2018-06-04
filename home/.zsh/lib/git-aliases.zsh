@@ -4,24 +4,22 @@ function current_branch {
 
 # git
 alias g=git
-alias gm='git --no-pager'
 
 # log
 alias gl='git log --stat'
-alias glm='git --no-pager log --stat'
-
 alias gll='git log --oneline'
-alias gllm='git --no-pager log --oneline'
-
 alias glg='git log --grep'
-alias glgm='git --no-pager log --grep'
-
 alias glum='git log --stat upstream/master'
 alias glud='git log --stat upstream/devel'
 
+# grep
+alias ggr='git grep --heading --break'
+
 # show
 alias go='git show'
-alias gom='git --no-pager show'
+alias goh='git show HEAD'
+alias gohh='git show HEAD^'
+alias gohhh='git show HEAD^^'
 
 # whatchanged
 alias gwc='git whatchanged -p --pretty=medium'
@@ -65,14 +63,12 @@ alias gtp='git stash pop'
 # checkout
 alias gco='git checkout'
 alias gcom='git checkout master'
-alias gcod='git checkout devel'
+alias gcod='git checkout develop'
 alias gcob='git checkout -b'
 
 # diff
 alias gd='git diff'
-alias gdm='git --no-pager diff'
 alias gdc='git diff --cached'
-alias gdcm='git --no-pager diff --cached'
 alias gdum='git log -p HEAD..upstream/master'
 alias gdud='git log -p HEAD..upstream/devel'
 
@@ -97,6 +93,7 @@ alias gcAa=gcaA
 # push
 alias gpp='git push'
 alias gppo='git push origin $(current_branch):$(current_branch)'
+alias gppf='git push origin $(current_branch):$(current_branch) --force'
 
 # pull-request
 alias hpr='hub pull-request -b'

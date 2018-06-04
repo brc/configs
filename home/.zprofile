@@ -2,6 +2,8 @@
 # ~/.zprofile
 #
 
+export GOPATH=/data/go
+
 ruby_version=2.4.0
 export GEM_HOME=~/.gem/ruby/${ruby_version}
 system_gems=/usr/lib/ruby/gems/${ruby_version}
@@ -9,18 +11,20 @@ gempaths=(
     ~/.gem/ruby/2.0.0
     ~/.gem/ruby/2.1.0
     ~/.gem/ruby/2.2.0
+    ~/.gem/ruby/2.3.0
     ${GEM_HOME}
     ${system_gems}
 )
 export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
 
-export GOPATH=/data/go
-
 mypaths=(
     ~/bin
     /usr/local/sbin
     /usr/local/bin
+    /bin
+    /sbin
     /usr/bin
+    /usr/sbin
     /usr/bin/vendor_perl
     /usr/bin/core_perl
     $(printf "%s/bin " "${gempaths[@]}")
@@ -64,6 +68,8 @@ eval "$(dircolors -b ~/.dircolors)"
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 #export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
+
+export FIRE_USER=bcampbell  # LMI
 
 #export PYTHONDONTWRITEBYTECODE=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1
