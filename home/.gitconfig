@@ -15,10 +15,12 @@
     branch = true
 
 [alias]
-    ctags = !.git/hooks/ctags
-    emc   = !git-emc.sh
-    who   = !git-who.sh
-    where = !git-where.sh
+    ctags   = !.git/hooks/ctags
+    emc     = !git-config.sh emc
+    liberty = !git-config.sh liberty
+    logmein = !git-config.sh lmi
+    who     = !git-who.sh
+    where   = !git-where.sh
 
 [github]
     user = invsblduck
@@ -27,4 +29,6 @@
     username = invsblduck
 
 [grep]
-	patternType = extended
+    patternType = extended
+    extendRegexp = true
+    lineNumber = true
