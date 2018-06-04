@@ -42,6 +42,7 @@ alias pp='ps faxww'                     #
 alias pg='pgrep -lf'                    #
 alias pgg='pgrep -lfa'                  #
 alias w='sudo'                          #
+alias wm='cat ~/.motd.old |sudo -S -l'  #
 alias count='wc -l'                     #
 alias chx='chmod a+x'                   #
 alias chw='sudo chmod a+w'              #
@@ -49,11 +50,17 @@ alias chr='sudo chmod a-w'              #
 alias chb='sudo chown campbb6:campbb6'  #
 alias untargzip='tar xvzf'
 alias untarbzip='tar xvjf'
-alias n='sudo ss -ltpn'
+#alias n='sudo ss -ltpn'
+alias n='sudo lsof -Pni 2>/dev/null |grep LIST'
 alias td='sudo tcpdump -nn'
-alias gr='grep -RIsi --exclude-dir=.git --exclude-dir=.tox'
-alias gri='grep -RIs'
-alias gra='grep -RIsi --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
+alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+alias gri='grep -RI --color --exclude-dir=.git --exclude-dir=.tox' # no -i
+alias gra='grep -RIi --color --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
+alias grx='grep -RIi --color --exclude-dir'
+alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+alias wgri='sudo grep -RI --color --exclude-dir=.git --exclude-dir=.tox' # no -i
+alias wgra='sudo grep -RIi --color --exclude-dir=/proc --exclude-dir=/sys --exclude-dir=/dev'
+alias wgrx='sudo grep -RIi --color --exclude-dir'
 alias t='tree -aCI .git\|.tox'
 alias r2='ssh -l root'
 alias vv='vim ~/.vimrc'
@@ -77,7 +84,7 @@ if grep -iwq ubuntu /etc/issue; then
     alias cache='apt-cache search'
     alias pmi='sudo apt-get install'
 elif uname -a |grep -q '\.el[0-9]+\.'; then
-    alias cache='sudo yum search'
+    alias cache='yum search'
     alias pmi='sudo yum install'
 elif grep -iwq arch /etc/issue; then
     alias aptdate='sudo pacman -Syy'
