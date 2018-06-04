@@ -1,0 +1,12 @@
+proxy=$(grep -w '^Proxy' /etc/cntlm.conf |head -1 |awk '{ print $2 }')
+
+# variables are address and port (colon delimited)
+if nc -vv -z -w1 ${proxy%%:*} ${proxy##*:} >/dev/null 2>&1; then
+    export http_proxy=localhost:3128  # cntlm proxy
+    export https_proxy=$http_proxy
+    export HTTP_PROXY=$http_proxy
+    export HTTPS_PROXY=$http_proxy
+    #(no_proxy is handled by cntlm)
+fi
+
+unset proxy
