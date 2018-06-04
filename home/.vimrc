@@ -87,24 +87,24 @@ syntax on
 "hi Type         term=underline  ctermfg=yellow     cterm=bold
 "hi Special      term=bold       ctermfg=red        cterm=bold
 "hi Nontext      term=bold       ctermfg=blue       cterm=bold
-"hi Normal       ctermfg=darkgreen
+hi Normal       ctermfg=darkgreen
 "hi Search       term=underline cterm=underline ctermfg=magenta ctermbg=none
 
 "color ir_black
 "color vividchalk
 "color jellybeans
 "color inkpot
+"color delek
 
 " Molokai: bring the 256 color version as close as possible to the the default
 " (dark) GUI version
 "let g:rehash256 = 1
 color molokai
 
-" TODO: configure this so it checks xrandr for VGA output
-"color delek
-
 " Custom highlights
 """""""""""""""""""
+hi Normal       ctermbg=235
+hi Visual       term=reverse ctermbg=4
 hi Search       cterm=underline,bold ctermfg=yellow ctermbg=magenta
 hi WarningMsg   ctermfg=yellow ctermbg=red
 "hi ColorColumn  ctermbg=blue ctermfg=yellow
@@ -354,8 +354,10 @@ vmap <Enter> <Plug>(EasyAlign)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Fugitive (vim-fugitive)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-let g:fugitive_github_domains = ['github.com', 'github.emcrubicon.com']
+if !empty(glob("~/.vim/bundle/vim-fugitive"))
+    set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+    let g:fugitive_github_domains = ['github.com', 'github.evilcorp.com']
+endif
 
 nmap <LocalLeader>gg :Gstatus<CR>
 nmap <LocalLeader>gl :Glog --<CR>
@@ -368,13 +370,16 @@ nmap <LocalLeader>gw :Gwrite<CR>
 nmap <LocalLeader>gR :Gread<CR>
 nmap <LocalLeader>gd :Gdiff<CR>
 nmap <LocalLeader>gc :Gcommit<CR>
+nmap <LocalLeader>gppo :Gpush origin HEAD<CR>
+nmap <LocalLeader>gppf :Gpush origin HEAD --force<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Gist (gist-vim)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gist_post_private = 1
+"let g:gist_post_private = 1
 let g:gist_show_privates = 1
-let g:gist_open_browser_after_post = 1
+"let g:gist_open_browser_after_post = 1
+"let g:gist_api_url = 'https://github.evilcorp.com/api/v3'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ NERDTree
@@ -397,6 +402,8 @@ autocmd FileType nerdtree :setl cursorline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Tagbar
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" focus tagbar when opening it
+let g:tagbar_autofocus = 1
 " don't use unicode arrow glyphs
 let g:tagbar_iconchars = ['+', '-'] 
 

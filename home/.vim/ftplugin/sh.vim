@@ -5,20 +5,20 @@ let g:sh_fold_enabled = 7
 map <buffer> <LocalLeader>bin i#!/bin/sh<CR><BS><CR><CR>
 imap <buffer> <LocalLeader>bin #!/bin/sh<CR><BS><CR><CR>
 
-map <buffer> .c i$<ESC>
-imap <buffer> .c $
+" map <buffer> .c i$<ESC>
+" imap <buffer> .c $
 
-map <buffer> <LocalLeader>r i#<ESC>
-imap <buffer> <LocalLeader>r # 
+" map <buffer> <LocalLeader>r i#<ESC>
+" imap <buffer> <LocalLeader>r #
 
-map <buffer> .n i\n<ESC>
-imap <buffer> .n \n
+" map <buffer> .n i\n<ESC>
+" imap <buffer> .n \n
 
 map <buffer> .r i"<ESC>
 imap <buffer> .r "
 
-map <buffer> .b i\<ESC>
-imap <buffer> .b \
+" map <buffer> .b i\<ESC>
+" imap <buffer> .b \
 
 imap <buffer> <LocalLeader>l <ESC>A
 
