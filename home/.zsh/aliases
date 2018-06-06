@@ -125,7 +125,7 @@ if [[ $(hostname) =~ archie ]]; then
     alias irc='ssh irc'
     alias chef='ssh chef'
 
-    alias fc='sudo fakecloud'
+    #alias fc='sudo fakecloud'  # conflicts with builtin history command
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
