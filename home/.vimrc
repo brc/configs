@@ -40,7 +40,7 @@ set timeout timeoutlen=500 ttimeoutlen=100
 set ttyfast
 "set textwidth=0
 if has("persistent_undo")
-    set undodir=~/.vim_undo
+    set undodir=~/.vim/.undo
     set undofile
 endif
 set updatetime=1000
