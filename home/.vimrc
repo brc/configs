@@ -39,7 +39,10 @@ set tabstop=8
 set timeout timeoutlen=500 ttimeoutlen=100
 set ttyfast
 "set textwidth=0
-set undofile
+if has("persistent_undo")
+    set undodir=~/.vim_undo
+    set undofile
+endif
 set updatetime=1000
 set visualbell
 set wildmenu
