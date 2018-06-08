@@ -440,3 +440,8 @@ let g:ycm_key_list_previous_completion=['<C-p>']
 
 " read tags file
 let g:ycm_collect_identifiers_from_tags_files = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" IndentGuides
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <LocalLeader>ig <Plug>IndentGuidesToggle
