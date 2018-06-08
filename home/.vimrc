@@ -254,42 +254,42 @@ autocmd FileType qf wincmd J
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 "focus (very bottom)
-nmap <LocalLeader>gf <C-w>b
+nnoremap <LocalLeader>gf <C-w>b
 
 " MBE window
 """"""""""""
 "toggle/focus (very top)
-nmap <LocalLeader>mm :MBEToggle<CR>
-nmap <LocalLeader>gm 99<C-w>k
+nnoremap <LocalLeader>mm :MBEToggle<CR>
+nnoremap <LocalLeader>gm 99<C-w>k
 
 " Window management
 """""""""""""""""""
-nmap <LocalLeader>w <c-w>
-nmap <LocalLeader>we <c-w>=
+nnoremap <LocalLeader>w <c-w>
+nnoremap <LocalLeader>we <c-w>=
 nnoremap <LocalLeader>ww <c-w>p
 
 " Yank
 """"""
-nmap Y y$
+nnoremap Y y$
 
 " Put
 """""
 "toggle
-nmap <F1> :set paste<CR>
-nmap <S-F1> :set nopaste<CR>
+" nnoremap <F1> :set paste<CR>
+" nnoremap <S-F1> :set nopaste<CR>
 "one-time paste for insert-mode
 "inoremap <F1> <C-o>:call Setup_paste()<CR>
 
 " Writing/quiting files
 """""""""""""""""""""""
-map <F4> :w<CR>
-imap <F4> <ESC>:w<CR>
-map  <F7> :wq<CR>
-imap <F7> <ESC>:wq<CR>
-map <F5> :q<CR>
-map <S-F5> :qa<CR>
-map <F8> :q!
-map <S-F8> :qa!
+noremap <F4> :w<CR>
+inoremap <F4> <ESC>:w<CR>
+noremap  <F7> :wq<CR>
+inoremap <F7> <ESC>:wq<CR>
+noremap <F5> :q<CR>
+noremap <S-F5> :qa<CR>
+noremap <F8> :q!
+noremap <S-F8> :qa!
 
 " Search highlighting
 """""""""""""""""""""
@@ -300,22 +300,22 @@ imap <S-F9> <C-o>:set hls<CR>
 
 " Pan left/right
 """"""""""""""""
-map <ESC>l z10l
-map <ESC>h z10h
+noremap <ESC>l z10l
+noremap <ESC>h z10h
 
 " Toggle folds
 """"""""""""""
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-map <LocalLeader>f zi
+noremap <LocalLeader>f zi
 
 " Refresh diff highlighting
 """""""""""""""""""""""""""
-map <LocalLeader>du :diffupdate<CR>
+noremap <LocalLeader>du :diffupdate<CR>
 
 " Prevent window death
 """"""""""""""""""""""
-nmap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
-nmap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
+nnoremap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
+nnoremap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
 
 
 " ###########################################################################
@@ -349,7 +349,7 @@ let g:ack_mappings = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Easy Align (vim-easy-align)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vmap <Enter> <Plug>(EasyAlign)
+vnoremap <Enter> <Plug>(EasyAlign)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Fugitive (vim-fugitive)
@@ -359,19 +359,19 @@ if !empty(glob("~/.vim/bundle/vim-fugitive"))
     let g:fugitive_github_domains = ['github.com', 'github.evilcorp.com']
 endif
 
-nmap <LocalLeader>gg :Gstatus<CR>
-nmap <LocalLeader>gl :Glog --<CR>
-nmap <LocalLeader>gL :Glog -- %
-nmap <LocalLeader>gr :Ggrep<SPACE>
-nmap <LocalLeader>gb :Gblame<CR>
-nmap <LocalLeader>gB :Gbrowse!<CR>
-nmap <LocalLeader>ge :Gedit<CR>
-nmap <LocalLeader>gw :Gwrite<CR>
-nmap <LocalLeader>gR :Gread<CR>
-nmap <LocalLeader>gd :Gdiff<CR>
-nmap <LocalLeader>gc :Gcommit<CR>
-nmap <LocalLeader>gppo :Gpush origin HEAD<CR>
-nmap <LocalLeader>gppf :Gpush origin HEAD --force<CR>
+nnoremap <LocalLeader>gg :Gstatus<CR>
+nnoremap <LocalLeader>gl :Glog --<CR>
+nnoremap <LocalLeader>gL :Glog -- %
+nnoremap <LocalLeader>gr :Ggrep<SPACE>
+nnoremap <LocalLeader>gb :Gblame<CR>
+nnoremap <LocalLeader>gB :Gbrowse!<CR>
+nnoremap <LocalLeader>ge :Gedit<CR>
+nnoremap <LocalLeader>gw :Gwrite<CR>
+nnoremap <LocalLeader>gR :Gread<CR>
+nnoremap <LocalLeader>gd :Gdiff<CR>
+nnoremap <LocalLeader>gc :Gcommit<CR>
+nnoremap <LocalLeader>gppo :Gpush origin HEAD<CR>
+nnoremap <LocalLeader>gppf :Gpush origin HEAD --force<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Gist (gist-vim)
@@ -408,8 +408,8 @@ let g:tagbar_autofocus = 1
 let g:tagbar_iconchars = ['+', '-'] 
 
 " toggle/focus (far right)
-nmap <LocalLeader>tt :TagbarToggle<CR>
-nmap <LocalLeader>gt 99<C-w>l
+nnoremap <LocalLeader>tt :TagbarToggle<CR>
+nnoremap <LocalLeader>gt 99<C-w>l
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ UltiSnips
@@ -426,8 +426,8 @@ let g:UltiSnipsEditSplit="vertical"
 """ Unimpaired (vim-unimpaired)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " make :cnext and :cprevious easier on my keymap
-map ]j :cnext<CR>
-map ]k :cprevious<CR>
+noremap ]j :cnext<CR>
+noremap ]k :cprevious<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ YouCompleteMe
