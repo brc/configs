@@ -14,7 +14,7 @@ URxvt.cutchars: `()*;<=>@[]^{|}
 URxvt.pastableTabs: true
 
 URxvt.scrollBar: false
-URxvt.saveLines: 0
+URxvt.saveLines: 1024
 
 URxvt.visualBell:   true
 !URxvt.urgentOnBell: true
@@ -29,7 +29,7 @@ URxvt.url-select.launcher:  /usr/bin/firefox
 URxvt.url-select.underline: true
 URxvt.colorUL:              #4682B4
 
-URxvt.keysym.C-equal: perl:font-size:increase
+URxvt.keysym.C-plus: perl:font-size:increase
 URxvt.keysym.C-minus: perl:font-size:decrease
 
 !URxvt.perl-ext-common: default,matcher
