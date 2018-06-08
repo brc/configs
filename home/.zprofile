@@ -71,6 +71,8 @@ unset SSH_ASKPASS
 
 export FIRE_USER=bcampbell  # LMI
 
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
+
 #export PYTHONDONTWRITEBYTECODE=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
