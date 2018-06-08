@@ -8,9 +8,10 @@ let python_space_error_highlight = 1
 let s:gitroot = systemlist('git rev-parse --show-toplevel')[0]
 
 " set makeprg to tox
-" TODO: check that tox.ini exists first
-:if s:gitroot !~ '^fatal:'
-:   execute 'setlocal makeprg=tox\ -c\ ' . s:gitroot . '/tox.ini'
-:   " tpope's Dispatch plugin provides 'Make' command
-:   map <buffer> <F10> :Make<CR>
-:endif
+if s:gitroot !~ '^fatal:'
+    if filereadable(s:gitroot . '/tox.ini')
+        execute 'setlocal makeprg=tox\ -c\ ' . s:gitroot . '/tox.ini'
+        " tpope's Dispatch plugin provides 'Make' command
+        nnoremap <buffer> <F10> :Make<CR>
+    endif
+endif
