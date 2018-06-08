@@ -2,136 +2,130 @@
 # Use preference dialog in lxpanel to adjust config when you can.
 
 Global {
-    edge=top
-    allign=left
-    margin=0
-    widthtype=percent
-    width=100
-    height=26
-    transparent=0
-    tintcolor=#000000
-    alpha=0
-    autohide=0
-    heightwhenhidden=2
-    setdocktype=1
-    setpartialstrut=1
-    usefontcolor=1
-    fontsize=10
-    fontcolor=#dddddd
-    usefontsize=0
-    background=0
-    backgroundfile=/usr/share/lxpanel/images/background.png
-    iconsize=24
-    loglevel=2
+  edge=top
+  allign=left
+  margin=0
+  widthtype=percent
+  width=100
+  height=26
+  transparent=0
+  tintcolor=#192837
+  alpha=255
+  autohide=0
+  heightwhenhidden=2
+  setdocktype=1
+  setpartialstrut=1
+  usefontcolor=1
+  fontsize=10
+  fontcolor=#d3d4d4
+  usefontsize=0
+  background=0
+  backgroundfile=/usr/share/lxpanel/images/background.png
+  iconsize=24
+  loglevel=2
 }
-
 Plugin {
-    type = space
-    Config {
-        Size=2
+  type=space
+  Config {
+    Size=2
+  }
+}
+Plugin {
+  type=menu
+  Config {
+    image=/usr/share/lxpanel/images/my-computer.png
+    system {
     }
-}
-
-Plugin {
-    type = menu
-    Config {
-        image=/usr/share/lxpanel/images/my-computer.png
-        system {
-        }
-        separator {
-        }
-        item {
-            command=run
-        }
-        separator {
-        }
-        item {
-            image=gnome-logout
-            command=logout
-        }
+    separator {
     }
-}
-
-Plugin {
-    type = launchbar
-    Config {
-        Button {
-            id=/usr/share/applications/chromium.desktop
-        }
-        Button {
-            id=firefox.desktop
-        }
+    item {
+      command=run
     }
-}
-
-Plugin {
-    type = space
-    Config {
-        Size=4
+    separator {
     }
-}
-
-Plugin {
-    type = space
-    Config {
-        Size=4
+    item {
+      image=gnome-logout
+      command=logout
     }
+  }
 }
-
 Plugin {
-    type = pager
-}
-
-Plugin {
-    type = space
-    Config {
-        Size=4
+  type=launchbar
+  Config {
+    Button {
+      id=/usr/share/applications/chromium.desktop
     }
-}
-
-Plugin {
-    type = taskbar
-    expand=1
-    Config {
-        tooltips=1
-        IconsOnly=0
-        ShowAllDesks=0
-        UseMouseWheel=1
-        UseUrgencyHint=1
-        FlatButton=0
-        MaxTaskWidth=150
-        spacing=1
-        GroupedTasks=0
+    Button {
+      id=firefox.desktop
     }
+  }
 }
-
 Plugin {
-    type = netstatus
-    Config {
-        iface=enp0s3
-    }
+  type=space
+  Config {
+    Size=4
+  }
 }
-
 Plugin {
-    type = cpu
+  type=space
+  Config {
+    Size=4
+  }
 }
-
 Plugin {
-    type = volumealsa
+  type=pager
+  Config {
+  }
 }
-
 Plugin {
-    type = tray
+  type=space
+  Config {
+    Size=4
+  }
 }
-
 Plugin {
-    type = dclock
-    Config {
-        ClockFmt=%a %b %d, %l:%M %p
-        TooltipFmt=%A %x
-        BoldFont=1
-        IconOnly=0
-        CenterText=1
-    }
+  type=taskbar
+  expand=1
+  Config {
+    tooltips=1
+    IconsOnly=0
+    ShowAllDesks=0
+    UseMouseWheel=1
+    UseUrgencyHint=1
+    FlatButton=0
+    MaxTaskWidth=150
+    spacing=1
+    GroupedTasks=0
+  }
 }
-
+Plugin {
+  type=netstatus
+  Config {
+    iface=enp0s3
+  }
+}
+Plugin {
+  type=cpu
+  Config {
+  }
+}
+Plugin {
+  type=volumealsa
+  Config {
+  }
+}
+Plugin {
+  type=tray
+  Config {
+  }
+}
+Plugin {
+  type=dclock
+  Config {
+    ClockFmt=%a %b %d, %l:%M %p
+    TooltipFmt=%A %x
+    BoldFont=1
+    IconOnly=0
+    CenterText=1
+  }
+}
