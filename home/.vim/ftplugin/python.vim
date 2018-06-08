@@ -1,5 +1,5 @@
 "setlocal omnifunc=pythoncomplete#Complete
-let python_space_error_highlight=1
+let python_space_error_highlight = 1
 
 " Find git repo root dir.
 "

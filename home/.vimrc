@@ -77,6 +77,19 @@ endif
 
 
 " ###########################################################################
+" ### FILETYPES
+" ###########################################################################
+
+filetype plugin indent on
+
+" Override whatever 'fo' string filetype plugins set
+" (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
+autocmd FileType * setlocal formatoptions+=qroj
+
+let maplocalleader = ","
+
+
+" ###########################################################################
 " ### SYNTAX HIGHLIGHTING
 " ###########################################################################
 
@@ -126,14 +139,6 @@ hi WarningMsg   ctermfg=yellow ctermbg=red
 " ###########################################################################
 " ### CUSTOMIZE THINGS!
 " ###########################################################################
-
-filetype plugin indent on
-
-" Override whatever 'fo' string filetype plugins set
-" (see https://groups.google.com/forum/#!topic/vim_dev/EKDS1PP4rPo)
-autocmd FileType * setlocal formatoptions+=qroj
-
-let maplocalleader = ","
 
 " Restore cursor position when opening file
 """""""""""""""""""""""""""""""""""""""""""
