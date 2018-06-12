@@ -15,8 +15,47 @@ setopt auto_param_slash # add slash instead of space if completing dir name
 setopt list_ambiguous   # auto insert unambigous parts of completions w/o menu
 setopt list_types       # show trailing character in listing to id file type
 
+# enable completion extensions (menus, colors, etc)
 zmodload -i zsh/complist
 
+# enable bash completion support
+autoload bashcompinit
+bashcompinit
+
+# normally this function comes from the `bash-completion' package;
+# define a zsh-equivalent here:
+_get_comp_words_by_ref ()
+{
+    while [ $# -gt 0 ]; do
+        case "$1" in
+        cur)
+            cur=${COMP_WORDS[COMP_CWORD]}
+            ;;
+        prev)
+            prev=${COMP_WORDS[COMP_CWORD-1]}
+            ;;
+        words)
+            words=("${COMP_WORDS[@]}")
+            ;;
+        cword)
+            cword=$COMP_CWORD
+            ;;
+        -n)
+            # assume COMP_WORDBREAKS is already set sanely
+            shift
+            ;;
+        esac
+        shift
+    done
+}
+
+# source the files in /etc/bash_completion.d
+# (not sure we should source /usr/share/bash-completion/completions/*)
+for f in /etc/bash_completion.d/*; do
+    source ${f}
+done
+
+# add useful completion styles
 zstyle ':completion:*' matcher-list \
     'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
