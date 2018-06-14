@@ -1,3 +1,5 @@
+# vim:set ft=conf:
+
 [global_config]
 focus = system
 title_receive_bg_color  = colour234
@@ -9,7 +11,53 @@ title_inactive_fg_color = colour249
 
 
 [keybindings]
+    # Got these strings with:
+    #
+    #   $ man terminator_config \
+    #         |grep -A140 '^keybindings' \
+    #         |grep -E '^[[:space:]]+[a-z_]+$' \
+    #         |sed 's/$/ =/' \
+    #         |sort
+    #
+    close_term =
+    close_window =
+    cycle_next =
+    cycle_prev =
+    edit_tab_title =
+    edit_terminal_title =
+    edit_window_title =
     full_screen =
+    go_down =
+    go_left =
+    go_prev =
+    go_right =
+    group_all =
+    group_tab =
+    hide_window =
+    move_tab_left =
+    move_tab_right =
+    new_tab =
+    new_terminator =
+    new_window =
+    next_tab =
+    prev_tab =
+    reset_clear =
+    resize_down =
+    resize_left =
+    resize_right =
+    resize_up =
+    rotate_ccw =
+    rotate_cw =
+    scaled_zoom =
+    split_horiz =
+    split_vert =
+    toggle_scrollbar =
+    toggle_zoom =
+    ungroup_all =
+    ungroup_tab =
+    #zoom_in =
+    zoom_normal =
+    #zoom_out =
 
 [profiles]
 [[default]]
