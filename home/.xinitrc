@@ -45,5 +45,6 @@ vmware-user &
 #########################################
 # open terminal and start wm            #
 #########################################
-terminator &
+#terminator &
+xfce4-terminal &
 exec openbox

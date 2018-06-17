@@ -343,7 +343,8 @@
           <enabled>true</enabled>
           <name>Terminal</name>
         </startupnotify>
-        <command>terminator</command>
+        <!-- <command>terminator</command> -->
+        <command>xfce4-terminal</command>
       </action>
     </keybind>
   </keyboard>
