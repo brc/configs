@@ -65,13 +65,10 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
 export LESS_TERMCAP_se=$'\E[0m'         # end
 
 eval "$(dircolors -b ~/.dircolors)"
-
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 #export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
-
 export FIRE_USER=bcampbell  # LMI
-
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 
 #export PYTHONDONTWRITEBYTECODE=1
@@ -107,7 +104,8 @@ done
 setopt no_null_glob
 
 # run other scripts
-for f in ~/.zsh/lib/*.zsh; do
+source ~/.zsh/aliases-common
+for f in $(echo ~/.zsh/lib/*.{sh,zsh} |sort); do
     source $f
 done
 
@@ -149,5 +147,3 @@ if which fortune >/dev/null; then
     fi
     echo -e "\e[0m"
 fi
-
-source ~/.zsh/aliases

@@ -1,0 +1,140 @@
+# vim: set ft=sh:
+
+have() {
+    command -v "$1" >/dev/null
+    return $?
+}
+
+# aliases
+alias ls='ls -h --color=auto'   # yay
+alias a='ls -lF'                #
+alias ad='ls -lFd'              #
+alias a.='ls -lF .*'            #
+alias ad.='ls -ldF .*'          #
+alias aa='ls -alF'              #
+alias at='ls -lFtr'             #
+alias aat='ls -alFtr'           #
+alias as='ls -lFSr'             #
+alias aas='ls -alFSr'           #
+alias aad='ls -aldF'            #
+alias aa.='ls -alF .*'          #
+alias aad.='ls -aldF .*'        #
+                                #
+alias wa='sudo ls -lF'          #
+alias wad='sudo ls -lFd'        #
+alias wa.='sudo ls -lF .*'      #
+alias wad.='sudo ls -ldF .*'    #
+alias waa='sudo ls -alF'        #
+alias wat='sudo ls -lFtr'       #
+alias waat='sudo ls -alFtr'     #
+alias was='sudo ls -lFSr'       #
+alias waas='sudo ls -alFSr'     #
+alias waad='sudo ls -aldF'      #
+alias waa.='sudo ls -alF .*'    #
+alias waad.='sudo ls -aldF .*'  #
+
+alias rm='rm -i'  # woopsy
+alias mv='mv -i'  #
+alias cp='cp -i'  #
+
+alias ..='cd ..'
+alias pd=pushd
+alias d='dirs -v'
+alias 1=pushd
+alias 2='pushd +2'
+alias 3='pushd +3'
+alias 4='pushd +4'
+alias 5='pushd +5'
+alias 6='pushd +6'
+alias 7='pushd +7'
+alias 8='pushd +8'
+alias 9='pushd +9'
+
+have egrep && alias grep='egrep --color=auto'
+have colordiff && alias diff=colordiff
+have lftp && alias ftp=lftp
+alias gdb='gdb -q'
+
+if have vim; then
+    alias vi=vim
+    alias ivm=vim
+    alias wv='sudo vim'
+else
+    alias ivm=vi
+    alias wv='sudo vi'
+fi
+alias v=vi
+alias vv='vi ~/.vimrc'
+alias vh='vi /etc/hosts'
+alias vssh='vi ~/.ssh/config'
+alias find-vim-swaps="find . -type f -name '.*.sw[pon]'"
+
+alias p='ps axf'
+have pstree && alias p='pstree -U'
+alias pp='ps axfww'
+
+if have pgrep; then
+    a_flag=-a
+    if command pgrep -l "${a_flag}" init 2>&1 |grep -q 'invalid option'; then
+        a_flag=  # fall back; -a not supported.
+    fi
+    alias pg="pgrep -l ${a_flag}"
+    alias pgg="pgrep -lf ${a_flag}"
+    unset a_flag
+else
+    pg() { command ps axww |grep "$1" |grep -vw grep; }
+    pgg() { pg "$@"; }  # TODO: maybe make these funcs mimic pgrep better
+fi
+
+alias w='sudo'
+alias count='wc -l'
+alias chx='chmod a+x'
+alias chw='sudo chmod a+w'
+alias chr='sudo chmod a-w'
+alias chb="sudo chown ${USER}:$(groups |awk '{ print $1}')"
+alias untargzip='tar xvzf'
+alias untarbzip='tar xvjf'
+alias untarxz='tar xvJf'
+#alias n='sudo ss -ltpn'
+alias n='sudo lsof -Pni 2>/dev/null |grep LIST'
+alias td='sudo tcpdump -nn'
+
+alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+if have rg; then
+    alias gr=rg
+    alias wgr='sudo rg'
+fi
+
+t() { local p="${1:-.}"; find "$p" -path .git -o -path .tox -prune -o -print; }
+have tree && alias t='tree -aCI .git\|.tox'
+
+alias ww=~/g2sh.pl
+alias r2='ssh -l root'
+alias j='journalctl -xab |less +G'
+alias jf='journalctl -xfab'
+alias uf='systemctl list-unit-files'
+alias tf='tail -f'
+
+if command dmesg -V 2>&1 |grep -q 'invalid option'; then
+    # XXX which version of util-linux introduced `-H'?  same one as `-V'?!
+    alias dm='dmesg |less +G'
+else
+    alias dm="env LESS='$LESS +G' dmesg -H"
+    alias dt='dmesg -Hw'
+fi
+
+if grep -iwq ubuntu /etc/issue; then
+    alias aptdate='sudo apt-get update'
+    alias cache='apt-cache search'
+    alias pmi='sudo apt-get install'
+elif uname -a |grep -Eq '\.el[0-9]+\.?'; then
+    alias cache='yum search'
+    alias pmi='sudo yum install'
+elif grep -iwq arch /etc/issue; then
+    alias aptdate='sudo pacman -Syy'
+    alias cache='pacaur -Ss'
+    alias pmi='pacaur -S'
+fi
+
+unset -f have
