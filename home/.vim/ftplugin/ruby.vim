@@ -31,9 +31,9 @@ imap <buffer> <LocalLeader>di def initialize()<CR>end<ESC>k$i
 map <buffer> <LocalLeader>do ido \|\|<CR>end<ESC>k$i
 imap <buffer> <LocalLeader>do do \|\|<CR>end<ESC>k$i
 
-imap <buffer> .eb .each { \|\| }<ESC>hhi
+" imap <buffer> .eb .each { \|\| }<ESC>hhi
 
-imap <buffer> .ed .each do \|\|<CR>end<ESC>k$i
+" imap <buffer> .ed .each do \|\|<CR>end<ESC>k$i
 
 map <buffer> <LocalLeader>if iif<CR><BS>end<ESC>kA 
 imap <buffer> <LocalLeader>if if<CR><BS>end<ESC>kA 
@@ -51,8 +51,8 @@ imap <buffer> <LocalLeader>aa attr_accessor :
 imap <buffer> <LocalLeader>ar attr_reader :
 imap <buffer> <LocalLeader>aw attr_writer :
 
-map <buffer> .b i\<ESC>
-imap <buffer> .b \
+" map <buffer> .b i\<ESC>
+" imap <buffer> .b \
 
 map <buffer> <LocalLeader>br i#{}<ESC>i
 imap <buffer> <LocalLeader>br #{}<ESC>i
@@ -77,8 +77,8 @@ imap <buffer> <LocalLeader>pr print
 map <buffer> <LocalLeader>r i#<ESC>
 imap <buffer> <LocalLeader>r #
 
-map <buffer> .r i"<ESC>
-imap <buffer> .r "
+" map <buffer> .r i"<ESC>
+" imap <buffer> .r "
 
 map <buffer> <LocalLeader>rq irequire ''<ESC>i
 imap <buffer> <LocalLeader>rq require ''<ESC>i
@@ -89,8 +89,8 @@ imap <buffer> <LocalLeader>t =~
 "
 " Chef shit
 "
-map <buffer> ..deb iChef::Log.debug("")<ESC>hi
-imap <buffer> ..deb Chef::Log.debug("")<ESC>hi
+" map <buffer> ..deb iChef::Log.debug("")<ESC>hi
+" imap <buffer> ..deb Chef::Log.debug("")<ESC>hi
 
 map <buffer> <LocalLeader>nd inode['']<ESC>hi
 imap <buffer> <LocalLeader>nd node['']<ESC>hi

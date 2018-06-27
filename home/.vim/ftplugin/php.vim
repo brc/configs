@@ -11,14 +11,14 @@ map <buffer> <LocalLeader>cb }{wO<BS>/*<ESC>}bo<BS>*/<ESC>
 map <buffer> <LocalLeader>co i/*  */<ESC>bh
 imap <buffer> <LocalLeader>co /*  */<ESC>bhi
 
-map <buffer> .c i$<ESC>
-imap <buffer> .c $
+" map <buffer> .c i$<ESC>
+" imap <buffer> .c $
 
-map <buffer> .n i\n<ESC>
-imap <buffer> .n \n
+" map <buffer> .n i\n<ESC>
+" imap <buffer> .n \n
 
-map <buffer> .r i"<ESC>
-imap <buffer> .r "
+" map <buffer> .r i"<ESC>
+" imap <buffer> .r "
 
 map <buffer> <LocalLeader>if iif ()<ESC>i
 map <buffer> <LocalLeader>cif ^iif (<ESC>$a)<ESC>

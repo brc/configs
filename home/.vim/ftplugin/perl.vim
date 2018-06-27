@@ -19,8 +19,8 @@ imap <buffer> <LocalLeader>ubw #!/usr/bin/perl -w<CR><BS>
 map <buffer> <LocalLeader>beg 0iBEGIN<CR>{<CR>}<ESC>O
 imap <buffer> <LocalLeader>beg <ESC>0iBEGIN<CR>{<CR>}<ESC>O
 
-map <buffer> .c i$<ESC>
-imap <buffer> .c $
+" map <buffer> .c i$<ESC>
+" imap <buffer> .c $
 map <buffer> <LocalLeader>c i@<ESC>
 imap <buffer> <LocalLeader>c @
 map <buffer> <LocalLeader>h i%<ESC>
@@ -34,14 +34,14 @@ imap <buffer> <LocalLeader>nt !
 map <buffer> <LocalLeader>t i=~<ESC>
 imap <buffer> <LocalLeader>t =~ 
 
-map <buffer> .n i\n<ESC>
-imap <buffer> .n \n
+" map <buffer> .n i\n<ESC>
+" imap <buffer> .n \n
 
-map <buffer> .r i"<ESC>
-imap <buffer> .r "
+" map <buffer> .r i"<ESC>
+" imap <buffer> .r "
 
-map <buffer> .- i$_<ESC> 
-imap <buffer> .- $_
+" map <buffer> .- i$_<ESC> 
+" imap <buffer> .- $_
 
 map <buffer> <LocalLeader>- i@_<ESC> 
 imap <buffer> <LocalLeader>- @_
@@ -91,8 +91,8 @@ imap <buffer> <LocalLeader>for for ()<ESC>i
 map <buffer> <LocalLeader>fe iforeach ()<ESC>i
 imap <buffer> <LocalLeader>fe foreach ()<ESC>i
 
-map <buffer> .b i\<ESC>
-imap <buffer> .b \
+" map <buffer> .b i\<ESC>
+" imap <buffer> .b \
 
 map <buffer> <LocalLeader>qm iquotemeta <ESC>
 imap <buffer> <LocalLeader>qm quotemeta 
@@ -138,8 +138,8 @@ imap <buffer> <LocalLeader>nd !defined
 map <buffer> <LocalLeader>arg i@ARGV
 imap <buffer> <LocalLeader>arg @ARGV
 
-map <buffer> .arg i$ARGV[]<ESC>i
-imap <buffer> .arg $ARGV[]<ESC>i
+" map <buffer> .arg i$ARGV[]<ESC>i
+" imap <buffer> .arg $ARGV[]<ESC>i
 
 map <buffer> <LocalLeader>env i$ENV{''}<ESC>hi
 imap <buffer> <LocalLeader>env $ENV{''}<ESC>hi

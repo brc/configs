@@ -14,8 +14,8 @@ imap <buffer> <LocalLeader>bin #!/bin/sh<CR><BS><CR><CR>
 " map <buffer> .n i\n<ESC>
 " imap <buffer> .n \n
 
-map <buffer> .r i"<ESC>
-imap <buffer> .r "
+" map <buffer> .r i"<ESC>
+" imap <buffer> .r "
 
 " map <buffer> .b i\<ESC>
 " imap <buffer> .b \
@@ -31,8 +31,8 @@ imap <buffer> <LocalLeader>if if ; then<CR>fi<ESC>k$2bi
 map <buffer> <LocalLeader>t i[  ]<ESC>hi
 imap <buffer> <LocalLeader>t [  ]<ESC>hi
 
-map <buffer> .t i[[  ]]<ESC>2hi
-imap <buffer> .t [[  ]]<ESC>2hi
+" map <buffer> .t i[[  ]]<ESC>2hi
+" imap <buffer> .t [[  ]]<ESC>2hi
 
 map <buffer> <LocalLeader>ech iecho ""<ESC>i
 imap <buffer> <LocalLeader>ech echo ""<ESC>i

@@ -29,11 +29,11 @@ imap <buffer> <LocalLeader>h4 =====  =====<ESC>bhha
 imap <buffer> <LocalLeader>br <br>
 
 imap <buffer> <LocalLeader>tt <tt>
-imap <buffer> .tt </tt>
+" imap <buffer> .tt </tt>
 
 map <buffer> <LocalLeader>tt i<tt><ESC>
-map <buffer> .tt i</tt><ESC>
+" map <buffer> .tt i</tt><ESC>
 
-imap <buffer> ..tt <tt></tt><ESC>2ba
+" imap <buffer> ..tt <tt></tt><ESC>2ba
 
 imap <buffer> <LocalLeader>l <ESC>A

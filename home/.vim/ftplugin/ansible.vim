@@ -3,8 +3,8 @@ imap <buffer> <LocalLeader>l <ESC>A
 map <buffer> <LocalLeader>br i{{  }}<ESC>3ha
 imap <buffer> <LocalLeader>br {{  }}<ESC>3ha
 
-map <buffer> .r i"<ESC>
-imap <buffer> .r "
+" map <buffer> .r i"<ESC>
+" imap <buffer> .r "
 
 imap <buffer> <LocalLeader>n <ESC>0i- name:<SPACE>
 map <buffer> <LocalLeader>n 0i- name:<SPACE>
@@ -18,8 +18,8 @@ imap <buffer> <LocalLeader>w when:<SPACE>
 imap <buffer> <LocalLeader>in - include:<SPACE>
 map <buffer> <LocalLeader>in i- include:<SPACE>
 
-imap <buffer> ..in - { include: .yml, }<ESC>3bi
-map <buffer> ..in i- { include: .yml, }<ESC>3bi
+" imap <buffer> ..in - { include: .yml, }<ESC>3bi
+" map <buffer> ..in i- { include: .yml, }<ESC>3bi
 
 map <buffer> <F10> :!emc-reposync.sh<CR>
 
