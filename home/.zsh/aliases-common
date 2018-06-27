@@ -6,32 +6,32 @@ have() {
 }
 
 # aliases
-alias ls='ls -h --color=auto'   # yay
-alias a='ls -lF'                #
-alias ad='ls -lFd'              #
-alias a.='ls -lF .*'            #
-alias ad.='ls -ldF .*'          #
-alias aa='ls -alF'              #
-alias at='ls -lFtr'             #
-alias aat='ls -alFtr'           #
-alias as='ls -lFSr'             #
-alias aas='ls -alFSr'           #
-alias aad='ls -aldF'            #
-alias aa.='ls -alF .*'          #
-alias aad.='ls -aldF .*'        #
-                                #
-alias wa='sudo ls -lF'          #
-alias wad='sudo ls -lFd'        #
-alias wa.='sudo ls -lF .*'      #
-alias wad.='sudo ls -ldF .*'    #
-alias waa='sudo ls -alF'        #
-alias wat='sudo ls -lFtr'       #
-alias waat='sudo ls -alFtr'     #
-alias was='sudo ls -lFSr'       #
-alias waas='sudo ls -alFSr'     #
-alias waad='sudo ls -aldF'      #
-alias waa.='sudo ls -alF .*'    #
-alias waad.='sudo ls -aldF .*'  #
+alias ls='ls -h --color=auto'
+alias a='ls -lF'
+alias ad='ls -lFd'
+alias a.='ls -lF .*'
+alias ad.='ls -ldF .*'
+alias aa='ls -alF'
+alias at='ls -lFtr'
+alias aat='ls -alFtr'
+alias as='ls -lFSr'
+alias aas='ls -alFSr'
+alias aad='ls -aldF'
+alias aa.='ls -alF .*'
+alias aad.='ls -aldF .*'
+
+alias wa='sudo ls -lF'
+alias wad='sudo ls -lFd'
+alias wa.='sudo ls -lF .*'
+alias wad.='sudo ls -ldF .*'
+alias waa='sudo ls -alF'
+alias wat='sudo ls -lFtr'
+alias waat='sudo ls -alFtr'
+alias was='sudo ls -lFSr'
+alias waas='sudo ls -alFSr'
+alias waad='sudo ls -aldF'
+alias waa.='sudo ls -alF .*'
+alias waad.='sudo ls -aldF .*'
 
 alias rm='rm -i'  # woopsy
 alias mv='mv -i'  #
