@@ -34,9 +34,6 @@
 [submodule "home/.vim/bundle/vim-repeat"]
 	path = home/.vim/bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
-[submodule "home/.vim/bundle/vim-plugin-minibufexpl"]
-	path = home/.vim/bundle/vim-plugin-minibufexpl
-	url = https://github.com/techlivezheng/vim-plugin-minibufexpl.git
 [submodule "home/.vim/bundle/vim-togglelist"]
 	path = home/.vim/bundle/vim-togglelist
 	url = https://github.com/milkypostman/vim-togglelist.git
