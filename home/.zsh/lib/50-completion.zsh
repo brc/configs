@@ -10,8 +10,9 @@ setopt auto_list        # automatically list choices on ambiguous completion
 setopt auto_menu        # show completion menu on succesive tab press
 setopt auto_param_keys  # dynamically remove auto-completed space when needed
 setopt auto_param_slash # add slash instead of space if completing dir name
-#setopt auto_remove_slash # remove trailing slash when next char is cmd delimeter
+setopt no_auto_remove_slash # don't remove auto-completed trailing slash
 #setopt glob_complete    # trigger menu comp for globs instead of exapanding
+setopt glob_dots        # don't require leading `.' to explicitly match files
 setopt list_ambiguous   # auto insert unambigous parts of completions w/o menu
 setopt list_types       # show trailing character in listing to id file type
 
