@@ -114,25 +114,61 @@ _fzf_complete() {
 #   Each function name will be used dynamically for a command of the same name.
 #       eg.:  _fzf_complete_foo() ->  foo
 #
-_fzf_complete_host() {
+# TODO: can default _hosts function be used somehow?  as input to fzf
+_fzf_complete_hostname() {
   _fzf_complete '+m' "$@" < <(
-    command cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host' | command grep -v '*' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
-        <(command grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print $1 " " $1 }') \
-        <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') |
-        awk '{if (length($2) > 0) {print $2}}' | sort -u
+    #command cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host' | command grep -v '*' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
+    #    <(command grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print $1 " " $1 }') \
+    #    <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') |
+    #    awk '{if (length($2) > 0) {print $2}}' | sort -u
+    #
+    echo "$hosts" |tr ' ' '\n' |sort -u  # see ~/.zsh/lib/50-completion.zsh
   )
 }
 
+# TODO: metaprogram this.
+# TODO: figure out username-host completion for scp/rsync
+
+_fzf_complete_ping() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_dig() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_host() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_traceroute() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_tcpraceroute() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_tcpdump() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_nmap() {
+    _fzf_complete_hostname "$@"
+}
 _fzf_complete_ssh() {
-    _fzf_complete_host "$@"
+    _fzf_complete_hostname "$@"
 }
 
 _fzf_complete_gnash() {
-    _fzf_complete_host "$@"
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_scp() {
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_rsync() {
+    _fzf_complete_hostname "$@"
 }
 
 _fzf_complete_nc() {
-    _fzf_complete_host "$@"
+    _fzf_complete_hostname "$@"
+}
+_fzf_complete_telnet() {
+    _fzf_complete_hostname "$@"
 }
 
 # Variable and alias completion

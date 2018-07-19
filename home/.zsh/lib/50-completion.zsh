@@ -81,6 +81,9 @@ zstyle ':completion:*:cd:*' \
 cdpath=(.)
 
 # hostname completion
+# TODO: look at `_fzf_complete_hostname()' in ~/.zsh/lib/99-fzf.zsh and
+#       determine which of these approaches results in a better set of
+#       completions; maybe combine techniques.
 _global_ssh_hosts=()
 _ssh_hosts=()
 _ssh_config=()
@@ -147,7 +150,4 @@ zle -N expand-or-complete-prefix-with-dots
 bindkey "^I" expand-or-complete-prefix-with-dots
 
 # allow g2sh to complete hostnames
-compdef _hosts g2sh.pl
-compdef _hosts gnash
-#compdef _hosts s.sh
-#compdef _hosts emc-ostool.sh
+compdef _hosts g2sh.pl gnash
