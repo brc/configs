@@ -13,6 +13,9 @@ home/.config/transmission/torrents/*.torrent
 
 home/.chef/servers.d/breu-chef
 
+home/.tmux/plugins/
+!home/.tmux/plugins/tpm
+
 home/.zsh/.zcompdump*
 home/.zsh/cache
 home/.zsh/history
