@@ -8,7 +8,7 @@ setopt no_list_beep     # don't fucking flash before showing menu
 setopt always_to_end    # move cursor to end of word after completion
 setopt auto_list        # automatically list choices on ambiguous completion
 setopt auto_menu        # show completion menu on succesive tab press
-setopt auto_param_keys  # intelligently remove completed chars for subkey chars
+setopt auto_param_keys  # dynamically remove auto-completed space when needed
 setopt auto_param_slash # add slash instead of space if completing dir name
 #setopt auto_remove_slash # remove trailing slash when next char is cmd delimeter
 #setopt glob_complete    # trigger menu comp for globs instead of exapanding
