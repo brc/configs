@@ -70,9 +70,6 @@
 [submodule "home/.vim/bundle/ultisnips"]
 	path = home/.vim/bundle-available/ultisnips
 	url = https://github.com/SirVer/ultisnips.git
-[submodule "home/.vim/bundle/YouCompleteMe"]
-	path = home/.vim/bundle/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
 [submodule "home/.vim/bundle/vim-dispatch"]
 	path = home/.vim/bundle-available/vim-dispatch
 	url = https://github.com/tpope/vim-dispatch.git
