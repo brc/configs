@@ -453,3 +453,8 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 """ IndentGuides
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <LocalLeader>ig <Plug>IndentGuidesToggle
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Airline
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline_powerline_fonts = 1  " sudo pacman -S powerline-fonts
