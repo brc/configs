@@ -2,8 +2,8 @@
 #xsetroot -cursor_name left_ptr &
 
 # add fonts
-xset +fp /usr/share/fonts/local
-xset fp rehash &
+#xset fp+ ${HOME}/.fonts
+#xset fp rehash &
 
 # start task panel
 lxpanel &
