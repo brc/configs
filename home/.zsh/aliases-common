@@ -1,45 +1,48 @@
 # vim: set ft=sh:
 
-have() {
+function have {
     command -v "$1" >/dev/null
     return $?
 }
 
 # aliases
-alias ls='command ls -ahF --color=auto'
-alias a='ls'
-alias a.='ls .*'
-alias ad='ls -d'
-alias ad.='ls -d .*'
-alias at='ls -tr'
-alias as='ls -Sr'
+alias a='ls -ahF --color=auto'
+alias a.='ls -ahF --color=auto .*'
+alias ad='ls -ahF --color=auto -d'
+alias ad.='ls -ahF --color=auto -d .*'
+alias at='ls -ahF --color=auto -tr'
+alias as='ls -ahF --color=auto -Sr'
 
-alias aa='ls -l'
-alias aa.='ls -l .*'
-alias aad='ls -l -d'
-alias aad.='ls -l -d .*'
-alias aat='ls -l -tr'
-alias aas='ls -l -Sr'
+alias aa='ls -ahF --color=auto -l'
+alias aa.='ls -ahF --color=auto -l .*'
+alias aad='ls -ahF --color=auto -l -d'
+alias aad.='ls -ahF --color=auto -l -d .*'
+alias aat='ls -ahF --color=auto -l -tr'
+alias aas='ls -ahF --color=auto -l -Sr'
 
-alias wa='sudo ls'
-alias wa.='sudo ls .*'
-alias wad='sudo ls -d'
-alias wad.='sudo ls -d .*'
-alias wat='sudo ls -tr'
-alias was='sudo ls -Sr'
+alias wa='sudo ls -ahF --color=auto'
+alias wa.='sudo ls -ahF --color=auto .*'
+alias wad='sudo ls -ahF --color=auto -d'
+alias wad.='sudo ls -ahF --color=auto -d .*'
+alias wat='sudo ls -ahF --color=auto -tr'
+alias was='sudo ls -ahF --color=auto -Sr'
 
-alias waa='sudo ls -l'
-alias waa.='sudo ls -l .*'
-alias waad='sudo ls -l -d'
-alias waad.='sudo ls -l -d .*'
-alias waat='sudo ls -l -tr'
-alias waas='sudo ls -l -Sr'
+alias waa='sudo ls -ahF --color=auto -l'
+alias waa.='sudo ls -ahF --color=auto -l .*'
+alias waad='sudo ls -ahF --color=auto -l -d'
+alias waad.='sudo ls -ahF --color=auto -l -d .*'
+alias waat='sudo ls -ahF --color=auto -l -tr'
+alias waas='sudo ls -ahF --color=auto -l -Sr'
 
 alias rm='rm -i'  # woopsy
 alias mv='mv -i'  #
 alias cp='cp -i'  #
 
 alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 alias pd=pushd
 alias d='dirs -v'
 alias 1=pushd
@@ -76,16 +79,16 @@ have pstree && alias p='pstree -U'
 alias pp='ps axfww'
 
 if have pgrep; then
-    a_flag=-a
+    a_flag=a
     if command pgrep -l "${a_flag}" init 2>&1 |grep -q 'invalid option'; then
         a_flag=  # fall back; -a not supported.
     fi
-    alias pg="pgrep -l ${a_flag}"
-    alias pgg="pgrep -lf ${a_flag}"
+    alias pg="pgrep -l${a_flag}"
+    alias pgg="pgrep -lf${a_flag}"
     unset a_flag
 else
-    pg() { command ps axww |grep "$1" |grep -vw grep; }
-    pgg() { pg "$@"; }  # TODO: maybe make these funcs mimic pgrep better
+    function pg { command ps axww |grep "$1" |grep -vw grep; }
+    function pgg { pg "$@"; }  # TODO: maybe make these funcs mimic pgrep better
 fi
 
 alias w='sudo'
@@ -108,7 +111,7 @@ if have rg; then
     alias wgr='sudo rg'
 fi
 
-t() { local p="${1:-.}"; find "$p" -path .git -o -path .tox -prune -o -print; }
+function t { local p="${1:-.}"; find "$p" -path .git -o -path .tox -prune -o -print; }
 have tree && alias t='tree -aCI .git\|.tox'
 
 alias ww=~/g2sh.pl
@@ -117,6 +120,9 @@ alias j='journalctl -xab |less +G'
 alias jf='journalctl -xfab'
 alias uf='systemctl list-unit-files'
 alias tf='tail -f'
+alias wtf='sudo tail -f'
+alias tmm='tmux ls'
+alias tma='tmux attach'
 
 if command dmesg -V 2>&1 |grep -q 'invalid option'; then
     # XXX which version of util-linux introduced `-H'?  same one as `-V'?!
