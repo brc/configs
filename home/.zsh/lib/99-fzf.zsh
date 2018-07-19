@@ -101,7 +101,13 @@ _fzf_complete() {
   fzf="$(__fzfcmd_complete)"
 
   _fzf_feed_fifo "$fifo"
-  matches=$(cat "$fifo" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} ${=fzf_opts} -q "${(Q)prefix}" | $post | tr '\n' ' ')
+  matches=$(
+    cat "$fifo" \
+     |FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} \
+       --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} \
+         ${=fzf_opts} -q "${(Q)prefix}" \
+           |$post | tr '\n' ' '
+  )
   if [ -n "$matches" ]; then
     LBUFFER="$lbuf$matches"
   fi
@@ -153,7 +159,6 @@ _fzf_complete_nmap() {
 _fzf_complete_ssh() {
     _fzf_complete_hostname "$@"
 }
-
 _fzf_complete_gnash() {
     _fzf_complete_hostname "$@"
 }
@@ -163,7 +168,6 @@ _fzf_complete_scp() {
 _fzf_complete_rsync() {
     _fzf_complete_hostname "$@"
 }
-
 _fzf_complete_nc() {
     _fzf_complete_hostname "$@"
 }
@@ -212,7 +216,17 @@ fzf-completion() {
   # Kill completion (do not require trigger sequence)
   if [ $cmd = kill -a ${LBUFFER[-1]} = ' ' ]; then
     fzf="$(__fzfcmd_complete)"
-    matches=$(command ps -ef | sed 1d | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-50%} --min-height 15 --reverse $FZF_DEFAULT_OPTS --preview 'echo {}' --preview-window down:3:wrap $FZF_COMPLETION_OPTS" ${=fzf} -m | awk '{print $2}' | tr '\n' ' ')
+    matches=$(
+        command ps -ef \
+            |sed 1d \
+            |FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-50%} \
+                --min-height 15 --reverse $FZF_DEFAULT_OPTS \
+                --preview 'echo {}' \
+                --preview-window down:3:wrap $FZF_COMPLETION_OPTS" \
+                ${=fzf} -m \
+            |awk '{print $2}' \
+            |tr '\n' ' '
+    )
     if [ -n "$matches" ]; then
       LBUFFER="$LBUFFER$matches"
     fi
