@@ -272,21 +272,22 @@
     <keybind key="A-F5">
       <action name="ToggleOmnipresent"/>
     </keybind>
-    <keybind key="A-Escape">
+    <!-- <keybind key="A-Escape">
       <action name="Lower"/>
       <action name="Unfocus"/>
-    </keybind>
-    <keybind key="A-grave">
+    </keybind> -->
+    <!-- <keybind key="A-grave">
       <action name="Lower"/>
       <action name="Unfocus"/>
-    </keybind>
-    <keybind key="A-1">
+    </keybind> -->
+    <!-- <keybind key="A-1">
       <action name="Focus"/>
       <action name="Raise"/>
       <action name="Unshade"/>
-    </keybind>
+    </keybind> -->
     <!-- Keybindings for window switching -->
-    <keybind key="A-Tab">
+    <!-- <keybind key="A-Tab"> -->
+    <keybind key="A-grave">
       <action name="NextWindow">
         <finalactions>
           <action name="Focus"/>
