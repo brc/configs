@@ -41,4 +41,5 @@ ColorCursor=#ffff5554ffff
 ColorPalette=rgb(0,0,0);rgb(202,47,47);rgb(0,170,0);rgb(170,85,0);rgb(58,121,181);rgb(170,0,170);rgb(0,170,170);rgb(170,170,170);rgb(85,85,85);rgb(255,85,85);rgb(85,255,85);rgb(255,255,85);rgb(85,85,255);rgb(173,129,172);rgb(85,255,255);rgb(255,255,255)
 RunCustomCommand=TRUE
 Encoding=UTF-8
+FontName=Hack 12
 
