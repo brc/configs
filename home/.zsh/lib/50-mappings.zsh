@@ -1,6 +1,9 @@
 # vi mode
 bindkey -v
 
+zle -N edit-command-line
+autoload -Uz edit-command-line
+
 # lower key timeout to 0.1 seconds so we can switch between vi modes faster
 KEYTIMEOUT=1
 
