@@ -86,8 +86,8 @@ alias gcp='git cherry-pick'
 # commit
 alias gc='git commit'
 alias gca='git commit -a'
-alias gcA='git commit --amend --reuse-message=HEAD'
-alias gcaA='git commit -a --amend --reuse-message=HEAD'
+alias gcA='git commit --amend --no-edit'
+alias gcaA='git commit -a --amend --no-edit'
 alias gcAa=gcaA
 
 # push

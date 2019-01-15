@@ -72,7 +72,16 @@ alias v=vi
 alias vv='vi ~/.vimrc'
 alias vh='vi /etc/hosts'
 alias vssh='vi ~/.ssh/config'
-alias find-vim-swaps="find . -type f -name '.*.sw[pon]'"
+#alias find-vim-swaps="find -L . -type f -name '.*.sw[pon]'"
+function find-vim-swaps {
+    local dir=~/.cache/vim/swap
+    [ -z "$(ls -1 "${dir}")" ] && return 0
+    for f in $(ls -1tr "${dir}"); do
+        echo "${dir}/${f}"
+        echo "$f" |tr % / |sed 's/\.sw[pon]$//'
+        echo
+    done
+}
 
 alias p='ps axf'
 have pstree && alias p='pstree -U'
@@ -80,7 +89,7 @@ alias pp='ps axfww'
 
 if have pgrep; then
     a_flag=a
-    if command pgrep -l "${a_flag}" init 2>&1 |grep -q 'invalid option'; then
+    if command pgrep -l${a_flag} init 2>&1 |grep -q 'invalid option'; then
         a_flag=  # fall back; -a not supported.
     fi
     alias pg="pgrep -l${a_flag}"
