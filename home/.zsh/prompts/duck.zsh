@@ -1,6 +1,6 @@
 # vim: set tags=~/.zsh/tags :
 
-autoload -U colors && colors
+autoload -U colors && colors  # see /usr/share/zsh/functions/Misc/colors
 
 # values to make a status line for indicating the current zle vi mode;
 # we're gonna emulate us some vim showmode!
@@ -20,8 +20,8 @@ function zle-line-finish {
     vimode="${viins}"
 }
 
-# catch SIGINT and set status line back to insert (since the widgets above don't
-# get called when interrupt is sent, i think); then repropagate the signal.
+# catch SIGINT and set status line back to insert (since the widgets above
+# don't get called when interrupt is sent, i think); then repropagate signal.
 function TRAPINT {
     vimode="${viins}"
     return $(( 128 + ${1} ))
@@ -56,11 +56,12 @@ ${terminfo[cud1]}"
 mode='%{${terminfo_down_sc}${vimode}${terminfo[rc]}%}'
 
 # variables for $PROMPT
+venv="%{${fg_bold[white]}%}"\$(virtualenv_prompt_info)"%{${reset_color}%}"
 host="%{${fg[red]}%}%m%{${reset_color}%}"
 cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
-close="%{${fg[blue]}%}>%{${reset_color}%} "        # >
+close="%{${fg[blue]}%}>%{${reset_color}%}"          # >
 
-PROMPT="${mode}${host} ${cwdpath}${close}"
+PROMPT="${mode}${host} ${cwdpath}${close}${venv} "
 
 GIT_PS1_SHOWDIRTYSTATE='true'
 GIT_PS1_SHOWSTASHSTATE='true'
@@ -69,8 +70,5 @@ GIT_PS1_SHOWUPSTREAM='true'
 GIT_PS1_SHOWUNTRACKEDFILES='true'
 GIT_PS1_DESCRIBE_STYLE='branch'
 
-source ~/.zsh/lib/50-git-prompt.zsh
-
 RPROMPT='$(__git_ps1 "(%s)")'
-
 #RPROMPT='${vcs_info_msg_0_}'
