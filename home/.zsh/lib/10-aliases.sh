@@ -54,8 +54,8 @@ if [[ $(hostname) =~ archie ]]; then
     alias fcc='cd /git/invsblduck/fakecloud_configs/dotfiles'
     alias configs='cd /git/invsblduck/configs/home'
 
-    # globals
-    alias -g MW='--max-width=$(tput cols)'
+    # zsh global aliases
+    #alias -g MW='--max-width=$(tput cols)'  # configured this as env var
 
     # rubicon bullshit
     alias ge='cd /git/emcrubicon'
