@@ -187,7 +187,8 @@ endif
 " Emacs-style keybindings (for Insert and Command-line modes)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 noremap! <C-a>      <Home>
-noremap! <C-e>      <End>
+" C-e is useful to cancel completion PUM--don't break it.
+noremap! <expr> <C-e> pumvisible() ? "\<C-e>" : "<End>"
 noremap! <C-b>      <Left>
 noremap! <C-f>      <Right>
 noremap! <C-u>      <C-e><C-u>
