@@ -3,14 +3,12 @@ let python_space_error_highlight = 1
 
 " Find git repo root dir.
 "
-" Using the systemlist() builtin will split the output lines into an array,
-" which prunes the newline/null character from the end of the string for us.
+" systemlist() will split output lines into an array, which prunes the
+" newline/null character from the end of the string for us.
 let b:gitroot = systemlist('git rev-parse --show-toplevel')[0]
 if b:gitroot =~ '^fatal:'
     unlet b:gitroot
 endif
-
-compiler pylint
 
 " set makeprg to tox
 "if exists("b:gitroot")
@@ -20,3 +18,14 @@ compiler pylint
 "        nnoremap <buffer> <F10> :Make<CR>
 "    endif
 "endif
+
+" Use pylint for dispatch compiler
+compiler pylint
+nnoremap <buffer> <F1> :Make<CR>
+
+" Enable `K' support in quickfix window for pylint message IDs
+augroup enablePylintKeywords
+    au!
+    au FileType qf setlocal keywordprg=pylint\ --help-msg
+    au FileType qf setlocal iskeyword=a-z,-
+augroup END
