@@ -1,6 +1,7 @@
 # vim: set ft=sh:
 
-alias va='vi ~/.bash/aliases'
-alias vp='vi ~/.bash_profile'
-alias na='source ~/.bash/aliases'
-alias np='source ~/.bash_profile'
+EC_PUPPET=/opt/ec/puppet/bin/puppet
+
+alias pa="sudo ${EC_PUPPET} agent"
+alias pat="sudo ${EC_PUPPET} agent --test"
+alias pl='sudo less /var/log/puppet/puppet.log'

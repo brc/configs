@@ -6,6 +6,9 @@ function have {
 }
 
 # aliases
+#
+#have exa && alias ls=exa  # incompatible ls(1) flags
+
 alias a='ls -ahF --color=auto'
 alias a.='ls -ahF --color=auto .*'
 alias ad='ls -ahF --color=auto -d'
@@ -55,6 +58,7 @@ alias 7='pushd +7'
 alias 8='pushd +8'
 alias 9='pushd +9'
 
+have bat && alias cat=bat
 have egrep && alias grep='egrep --color=auto'
 have colordiff && alias diff=colordiff
 have lftp && alias ftp=lftp
