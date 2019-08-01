@@ -211,6 +211,8 @@ nnoremap <LocalLeader>ra :%s/<C-r><C-w>//gc<Left><Left><Left>
 """""""""""""""
 "(like vim-vinegar)
 nnoremap - :silent edit <C-R>=empty(expand('%')) ? '.' : expand('%:p:h')<CR><CR>
+" don't return to netrw with ^6, go to the file i was editing previously!
+let g:netrw_altfile = 1
 
 " QuickFix window
 """""""""""""""""
@@ -262,12 +264,6 @@ autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 "focus (very bottom)
 nnoremap <LocalLeader>gf <C-w>b
-
-" MBE window
-""""""""""""
-"toggle/focus (very top)
-nnoremap <LocalLeader>mm :MBEToggle<CR>
-nnoremap <LocalLeader>gm 99<C-w>k
 
 " Window management
 """""""""""""""""""
