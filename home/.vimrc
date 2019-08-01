@@ -464,7 +464,7 @@ nnoremap <LocalLeader>ig <Plug>IndentGuidesToggle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_powerline_fonts = 1  " sudo pacman -S powerline-fonts
+let g:airline_powerline_fonts = 1  "sudo pacaur -S powerline-fonts ttf-devicons
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ FZF completion

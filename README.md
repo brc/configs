@@ -21,3 +21,8 @@ $ ls -latr ~/.local/share/fonts/
 -rw-rw-r--  1 duck duck 1.7M Apr  1  2018 'Hack Regular Nerd Font Complete.ttf'
 -rw-rw-r--  1 duck duck 1.7M Apr  1  2018 'Hack Regular Nerd Font Complete Windows Compatible.ttf'
 ```
+
+# Other Fonts (for `vim-airline` and `vim-devicons`)
+```
+$ sudo pacaur -S powerline-fonts ttf-devicons
+```
