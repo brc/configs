@@ -148,13 +148,16 @@ fi
 if grep -iwq ubuntu /etc/issue; then
     alias aptdate='sudo apt-get update'
     alias cache='apt-cache search'
+    alias show='apt-cache show'
     alias pmi='sudo apt-get install'
 elif uname -a |grep -Eq '\.el[0-9]+\.?'; then
     alias cache='yum search'
+    alias show='yum info'
     alias pmi='sudo yum install'
 elif grep -iwq arch /etc/issue; then
     alias aptdate='sudo pacman -Syy'
     alias cache='pacaur -Ss'
+    alias show='pacaur -Si'
     alias pmi='pacaur -S'
 fi
 
