@@ -22,9 +22,6 @@ imap <buffer> <LocalLeader>bin #!/bin/sh<CR><BS><CR><CR>
 
 imap <buffer> <LocalLeader>l <ESC>A
 
-map <buffer> <LocalLeader>par Bi(<ESC>Ea)<ESC>
-imap <buffer> <LocalLeader>par <ESC>Bi(<ESC>Ea)
-
 map <buffer> <LocalLeader>if iif ; then<CR>fi<ESC>k$2bi
 imap <buffer> <LocalLeader>if if ; then<CR>fi<ESC>k$2bi
 

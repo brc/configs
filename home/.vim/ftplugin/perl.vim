@@ -82,8 +82,8 @@ imap <buffer> <LocalLeader>el else<LocalLeader>br
 map <buffer> <LocalLeader>un iunless ()<ESC>i
 imap <buffer> <LocalLeader>un unless ()<ESC>i
 
-map <buffer> <LocalLeader>wh iwhile ()<ESC>i
-imap <buffer> <LocalLeader>wh while ()<ESC>i
+" map <buffer> <LocalLeader>wh iwhile ()<ESC>i
+" imap <buffer> <LocalLeader>wh while ()<ESC>i
 
 map <buffer> <LocalLeader>for ifor ()<ESC>i
 imap <buffer> <LocalLeader>for for ()<ESC>i
