@@ -100,3 +100,9 @@
 [submodule "home/.zsh/bundles-available/oh-my-zsh"]
 	path = home/.zsh/bundles-available/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh.git
+[submodule "home/.vim/bundle-available/fzf"]
+	path = home/.vim/bundle-available/fzf
+	url = git@github.com:junegunn/fzf.git
+[submodule "home/.vim/bundle-available/fzf.vim"]
+	path = home/.vim/bundle-available/fzf.vim
+	url = git@github.com:junegunn/fzf.vim.git

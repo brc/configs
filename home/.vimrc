@@ -314,7 +314,7 @@ noremap <ESC>h z10h
 " Toggle folds
 """"""""""""""
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-noremap <LocalLeader>f zi
+noremap <LocalLeader>z zi
 
 " Refresh diff highlighting
 """""""""""""""""""""""""""
@@ -324,6 +324,13 @@ noremap <LocalLeader>du :diffupdate<CR>
 """"""""""""""""""""""
 nnoremap <C-w>o :echoerr "Go fuck yourself :-)"<CR>
 nnoremap <C-w><C-o> :echoerr "Go fuck yourself :-)"<CR>
+
+" List buffers
+""""""""""""""
+nnoremap <LocalLeader>b :ls<CR>
+if !empty(glob("~/.vim/bundle/fzf.vim"))  " (not loaded yet)
+    nnoremap <LocalLeader>b :Buffers<CR>
+endif
 
 
 " ###########################################################################
@@ -458,3 +465,30 @@ nnoremap <LocalLeader>ig <Plug>IndentGuidesToggle
 """ Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_powerline_fonts = 1  " sudo pacman -S powerline-fonts
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" FZF completion
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" File search
+noremap <LocalLeader>v :Files<SPACE>
+
+" Mapping selecting mappings
+nmap <LocalLeader><TAB> <Plug>(fzf-maps-n)
+xmap <LocalLeader><TAB> <Plug>(fzf-maps-x)
+omap <LocalLeader><TAB> <Plug>(fzf-maps-o)
+
+" Customize fzf colors to match current color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
