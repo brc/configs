@@ -112,10 +112,8 @@ hi Normal       ctermfg=darkgreen
 "color inkpot
 "color delek
 
-" Molokai: bring the 256 color version as close as possible to the the default
-" (dark) GUI version
-"let g:rehash256 = 1
 color molokai
+"color murphy
 
 " Custom highlights
 """""""""""""""""""
@@ -123,7 +121,7 @@ hi Normal       ctermbg=235
 hi Visual       term=reverse ctermbg=4
 hi Search       cterm=underline,bold ctermfg=yellow ctermbg=magenta
 hi WarningMsg   ctermfg=yellow ctermbg=red
-"hi ColorColumn  ctermbg=blue ctermfg=yellow
+hi ColorColumn  ctermbg=blue ctermfg=yellow
 
 " Vimdiff mode
 """"""""""""""
@@ -135,6 +133,7 @@ hi WarningMsg   ctermfg=yellow ctermbg=red
     highlight DiffDelete term=reverse cterm=none ctermbg=black ctermfg=red
 "endif
 
+"color desert
 
 " ###########################################################################
 " ### CUSTOMIZE THINGS!
