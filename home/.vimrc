@@ -46,7 +46,7 @@ endif
 set updatetime=1000
 set visualbell
 set wildmenu
-set wildmode=list,longest,full
+set wildmode=list:full  " automatically complete first item and show list
 set writebackup
 
 " Things to remember when we exit
