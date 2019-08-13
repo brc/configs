@@ -58,9 +58,13 @@ __fzf_generic_path_completion() {
       [ -z "$dir" ] && dir='.'
       [ "$dir" != "/" ] && dir="${dir/%\//}"
       dir=${~dir}
-      matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} ${=fzf_opts} -q "$leftover" | while read item; do
-        echo -n "${(q)item}$suffix "
-      done)
+      matches=$(eval "$compgen $(printf %q "$dir")" |
+        FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse
+          $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" \
+            ${=fzf} ${=fzf_opts} -q "$leftover" |
+              while read item; do
+                echo -n "${(q)item}$suffix "
+              done)
       matches=${matches% }
       if [ -n "$matches" ]; then
         LBUFFER="$lbuf$matches$tail"
