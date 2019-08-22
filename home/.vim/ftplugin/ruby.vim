@@ -16,8 +16,8 @@ nnoremap <silent> <buffer> <cr> :RubySearch<cr>
 "
 " multi line stuff
 "
-map <buffer> <LocalLeader>beg ibegin<CR>rescue => e<CR>end<ESC>kO<TAB>
-imap <buffer> <LocalLeader>beg begin<CR>rescue => e<CR>end<ESC>kO<TAB>
+map <buffer> <LocalLeader>beg ibegin<CR>rescue => e<CR>end<ESC>kO
+imap <buffer> <LocalLeader>beg begin<CR>rescue => e<CR>end<ESC>kO
 
 map <buffer> <LocalLeader>kl iclass<CR>end #class <ESC>kA 
 imap <buffer> <LocalLeader>kl class<CR>end #class <ESC>kA 
