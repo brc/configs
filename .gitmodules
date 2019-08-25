@@ -109,3 +109,6 @@
 [submodule "home/.vim/bundle-available/vim-devicons"]
 	path = home/.vim/bundle-available/vim-devicons
 	url = git@github.com:ryanoasis/vim-devicons.git
+[submodule "home/spacemacs"]
+	path = home/spacemacs
+	url = https://github.com/syl20bnr/spacemacs
