@@ -39,7 +39,7 @@ bindkey "\e3;5~" delete-char
 bindkey "\e[3~" delete-char
 
 # other misc mappings
-bindkey -M vicmd Y vi-yank-eol
+bindkey -M vicmd \Y vi-yank-eol  # escaped to avoid my global alias `Y'
 bindkey -M vicmd v edit-command-line
 bindkey '^[[Z'  reverse-menu-complete
 bindkey "\eh"   run-help

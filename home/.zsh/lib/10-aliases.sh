@@ -55,7 +55,11 @@ if [[ $(hostname) =~ archie ]]; then
     alias configs='cd /git/invsblduck/configs/home'
 
     # zsh global aliases
+    alias -g Y='|bat --color=always -l yaml'
+    alias -g J='|jq -C'
+    alias -g CA='--color=always'
     #alias -g MW='--max-width=$(tput cols)'  # configured this as env var
+
 
     # rubicon bullshit
     alias ge='cd /git/emcrubicon'
