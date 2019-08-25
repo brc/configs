@@ -11,6 +11,7 @@ set autoindent
 set backspace=indent,eol,start
 set backupcopy=auto
 set colorcolumn=80
+set completeopt=menuone,preview
 set diffopt=filler,vertical
 set expandtab
 set fileformat=unix
@@ -46,7 +47,7 @@ endif
 set updatetime=1000
 set visualbell
 set wildmenu
-set wildmode=list:full  " automatically complete first item and show list
+set wildmode=list,list:full  " automatically complete first item and show list
 set writebackup
 
 " Things to remember when we exit
