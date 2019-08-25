@@ -373,7 +373,8 @@ endif
 
 nnoremap <LocalLeader>gg :Gstatus<CR>
 nnoremap <LocalLeader>gl :Glog --<CR>
-nnoremap <LocalLeader>gL :Glog -- %
+nnoremap <LocalLeader>gL :Glog -- %<CR>
+nnoremap <LocalLeader>gS :Glog -S
 nnoremap <LocalLeader>gr :Ggrep<SPACE>
 nnoremap <LocalLeader>gb :Gblame<CR>
 nnoremap <LocalLeader>gB :Gbrowse!<CR>
