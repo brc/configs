@@ -39,8 +39,9 @@ xset s off &
 
 # start client services (for shared clipboard, seamless mode, etc)
 #VBoxClient-all &
-vmware-user &
-#~/bin/xrandr-fusion-laptop.sh &
+#vmware-user &
+prlcc &  # parallels daemon for automatically adjusting video resolution
+clipster -d &  # sync PRIMARY selection and CLIPBOARD
 
 #########################################
 # open terminal and start wm            #

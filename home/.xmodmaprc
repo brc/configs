@@ -13,6 +13,8 @@
 ! Don't arrange these when running under VirtualBox on OSX
 ! (the raw keysyms are already intercepted by Karabiner on the outside)
 !
+! UPDATE: These are now handled by Kaleidoscope (keyboard.io Model 01)
+!
 !   keysym 1 = numbersign percent
 !   keysym 2 = dollar 7
 !   keysym 3 = parenleft 5
@@ -52,7 +54,7 @@ keysym KP_Delete = KP_Decimal
 !   add Control = Control_L  
 
 
-! For Apple kbd under VMWare Fusion:
+! For running in VMWare Fusion:
 !     - Both Command keys are mapped to Super (because it assumes Windows)
 !     - Map them to Alt_L and Alt_R
 !
