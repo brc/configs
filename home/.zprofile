@@ -42,9 +42,9 @@ fi
 
 # for most pttys i use (xterm, xterm-color, screen, etc),
 # the kbs sequence is ^H in the terminfo.
-stty erase ^H
+#stty erase ^H  # going down the rabbit hole of terminal emacs
 
-export EDITOR=vim
+#export EDITOR=vim  # see comment immediately above! and lib/99-emacs.zsh
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8

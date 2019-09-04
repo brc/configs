@@ -314,11 +314,17 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  ;; Make C-h backspace
+  (global-set-key (kbd "C-h") 'delete-backward-char)
+  (global-set-key (kbd "M-h") 'help-command)  ;; overrides (mark-paragraph)
   (xterm-mouse-mode -1)
 
   (setq-default
    fci-rule-column 80  ;; vim `colorcolumn'
    scroll-margin 5     ;; vim `scrolloff'
+   ;; (emacs 26.1 changed `term-char-mode' to disallow cursor movement in evil's
+   ;;  normal mode--restore the previous behavior)
+   term-char-mode-point-at-process-mark nil
    ;; Magit stuff
    magit-blame-echo-style 'margin))
 

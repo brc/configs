@@ -1,5 +1,6 @@
 # vim: set ft=sh:
 
+alias vim='emacsclient -t'
 alias va='vim ~/.zsh/lib/10-aliases.sh'
 alias vp='vim ~/.zprofile'
 alias vrc='vim ~/.zshrc'
