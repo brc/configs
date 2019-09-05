@@ -61,7 +61,11 @@ host="%{${fg[red]}%}%m%{${reset_color}%}"
 cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
 close="%{${fg[blue]}%}>%{${reset_color}%}"          # >
 
-PROMPT="${mode}${host} ${cwdpath}${close}${venv} "
+PROMPT=
+if [ -z "$EMACS" ]; then
+    PROMPT="${mode}"
+fi
+PROMPT="${PROMPT}${host} ${cwdpath}${close}${venv} "
 
 GIT_PS1_SHOWDIRTYSTATE='true'
 GIT_PS1_SHOWSTASHSTATE='true'
