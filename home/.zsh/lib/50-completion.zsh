@@ -20,7 +20,7 @@ setopt list_types       # show trailing character in listing to id file type
 zmodload -i zsh/complist
 
 # enable bash completion support
-autoload bashcompinit
+autoload -U bashcompinit
 bashcompinit
 
 # normally this function comes from the `bash-completion' package;

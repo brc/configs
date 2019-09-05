@@ -56,6 +56,7 @@ if [[ $(hostname) =~ archie ]]; then
     alias configs='cd /git/invsblduck/configs/home'
 
     # zsh global aliases
+    alias -g C='|bat --color=always'
     alias -g Y='|bat --color=always -l yaml'
     alias -g J='|jq -C'
     alias -g CA='--color=always'
