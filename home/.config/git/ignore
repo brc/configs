@@ -3,4 +3,8 @@
 .*.swp
 *.pyc
 /doc/tags
+.tox/
 .venv/
+GPATH
+GRTAGS
+GTAGS

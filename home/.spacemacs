@@ -31,26 +31,26 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     helm
+     ansible
      auto-completion
      ;; better-defaults
+     docker
+     helm
      emacs-lisp
      git
-     ;; markdown
+     ;;groovy  ;; only available in develop
+     gtags
+     html
+     markdown
      org
+     puppet
      python
      ruby
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom)
-     ;; spell-checking
-     ;; syntax-checking
-     ;; version-control
+     ;;(shell :variables
+     ;;       shell-default-height 30
+     ;;       shell-default-position 'bottom)
+     (spell-checking :variables spell-checking-enable-by-default nil)
+     ;; syntax-checking  ;; enable flycheck
      themes-megapack
      vimscript
      )
@@ -58,7 +58,12 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(
+     ini-mode
+     strace-mode
+     groovy-mode
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -296,6 +301,12 @@ values."
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
+
+   ;; brett/duck/brc temp override while gnu.org is down today...
+   ;; configuration-layer--elpa-archives
+   ;; '(("melpa" . "melpa.org/packages/")
+   ;;   ("org"   . "orgmode.org/elpa/")
+   ;;   ("gnu"   . "/git/spacemacs-elpa-mirror-master/gnu"))
    ))
 
 (defun dotspacemacs/user-init ()
@@ -314,19 +325,88 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  ;; Make C-h backspace
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Load custom files
+  ;;
+  ;;  See https://www.emacswiki.org/emacs/LoadingLispFiles and
+  ;;      http://www.cb1.com/~john/computing/emacs/lisp/basics/load-directory.el
+  ;;
+  (add-to-list 'load-path "~/.elisp/enabled")
+
+  ;; Jenkinsfile mode
+  (require 'jenkinsfile-mode)
+  (add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Backspace with C-h and Help with M-h
+  ;;
   (global-set-key (kbd "C-h") 'delete-backward-char)
   (global-set-key (kbd "M-h") 'help-command)  ;; overrides (mark-paragraph)
-  (xterm-mouse-mode -1)
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Evil-mode overrides
+  ;;
+  ;; retain some Emacs movement bindings
+  (evil-define-key nil evil-insert-state-map (kbd "C-a") nil)  ;; unbind
+  (evil-define-key nil evil-insert-state-map (kbd "C-e") nil)  ;; unbind
+  (evil-define-key nil evil-normal-state-map (kbd "C-p") nil)  ;; unbind
+  (evil-define-key nil evil-normal-state-map (kbd "C-n") nil)  ;; unbind
+  ;; override `evil-repeat-pop-next' and `pop-tag-mark' bindings
+  (evil-define-key nil evil-normal-state-map (kbd "M-,") 'evil-scroll-left)
+  (evil-define-key nil evil-normal-state-map (kbd "M-.") 'evil-scroll-right)
+  ;; override `evil-jump-to-tag' binding to use GNU Global
+  (evil-define-key nil evil-normal-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
+
+  ;; allow keybindings for magit-popup magic in docker mode
+  (add-to-list 'evil-emacs-state-modes 'docker-container-mode)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Spacemacs overrides
+  ;;
+  ;; maximize window on single axis
+  (spacemacs/set-leader-keys
+    "w|" 'spacemacs/maximize-horizontally
+    "w_" 'spacemacs/maximize-vertically)  ;; defined below
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Man-mode
+  ;;
+  ;; override page width
+  (setenv "MANWIDTH" "80")
+  ;; navigate sections easily
+  (evil-define-key nil Man-mode-map (kbd "M-n") 'Man-next-section)
+  (evil-define-key nil Man-mode-map (kbd "M-p") 'Man-previous-section)
+  (evil-define-key nil Man-mode-map (kbd "S")   'Man-goto-section)
+  ;; reuse current window for new Man buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Man .*\\*\\'" .
+                 (display-buffer-reuse-mode-window
+                  (inhibit-same-window . nil)
+                  (mode . Man-mode))))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Misc
+  ;;
+  (xterm-mouse-mode -1)  ;; disable mouse for terminal
+  (define-key help-map (kbd "h") nil)  ;; unbind accidental hello-file (<Esc> hh)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Custom variables
+  ;;
   (setq-default
+   ;;create-lockfiles nil  ;; these broken symlinks wreak way too much havoc
+   ;; (^ Actually: the broken symlinks are a nice indicator there is unsaved work :))
+   evil-escape-key-sequence "mk"  ;; escape from Insert mode with
    fci-rule-column 80  ;; vim `colorcolumn'
    scroll-margin 5     ;; vim `scrolloff'
    ;; (emacs 26.1 changed `term-char-mode' to disallow cursor movement in evil's
    ;;  normal mode--restore the previous behavior)
    term-char-mode-point-at-process-mark nil
    ;; Magit stuff
-   magit-blame-echo-style 'margin))
+   magit-blame-echo-style 'margin
+   ;; Bug-fix see https://www.reddit.com/r/emacs/comments/aruxah/python_shell_doesnt_work_with_multiple_lines_of/egtwe3l/
+   python-shell-prompt-block-regexp "\\.\\.\\.:? "))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -338,11 +418,47 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol t)
  '(package-selected-packages
    (quote
-    (xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+ '(safe-local-variable-values
+   (quote
+    ((encoding . utf-8)
+     (eval ansible 1)
+     (eval add-to-list
+           (quote company-backends)
+           (quote company-ansible))))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 257)) (:foreground "#f8fbfc" :background "#242728")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background nil)))))
+ '(default ((((class color) (min-colors 257)) (:foreground "#f8fbfc" :background "#242728")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background nil))))
+ '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t)))))
+
+
+;; https://tsdh.wordpress.com/2007/03/
+(defun spacemacs/maximize-vertically ()
+  "Delete all windows above or below the current window."
+  (interactive)
+  (require 'windmove)
+  (save-excursion
+    (while (condition-case nil (windmove-up) (error nil))
+      (delete-window))
+    (while (condition-case nil (windmove-down) (error nil))
+      (delete-window))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Unimpaired-paste emulator (YOPO)
+;;
+;;  TODO: seems like newline-and-indent not being restored
+;;
+;; ;; https://github.com/tpope/vim-unimpaired/blob/master/plugin/unimpaired.vim
+;; (defun setup_paste ()
+;;   (setq-local oldret (key-binding "\C-m"))
+;;   (local-set-key "\C-m" 'evil-ret)  ;; was 'newline-and-indent)
+;;   (add-hook 'evil-insert-state-exit-hook
+;;             '(lambda () (when (boundp 'oldret)
+;;                          (local-set-key "\C-m" oldret)
+;;                          (makunbound 'oldret)))
+;;             nil t))

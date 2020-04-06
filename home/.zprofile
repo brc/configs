@@ -45,6 +45,7 @@ fi
 #stty erase ^H  # going down the rabbit hole of terminal emacs
 
 #export EDITOR=vim  # see comment immediately above! and lib/99-emacs.zsh
+export MANWIDTH=80
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -69,7 +70,10 @@ eval "$(dircolors -b ~/.dircolors)"
 #export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 export FIRE_USER=bcampbell  # LMI
+export ANSIBLE_NOCOWS=true
+export ANSIBLE_FORCE_COLOR=true
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
+export GTAGSLABEL=pygments
 
 #export PYTHONDONTWRITEBYTECODE=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1

@@ -112,3 +112,6 @@
 [submodule "home/spacemacs"]
 	path = home/spacemacs
 	url = https://github.com/syl20bnr/spacemacs
+[submodule "home/.elisp/available/jenkinsfile-mode"]
+	path = home/.elisp/available/jenkinsfile-mode
+	url = git@github.com:john2x/jenkinsfile-mode.git

@@ -3,7 +3,7 @@
 gitdir=$(git rev-parse --git-dir)
 mkdir ${gitdir}/tags_lock 2>/dev/null || exit 0
 
-trap "rm -rf ${gitdir}/tags_lock; rm -f ${gitdir}/tags.$$" EXIT
+trap "rm -rf ${gitdir}/tags_lock; rm -f ${gitdir}/[tT][aA][gG][sS].$$" EXIT
 
 # how to conditionally/intelligently use ripper-tags here?
 ctags --tag-relative=yes -R -f ${gitdir}/tags.$$ \
@@ -12,4 +12,13 @@ ctags --tag-relative=yes -R -f ${gitdir}/tags.$$ \
     --fields=+l \
     --languages=-javascript,sql
 
+# do etags
+ctags --output-format=etags \
+      --tag-relative=yes -R -f ${gitdir}/TAGS.$$ \
+      --exclude=${gitdir} \
+      --exclude=.tox  \
+      --fields=+l \
+      --languages=-javascript,sql
+
 mv ${gitdir}/tags.$$ ${gitdir}/tags
+mv ${gitdir}/TAGS.$$ ${gitdir}/TAGS

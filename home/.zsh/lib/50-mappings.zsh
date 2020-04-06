@@ -18,7 +18,7 @@ bindkey ^h      backward-delete-char
 bindkey ^d      delete-char-or-list
 bindkey "\ed"   kill-word
 bindkey ^w      backward-kill-word
-bindkey "\e^h"  backward-kill-word
+bindkey "\e^?"  backward-kill-word
 bindkey ^k      kill-line
 bindkey ^u      kill-whole-line
 bindkey ^t      transpose-chars
