@@ -29,6 +29,7 @@ alias gf='git fetch'
 alias gfu='git fetch -v upstream'
 
 # merge
+alias gm='git merge'
 alias gmum='git merge upstream/master'
 alias gmud='git merge upstream/devel'
 
@@ -63,7 +64,7 @@ alias gtp='git stash pop'
 # checkout
 alias gco='git checkout'
 alias gcom='git checkout master'
-alias gcod='git checkout develop'
+alias gcod='git checkout devel'
 alias gcob='git checkout -b'
 
 # diff
