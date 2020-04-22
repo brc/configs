@@ -10,6 +10,7 @@
 # - $FZF_COMPLETION_OPTS    (default: empty)
 
 export FZF_TMUX=1  # open fzf in new pane
+export FZF_DEFAULT_OPTS='--no-mouse'
 
 # override find(1) command for fzf to prune .tox/ dir
 _fzf_compgen_path() {
