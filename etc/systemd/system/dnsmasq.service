@@ -1,0 +1,25 @@
+# brc
+# Normally, you would want dnsmasq to come online very early in the boot process,
+# but for this jank VM, where we don't serve DHCP, nor any meaningful DNS, we
+# need it to come up *after* docker since we specifically bind docker0 in the
+# config file. Otherwise, dnsmasq will fail to start because docker isn't up yet.
+[Unit]
+Description=dnsmasq - A lightweight DHCP and caching DNS server
+Documentation=man:dnsmasq(8)
+After=network.target docker.socket docker.service
+#Before=network-online.target nss-lookup.target
+Before= nss-lookup.target
+Wants=nss-lookup.target
+
+[Service]
+Type=dbus
+BusName=uk.org.thekelleys.dnsmasq
+ExecStartPre=/usr/bin/dnsmasq --test
+ExecStart=/usr/bin/dnsmasq -k --enable-dbus --user=dnsmasq --pid-file
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+PrivateDevices=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
