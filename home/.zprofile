@@ -119,11 +119,6 @@ done
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
-# Edit the current command line in $EDITOR
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey -M viins "\ee" edit-command-line
-
 # git theming defaults
 #ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
 #ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt

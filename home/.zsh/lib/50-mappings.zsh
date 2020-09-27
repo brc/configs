@@ -29,8 +29,8 @@ bindkey "\ey"   yank-pop
 bindkey "\e."   insert-last-word
 bindkey "\ep"   _history-complete-older
 bindkey ^r      history-incremental-search-backward
-bindkey ^x^e    edit-command-line
 bindkey       undo
+#bindkey ^x^e    edit-command-line
 
 # Make the delete key work (or Fn + Delete on the Mac)
 bindkey '^?'    backward-delete-char
