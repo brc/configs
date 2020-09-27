@@ -2,6 +2,8 @@
 # ~/.zprofile
 #
 
+zmodload zsh/zprof
+
 export GOPATH=/data/go
 
 ruby_version=2.5.0
@@ -101,11 +103,11 @@ autoload -U compinit
 compinit -i -d ~/.zsh/.zcompdump-${ZSH_VERSION}
 
 # load functions
-setopt null_glob  # don't bomb if glob expansion fails
-for f in ~/.zsh/fpath/*.zsh; do
-    source $f
-done
-setopt no_null_glob
+# setopt null_glob  # don't bomb if glob expansion fails
+# for f in ~/.zsh/fpath/*.zsh; do
+#     source $f
+# done
+# setopt no_null_glob
 
 # run other scripts
 source ~/.zsh/aliases-common
