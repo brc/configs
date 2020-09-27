@@ -10,7 +10,9 @@ alias gl='git log --stat'
 alias gll='git log --oneline'
 alias glg='git log --grep'
 alias glum='git log --stat upstream/master'
-alias glud='git log --stat upstream/devel'
+alias glud='git log --stat upstream/develop'
+alias glom='git log --stat origin/master'
+alias glod='git log --stat origin/develop'
 
 # grep
 alias ggr='git grep --heading --break'
@@ -31,11 +33,15 @@ alias gfu='git fetch -v upstream'
 # merge
 alias gm='git merge'
 alias gmum='git merge upstream/master'
-alias gmud='git merge upstream/devel'
+alias gmud='git merge upstream/develop'
+alias gmom='git merge origin/master'
+alias gmod='git merge origin/develop'
 
 # rebase
 alias grum='git rebase upstream/master'
-alias grud='git rebase upstream/devel'
+alias grud='git rebase upstream/develop'
+alias grom='git rebase origin/master'
+alias grod='git rebase origin/develop'
 
 # pull
 alias gp='git pull'
@@ -64,14 +70,16 @@ alias gtp='git stash pop'
 # checkout
 alias gco='git checkout'
 alias gcom='git checkout master'
-alias gcod='git checkout devel'
+alias gcod='git checkout develop'
 alias gcob='git checkout -b'
 
 # diff
 alias gd='git diff'
 alias gdc='git diff --cached'
-alias gdum='git log -p HEAD..upstream/master'
-alias gdud='git log -p HEAD..upstream/devel'
+alias gdum='git log -p upstream/master'
+alias gdud='git log -p upstream/develop'
+alias gdom='git log -p origin/master'
+alias gdod='git log -p origin/develop'
 
 # add
 alias ga='git add'
