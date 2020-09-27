@@ -60,6 +60,7 @@ bindkey "\eh"   run-help
 
 bindkey -s "\ea" "|awk '{print $}'^B^B"
 bindkey -s "\ec" "|count "
+bindkey -s "\ee" ".expertcity.com"
 bindkey -s "\eg" "|grep -i "
 bindkey -s "\el" "|less"
 bindkey -s "\en" ">/dev/null "

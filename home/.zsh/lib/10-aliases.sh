@@ -48,12 +48,13 @@ if [[ $(hostname) =~ archie ]]; then
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
     alias r=ranger
+    alias top=bpytop
 
     alias gi='cd /git/invsblduck'
-    alias gib='cd /git/invsblduck/bin'
-    alias cdcd='cd /git/invsblduck/chef_dev_utils'
+    #alias cdcd='cd /git/invsblduck/chef_dev_utils'
     alias fcc='cd /git/invsblduck/fakecloud_configs/dotfiles'
     alias configs='cd /git/invsblduck/configs/home'
+    alias bin='cd /git/invsblduck/bin'
 
     # zsh global aliases
     alias -g C='|bat --color=always'
@@ -64,35 +65,35 @@ if [[ $(hostname) =~ archie ]]; then
 
 
     # rubicon bullshit
-    alias ge='cd /git/emcrubicon'
-    alias gec='cd /git/emcrubicon/campbb6'
-    alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
+    #alias ge='cd /git/emcrubicon'
+    #alias gec='cd /git/emcrubicon/campbb6'
+    #alias geca='cd /git/emcrubicon/campbb6/plato-gouda/ansible'
     alias gecd='cd /git/emcrubicon/campbb6/dev-utils/bin'
-    alias gep='cd /git/emcrubicon/pantry-projects'
-    alias gecp='cd /git/emcrubicon/campbb6/pantry-projects'
-    alias gepd='cd /git/emcrubicon/pantry-dev'
-    alias gecpd='cd /git/emcrubicon/campbb6/pantry-dev'
-    alias gecsh='cd /git/emcrubicon/campbb6/pantry-dev/service-improvement-handbook'
-    alias ger='cd /git/emcrubicon/rubicon-saltstack'
+    #alias gep='cd /git/emcrubicon/pantry-projects'
+    #alias gecp='cd /git/emcrubicon/campbb6/pantry-projects'
+    #alias gepd='cd /git/emcrubicon/pantry-dev'
+    #alias gecpd='cd /git/emcrubicon/campbb6/pantry-dev'
+    #alias gecsh='cd /git/emcrubicon/campbb6/pantry-dev/service-improvement-handbook'
+    #alias ger='cd /git/emcrubicon/rubicon-saltstack'
     alias gecr='cd /git/emcrubicon/campbb6/rubicon-saltstack'
-    alias gece='cd /git/emcrubicon/campbb6/pantry-projects/ecs2-salt'
-    alias det='cd /data/emc/tmp'
-    alias detu='cd /data/emc/tmp/users-formula/test/roots'
-    alias ess='emc-saltsync.sh'
-    alias cdev='cd /data/emc/salt/dev/graft_root'
-    alias ckick='cd /data/emc/salt/dev/graft_root'
-    alias cmin='docker exec -it dev_minion_1 /bin/bash'
-    alias cmm='docker exec -it dev_master_1 /bin/bash'
-    alias ccpg='docker exec -it dev_minion_1 salt-call pillar.get'
-    alias ccpi='docker exec -it dev_minion_1 salt-call pillar.items'
+    #alias gece='cd /git/emcrubicon/campbb6/pantry-projects/ecs2-salt'
+    #alias det='cd /data/emc/tmp'
+    #alias detu='cd /data/emc/tmp/users-formula/test/roots'
+    #alias ess='emc-saltsync.sh'
+    #alias cdev='cd /data/emc/salt/dev/graft_root'
+    #alias ckick='cd /data/emc/salt/dev/graft_root'
+    #alias cmin='docker exec -it dev_minion_1 /bin/bash'
+    #alias cmm='docker exec -it dev_master_1 /bin/bash'
+    #alias ccpg='docker exec -it dev_minion_1 salt-call pillar.get'
+    #alias ccpi='docker exec -it dev_minion_1 salt-call pillar.items'
 
     # liberty bullshit
-    alias glu='cd /git/liberty/uscm-devops'
-    alias glug='cd /git/liberty/uscm-devops/jenkins-global-groovy/vars'
-    alias glup='cd /git/liberty/uscm-devops/jenkins-python'
+    #alias glu='cd /git/liberty/uscm-devops'
+    #alias glug='cd /git/liberty/uscm-devops/jenkins-global-groovy/vars'
+    #alias glup='cd /git/liberty/uscm-devops/jenkins-python'
 
     # lmi bullshit
-    alias pf='cd /data/lmi/os/pf9'
+    #alias pf='cd /data/lmi/os/pf9'
     alias poc='cd /git/lmi/ie/platform9/poc/scripts'
     alias las2crdp='xfreerdp /u:bcampbell /d:logmein /v:jump.las2c'
 fi
