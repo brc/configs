@@ -4,7 +4,7 @@ ix() { curl -F 'f:1=<-' http://ix.io < "${1:-/dev/stdin}"; }
 
 pubkey() {
     echo "# Brett's key"
-    cat ~/.ssh/id_rsa.pub
+    /bin/cat ~/.ssh/id_rsa.pub  # don't use bat(1)
 }
 
 #function irclast {
