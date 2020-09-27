@@ -52,9 +52,11 @@ _get_comp_words_by_ref ()
 
 # source the files in /etc/bash_completion.d
 # (not sure we should source /usr/share/bash-completion/completions/*)
+setopt null_glob
 for f in /etc/bash_completion.d/*; do
     source ${f}
 done
+unsetopt null_glob
 
 # add useful completion styles
 zstyle ':completion:*' matcher-list \
