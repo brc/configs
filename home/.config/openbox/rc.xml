@@ -287,7 +287,7 @@
     </keybind> -->
     <!-- Keybindings for window switching -->
     <!-- <keybind key="A-Tab"> -->
-    <keybind key="C-Tab">
+    <keybind key="A-Tab">
       <action name="NextWindow">
         <finalactions>
           <action name="Focus"/>
@@ -421,16 +421,17 @@
         <action name="Move"/>
       </mousebind>
       <mousebind button="Left" action="DoubleClick">
-        <action name="ToggleShade"/>
+        <!-- <action name="ToggleShade"/> -->
+        <action name="ToggleMaximize"/>
       </mousebind>
       <mousebind button="Up" action="Click">
         <action name="if">
           <shaded>no</shaded>
           <then>
             <action name="Shade"/>
-            <action name="FocusToBottom"/>
-            <action name="Unfocus"/>
-            <action name="Lower"/>
+            <!-- <action name="FocusToBottom"/> -->
+            <!-- <action name="Unfocus"/> -->
+            <!-- <action name="Lower"/> -->
           </then>
         </action>
       </mousebind>
@@ -439,7 +440,7 @@
           <shaded>yes</shaded>
           <then>
             <action name="Unshade"/>
-            <action name="Raise"/>
+            <!-- <action name="Raise"/> -->
           </then>
         </action>
       </mousebind>
@@ -448,7 +449,7 @@
       <mousebind button="Left" action="Press">
         <action name="Focus"/>
         <action name="Raise"/>
-        <action name="Unshade"/>
+        <!-- <action name="Unshade"/> -->
       </mousebind>
       <mousebind button="Middle" action="Press">
         <action name="Lower"/>
@@ -508,20 +509,20 @@
         <action name="Resize"/>
       </mousebind>
     </context>
-    <context name="Client">
-      <mousebind button="Left" action="Press">
-        <action name="Focus"/>
-        <action name="Raise"/>
-      </mousebind>
-      <mousebind button="Middle" action="Press">
-        <action name="Focus"/>
-        <action name="Raise"/>
-      </mousebind>
-      <mousebind button="Right" action="Press">
-        <action name="Focus"/>
-        <action name="Raise"/>
-      </mousebind>
-    </context>
+    <!-- <context name="Client"> -->
+    <!--   <mousebind button="Left" action="Press"> -->
+    <!--     <action name="Focus"/> -->
+    <!--     <action name="Raise"/> -->
+    <!--   </mousebind> -->
+    <!--   <mousebind button="Middle" action="Press"> -->
+    <!--     <action name="Focus"/> -->
+    <!--     <action name="Raise"/> -->
+    <!--   </mousebind> -->
+    <!--   <mousebind button="Right" action="Press"> -->
+    <!--     <action name="Focus"/> -->
+    <!--     <action name="Raise"/> -->
+    <!--   </mousebind> -->
+    <!-- </context> -->
     <context name="Icon">
       <mousebind button="Left" action="Press">
         <action name="Focus"/>
