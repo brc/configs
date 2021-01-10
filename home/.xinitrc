@@ -1,3 +1,8 @@
+# orient screens
+if [ "$(hostname)" = bunker ]; then
+    ~/.screenlayout/tai-fighter.sh
+fi
+
 # change x11 cursor
 #xsetroot -cursor_name left_ptr &
 
