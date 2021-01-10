@@ -53,10 +53,19 @@ Plugin {
   type=launchbar
   Config {
     Button {
-      id=/usr/share/applications/chromium.desktop
+      id=firefox.desktop
     }
     Button {
-      id=firefox.desktop
+      id=chromium.desktop
+    }
+    Button {
+      id=slack.desktop
+    }
+    Button {
+      id=emacs.desktop
+    }
+    Button {
+      id=xfce4-terminal.desktop
     }
   }
 }
@@ -112,6 +121,10 @@ Plugin {
 Plugin {
   type=volumealsa
   Config {
+    CardNumber=3
+    MasterChannel=PCM
+    VolumeUpKey=XF86AudioRaiseVolume
+    VolumeDownKey=XF86AudioLowerVolume
   }
 }
 Plugin {
