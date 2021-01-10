@@ -54,4 +54,5 @@ xset m 8 3 &
 #########################################
 #terminator &
 xfce4-terminal &
-exec openbox
+#exec openbox
+exec compiz
