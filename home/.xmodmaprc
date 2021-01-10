@@ -30,17 +30,6 @@
 !   keysym bracketleft = at asciicircum
 !   keysym bracketright = ampersand plus
 !
-keysym KP_Home = KP_7
-keysym KP_Up = KP_8
-keysym KP_Prior = KP_9
-keysym KP_Left = KP_4
-keysym KP_Begin = KP_5
-keysym KP_Right = KP_6
-keysym KP_End = KP_1
-keysym KP_Down = KP_2
-keysym KP_Next = KP_3
-keysym KP_Insert = KP_0
-keysym KP_Delete = KP_Decimal
 
 
 ! Don't swap CapsLock/Control when running under VirtualBox on OSX
@@ -58,5 +47,5 @@ keysym KP_Delete = KP_Decimal
 !     - Both Command keys are mapped to Super (because it assumes Windows)
 !     - Map them to Alt_L and Alt_R
 !
-remove Mod4 = Super_L Super_R
-add Mod1 = Super_L Super_R
+!   remove Mod4 = Super_L Super_R
+!   add Mod1 = Super_L Super_R
