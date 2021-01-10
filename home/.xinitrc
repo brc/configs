@@ -12,6 +12,7 @@ fi
 
 # start task panel
 lxpanel &
+blueman-applet &
 
 # set xdefaults (urxvt)
 xrdb -merge /home/brc/.Xresources
