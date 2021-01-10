@@ -14,12 +14,12 @@ fi
 lxpanel &
 
 # set xdefaults (urxvt)
-xrdb -merge /home/duck/.Xresources
+xrdb -merge /home/brc/.Xresources
 
 # fix keymap
 # (don't configure dvorak anymore (ergodox))
 #setxkbmap dvorak 
-xmodmap /home/duck/.xmodmaprc &
+xmodmap /home/brc/.xmodmaprc &
 
 # bump key repeat rate
 xset r rate 180 100 &
@@ -36,8 +36,8 @@ xset m 8 3 &
 
 # shut off x11 screensaver
 #xscreensaver </dev/null &>/dev/null &
-xset -dpms &
-xset s off &
+#xset -dpms &
+#xset s off &
 
 # don't much with battery info
 #batti &
@@ -45,8 +45,8 @@ xset s off &
 # start client services (for shared clipboard, seamless mode, etc)
 #VBoxClient-all &
 #vmware-user &
-prlcc &  # parallels daemon for automatically adjusting video resolution
-clipster -d &  # sync PRIMARY selection and CLIPBOARD
+#prlcc &  # parallels daemon for automatically adjusting video resolution
+#clipster -d &  # sync PRIMARY selection and CLIPBOARD
 
 #########################################
 # open terminal and start wm            #
