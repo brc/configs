@@ -2,12 +2,12 @@
 # Use preference dialog in lxpanel to adjust config when you can.
 
 Global {
-  edge=top
+  edge=bottom
   allign=left
-  margin=0
+  margin=10
   widthtype=percent
   width=100
-  height=26
+  height=40
   transparent=0
   tintcolor=#192837
   alpha=255
@@ -16,19 +16,15 @@ Global {
   setdocktype=1
   setpartialstrut=1
   usefontcolor=1
-  fontsize=10
+  fontsize=14
   fontcolor=#d3d4d4
-  usefontsize=0
+  usefontsize=1
   background=0
   backgroundfile=/usr/share/lxpanel/images/background.png
-  iconsize=24
+  iconsize=36
   loglevel=2
-}
-Plugin {
-  type=space
-  Config {
-    Size=2
-  }
+  monitor=1
+  align=center
 }
 Plugin {
   type=menu
@@ -50,7 +46,13 @@ Plugin {
   }
 }
 Plugin {
-  type=launchbar
+  type=dirmenu
+  Config {
+    path=/home/brc
+  }
+}
+Plugin {
+  type=launchtaskbar
   Config {
     Button {
       id=firefox.desktop
@@ -67,68 +69,50 @@ Plugin {
     Button {
       id=xfce4-terminal.desktop
     }
+    GroupedTasks=1
   }
 }
 Plugin {
-  type=space
+  type=kbled
   Config {
-    Size=4
-  }
-}
-Plugin {
-  type=space
-  Config {
-    Size=4
-  }
-}
-Plugin {
-  type=pager
-  Config {
-  }
-}
-Plugin {
-  type=space
-  Config {
-    Size=4
-  }
-}
-Plugin {
-  type=taskbar
-  expand=1
-  Config {
-    tooltips=1
-    IconsOnly=0
-    ShowAllDesks=0
-    UseMouseWheel=1
-    UseUrgencyHint=1
-    FlatButton=0
-    MaxTaskWidth=150
-    spacing=1
-    GroupedTasks=0
   }
 }
 Plugin {
   type=netstatus
   Config {
-    iface=enp0s3
+    iface=enp6s0
+    configtool=nm-connection-editor
   }
 }
 Plugin {
-  type=cpu
+  type=monitors
   Config {
+    DisplayCPU=1
+    DisplayRAM=1
+    Action=showtop.sh
+    CPUColor=#0000FF
+    RAMColor=#FF0000
   }
 }
 Plugin {
-  type=volumealsa
+  type=thermal
   Config {
-    CardNumber=3
-    MasterChannel=PCM
-    VolumeUpKey=XF86AudioRaiseVolume
-    VolumeDownKey=XF86AudioLowerVolume
+    NormalColor=#00ff00
+    Warning1Color=#fff000
+    Warning2Color=#ff0000
+    AutomaticLevels=1
+    Warning1Temp=140
+    Warning2Temp=145
+    AutomaticSensor=1
   }
 }
 Plugin {
   type=tray
+  Config {
+  }
+}
+Plugin {
+  type=volume
   Config {
   }
 }
