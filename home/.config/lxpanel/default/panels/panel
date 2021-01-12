@@ -2,7 +2,7 @@
 # Use preference dialog in lxpanel to adjust config when you can.
 
 Global {
-  edge=bottom
+  edge=top
   allign=left
   margin=10
   widthtype=percent
@@ -46,14 +46,11 @@ Plugin {
   }
 }
 Plugin {
-  type=dirmenu
-  Config {
-    path=/home/brc
-  }
-}
-Plugin {
   type=launchtaskbar
   Config {
+    Button {
+      id=thunar.desktop
+    }
     Button {
       id=firefox.desktop
     }
@@ -68,6 +65,9 @@ Plugin {
     }
     Button {
       id=xfce4-terminal.desktop
+    }
+    Button {
+      id=io.github.janbar.noson.desktop
     }
     GroupedTasks=1
   }
