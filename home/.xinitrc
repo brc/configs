@@ -13,6 +13,7 @@ fi
 # start task panel
 lxpanel &
 blueman-applet &
+/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 # set xdefaults (urxvt)
 xrdb -merge /home/brc/.Xresources
