@@ -15,6 +15,7 @@ gempaths=(
     ~/.gem/ruby/2.2.0
     ~/.gem/ruby/2.3.0
     ~/.gem/ruby/2.4.0
+    ~/.gem/ruby/2.5.0
     ${GEM_HOME}
     ${system_gems}
 )
@@ -55,7 +56,7 @@ export LC_COLLATE=C
 export LC_CTYPE=C
 
 export LESSCHARSET=utf-8
-export LESS="-QRfim -j4"
+export LESS="-QRFim -j4"
 # termcap codes for less(1)
 # double-bright (headings, keywords, options, symbols)
 export LESS_TERMCAP_md=$'\E[01;37m'     # begin
