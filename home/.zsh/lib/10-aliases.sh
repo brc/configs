@@ -65,6 +65,12 @@ if [[ $(hostname) =~ bunker ]]; then
     alias configs='cd /git/invsblduck/configs/home'
     alias bin='cd /git/invsblduck/bin'
 
+    alias dn='dctl namespace set'
+    alias kg='kubectl get'
+    alias kgp='kubectl get pods'
+    alias kgpw='kubectl get pods -o wide'
+    alias kd='kubectl describe'
+
     # zsh global aliases
     alias -g C='|bat --color=always'
     alias -g Y='|bat --color=always -l yaml'
