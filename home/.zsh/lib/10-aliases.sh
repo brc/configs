@@ -1,5 +1,14 @@
 # vim: set ft=sh:
 
+# XXX this should probably be a relative path, since we
+#     live in symlinking hell.
+source ~/.zsh/aliases-common
+
+function have {
+    command -v "$1" >/dev/null
+    return $?
+}
+
 alias vim='emacsclient -t'
 alias va='vim ~/.zsh/lib/10-aliases.sh'
 alias vp='vim ~/.zprofile'
@@ -14,7 +23,7 @@ alias nrc='source ~/.zshrc'
 alias nag='source ~/.zsh/lib/10-git-aliases.zsh'
 alias nac='source ~/.zsh/aliases-common'
 
-if [[ $(hostname) =~ archie ]]; then
+if [[ $(hostname) =~ bunker ]]; then
     # alias f='fixshit.sh'
     # alias wi='sudo wifi-menu'
     # alias kf='pkill plugin-containe'
@@ -47,8 +56,8 @@ if [[ $(hostname) =~ archie ]]; then
     alias jenkins='java -jar /home/duck/jenkins-cli.jar'
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
-    alias r=ranger
-    alias top=bpytop
+    have ranger && alias r=ranger
+    have bpytop && alias top=bpytop
 
     alias gi='cd /git/invsblduck'
     #alias cdcd='cd /git/invsblduck/chef_dev_utils'
@@ -62,7 +71,6 @@ if [[ $(hostname) =~ archie ]]; then
     alias -g J='|jq -C'
     alias -g CA='--color=always'
     #alias -g MW='--max-width=$(tput cols)'  # configured this as env var
-
 
     # rubicon bullshit
     #alias ge='cd /git/emcrubicon'

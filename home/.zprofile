@@ -110,7 +110,6 @@ compinit -i -d ~/.zsh/.zcompdump-${ZSH_VERSION}
 # setopt no_null_glob
 
 # run other scripts
-source ~/.zsh/aliases-common
 for f in $(echo ~/.zsh/lib/*.{sh,zsh} |sort); do
     source $f
 done
