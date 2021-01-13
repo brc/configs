@@ -1,0 +1,7 @@
+#!/bin/bash
+#set -x
+
+INTERNAL_IP4_DNS=  # don't modify resolv.conf
+#env |sort
+
+. /etc/vpnc/vpnc-script

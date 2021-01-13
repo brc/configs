@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -x
-
 DOCKER_DEV=docker0
 DOCKER_NET=172.17.0.0/16
 TUNDEV="${TUNDEV:-tun0}"
