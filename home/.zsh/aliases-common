@@ -16,12 +16,22 @@ alias ad.='ls -ahF --color=auto -d .*'
 alias at='ls -ahF --color=auto -tr'
 alias as='ls -ahF --color=auto -Sr'
 
-alias aa='ls -ahF --color=auto -l'
-alias aa.='ls -ahF --color=auto -l .*'
-alias aad='ls -ahF --color=auto -l -d'
-alias aad.='ls -ahF --color=auto -l -d .*'
-alias aat='ls -ahF --color=auto -l -tr'
-alias aas='ls -ahF --color=auto -l -Sr'
+if have 'ls++'
+then
+    alias aa='ls++ --potsf -a '
+    alias aa.='ls++ --potsf -a .*'
+    alias aad='ls++ --potsf -a -d'
+    alias aad.='ls++ --potsf -a -d .*'
+    alias aat='ls++ --potsf -a -tr'
+    alias aas='ls++ --potsf -a -Sr'
+else
+    alias aa='ls -ahF --color=auto -l'
+    alias aa.='ls -ahF --color=auto -l .*'
+    alias aad='ls -ahF --color=auto -l -d'
+    alias aad.='ls -ahF --color=auto -l -d .*'
+    alias aat='ls -ahF --color=auto -l -tr'
+    alias aas='ls -ahF --color=auto -l -Sr'
+fi
 
 alias wa='sudo ls -ahF --color=auto'
 alias wa.='sudo ls -ahF --color=auto .*'
@@ -126,6 +136,7 @@ fi
 
 function t { local p="${1:-.}"; find "$p" -path .git -o -path .tox -prune -o -print; }
 have tree && alias t='tree -aCI .git\|.tox'
+have tree && alias tt='tree -apDFhCI .git\|.tox'
 
 alias ww=~/g2sh.pl
 alias r2='ssh -l root'
