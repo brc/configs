@@ -8,7 +8,7 @@ NS=10.19.145.138
 
 mkdir -p "${DIR}"
 cat >"${CONF}" <<__EOF__
-server=/logmein.com/expertcity.com/getgotools.net/3amlabs.net/lmiprod.com/${NS}
+server=/logmein.com/expertcity.com/getgotools.net/goto.com/3amlabs.net/lmiprod.com/${NS}
 server=/10.in-addr.arpa/${NS}
 __EOF__
 
