@@ -20,8 +20,10 @@ xrdb -merge /home/brc/.Xresources
 
 # fix keymap
 # (don't configure dvorak anymore (ergodox))
-#setxkbmap dvorak 
-xmodmap /home/brc/.xmodmaprc &
+#setxkbmap dvorak
+
+# KDE Plasma reads this automatically
+#xmodmap /home/brc/.Xmodmap &
 
 # bump key repeat rate
 xset r rate 180 100 &
