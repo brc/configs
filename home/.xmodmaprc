@@ -49,3 +49,11 @@
 !
 !   remove Mod4 = Super_L Super_R
 !   add Mod1 = Super_L Super_R
+
+
+! Convert Super to Meta
+clear mod4
+remove mod1 = Meta_L
+keycode 133 = Meta_L
+keycode 134 = Meta_R
+add mod1 = Meta_L Meta_R
