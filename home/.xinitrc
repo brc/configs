@@ -1,7 +1,7 @@
 # orient screens
-if [ "$(hostname)" = bunker ]; then
-    ~/.screenlayout/tai-fighter.sh
-fi
+# if [ "$(hostname)" = bunker ]; then
+#     ~/.screenlayout/tai-fighter.sh
+# fi
 
 # change x11 cursor
 #xsetroot -cursor_name left_ptr &
@@ -11,9 +11,9 @@ fi
 #xset fp rehash &
 
 # start task panel
-lxpanel &
-blueman-applet &
-/usr/lib/xfce4/notifyd/xfce4-notifyd &
+#lxpanel &
+#blueman-applet &
+#/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 # set xdefaults (urxvt)
 xrdb -merge /home/brc/.Xresources
@@ -54,6 +54,9 @@ xset m 8 3 &
 # open terminal and start wm            #
 #########################################
 #terminator &
-xfce4-terminal &
+#xfce4-terminal &
 #exec openbox
-exec compiz
+#exec compiz
+
+export DESKTOP_SESSION=plasma
+exec startplasma-x11
