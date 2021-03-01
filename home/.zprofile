@@ -87,6 +87,8 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 export VAGRANT_VM_MEM=1536
 #export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
 
+export QMK_HOME=/git/qmk/qmk_firmware
+
 # configure basic history
 export HISTSIZE=10000
 export SAVEHIST=9990        # smaller than HISTSIZE for hist_expire_dups_first
