@@ -1,0 +1,6 @@
+.include /etc/pulse/default.pa
+
+# (From https://wiki.archlinux.org/index.php/Bluetooth_headset)
+### Automatically switch to newly-connected devices
+load-module module-switch-on-connect
+
