@@ -24,13 +24,15 @@ then
     alias aad.='ls++ --potsf -a -d .*'
     alias aat='ls++ --potsf -a -tr'
     alias aas='ls++ --potsf -a -Sr'
+    alias aaat='ls++ --potsf -a -tr -L'  # deref symlinks
+    alias aaas='ls++ --potsf -a -Sr -L'  #
 else
     alias aa='ls -ahF --color=auto -l'
     alias aa.='ls -ahF --color=auto -l .*'
     alias aad='ls -ahF --color=auto -l -d'
     alias aad.='ls -ahF --color=auto -l -d .*'
-    alias aat='ls -ahF --color=auto -l -tr'
-    alias aas='ls -ahF --color=auto -l -Sr'
+    alias aat='ls -ahF --color=auto -l -tr -L'  # deref symlinks
+    alias aas='ls -ahF --color=auto -l -Sr -L'  #
 fi
 
 alias wa='sudo ls -ahF --color=auto'
@@ -46,6 +48,8 @@ alias waad='sudo ls -ahF --color=auto -l -d'
 alias waad.='sudo ls -ahF --color=auto -l -d .*'
 alias waat='sudo ls -ahF --color=auto -l -tr'
 alias waas='sudo ls -ahF --color=auto -l -Sr'
+alias waat='sudo ls -ahF --color=auto -l -tr -L'  # deref symlinks
+alias waas='sudo ls -ahF --color=auto -l -Sr -L'  #
 
 alias rm='rm -i'  # woopsy
 alias mv='mv -i'  #
