@@ -55,9 +55,13 @@ ${terminfo[cud1]}"
 # (this line has to be in single quotes here)
 mode='%{${terminfo_down_sc}${vimode}${terminfo[rc]}%}'
 
+# change hostname color when SSH
+fqdn_color="${SSH_CLIENT:+cyan}"
+fqdn_color="${fqdn_color:-red}"
+
 # variables for $PROMPT
 venv="%{${fg_bold[white]}%}"\$(virtualenv_prompt_info)"%{${reset_color}%}"
-host="%{${fg[red]}%}%m%{${reset_color}%}"
+host="%{${fg[${fqdn_color}]}%}%m%{${reset_color}%}"
 cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
 close="%{${fg[blue]}%}>%{${reset_color}%}"          # >
 
