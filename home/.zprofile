@@ -50,6 +50,7 @@ fi
 
 #export EDITOR=vim  # see comment immediately above! and lib/99-emacs.zsh
 export MANWIDTH=80
+export MAKEFLAGS="-j$(nproc)"
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
