@@ -1,0 +1,6 @@
+[Match]
+Name=enp6s0
+
+[Network]
+Address=172.16.247.5/24
+Gateway=172.16.247.1
