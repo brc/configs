@@ -2,7 +2,7 @@
 case "$1" in
   resume|thaw)
     setxkbmap dvorak
-    xmodmap /home/duck/.xmodmaprc
+    xmodmap /home/brc/.xmodmaprc
   ;;
   *)
     exit 1

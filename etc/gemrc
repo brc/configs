@@ -4,6 +4,6 @@
 #                pacman installed gems and gem installed gems
 gem: --user-install
 :gempath:
-- /home/duck/.gem/ruby/2.1.0
-- /home/duck/.gem/ruby/2.0.0
+- /home/brc/.gem/ruby/2.1.0
+- /home/brc/.gem/ruby/2.0.0
 - /usr/lib/ruby/gems/2.1.0
