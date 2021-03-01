@@ -6,7 +6,7 @@ zmodload zsh/zprof
 
 export GOPATH=/data/go
 
-ruby_version=2.5.0
+ruby_version=2.7.0
 export GEM_HOME=~/.gem/ruby/${ruby_version}
 system_gems=/usr/lib/ruby/gems/${ruby_version}
 gempaths=(
@@ -23,6 +23,8 @@ export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
 
 mypaths=(
     ~/bin
+    ~/.local/bin
+    $(printf "%s/bin " "${gempaths[@]}")
     /usr/local/sbin
     /usr/local/bin
     /bin
@@ -31,7 +33,6 @@ mypaths=(
     /usr/sbin
     /usr/bin/vendor_perl
     /usr/bin/core_perl
-    $(printf "%s/bin " "${gempaths[@]}")
     /git/emcrubicon/campbb6/dev-utils/bin
     /git/invsblduck/fakecloud
     /git/powerline/scripts
