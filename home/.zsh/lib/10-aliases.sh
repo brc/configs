@@ -23,7 +23,7 @@ alias nrc='source ~/.zshrc'
 alias nag='source ~/.zsh/lib/10-git-aliases.zsh'
 alias nac='source ~/.zsh/aliases-common'
 
-if [[ $(hostname) =~ bunker ]]; then
+if [[ $(hostname) =~ ^bunker\|archer$ ]]; then  # pipe needs escape when sourcing
     # alias f='fixshit.sh'
     # alias wi='sudo wifi-menu'
     # alias kf='pkill plugin-containe'
@@ -53,7 +53,7 @@ if [[ $(hostname) =~ bunker ]]; then
     alias wo=/data/fire/s.sh
 
     #alias fc='sudo fakecloud'  # conflicts with builtin history command
-    alias jenkins='java -jar /home/duck/jenkins-cli.jar'
+    #alias jenkins='java -jar /home/brc/jenkins-cli.jar'
     alias nr='next-review -u invsblduck -l stackforge/cookbook'
 
     have ranger && alias r=ranger
