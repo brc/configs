@@ -49,7 +49,9 @@ fi
 #stty erase ^H  # going down the rabbit hole of terminal emacs
 
 #export EDITOR=vim  # see comment immediately above! and lib/99-emacs.zsh
+export MANPAGER="bash -c 'col -bx | bat -l man -p'"
 export MANWIDTH=80
+
 export MAKEFLAGS="-j$(nproc)"
 
 export LANG=en_US.UTF-8
@@ -61,14 +63,14 @@ export LESSCHARSET=utf-8
 export LESS="-QRFim -j4"
 # termcap codes for less(1)
 # double-bright (headings, keywords, options, symbols)
-export LESS_TERMCAP_md=$'\E[01;37m'     # begin
-export LESS_TERMCAP_me=$'\E[0m'         # end
-# underline (arguments and filenames)
-export LESS_TERMCAP_us=$'\E[04;36m'     # begin
-export LESS_TERMCAP_ue=$'\E[0m'         # end
-# standout (highlighted search terms and info bar at bottom)
-export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
-export LESS_TERMCAP_se=$'\E[0m'         # end
+#export LESS_TERMCAP_md=$'\E[01;37m'     # begin
+#export LESS_TERMCAP_me=$'\E[0m'         # end
+## underline (arguments and filenames)
+#export LESS_TERMCAP_us=$'\E[04;36m'     # begin
+#export LESS_TERMCAP_ue=$'\E[0m'         # end
+## standout (highlighted search terms and info bar at bottom)
+#export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
+#export LESS_TERMCAP_se=$'\E[0m'         # end
 
 eval "$(dircolors -b ~/.dircolors)"
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
