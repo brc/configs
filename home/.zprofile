@@ -6,7 +6,8 @@ zmodload zsh/zprof
 
 export GOPATH=/data/go
 
-ruby_version=2.7.0
+#ruby_version=2.7.0
+ruby_version=3.0.0
 export GEM_HOME=~/.gem/ruby/${ruby_version}
 system_gems=/usr/lib/ruby/gems/${ruby_version}
 gempaths=(
@@ -16,6 +17,8 @@ gempaths=(
     ~/.gem/ruby/2.3.0
     ~/.gem/ruby/2.4.0
     ~/.gem/ruby/2.5.0
+    ~/.gem/ruby/2.7.0
+    ~/.gem/ruby/3.0.0
     ${GEM_HOME}
     ${system_gems}
 )
