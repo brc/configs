@@ -30,6 +30,7 @@ if [[ $(hostname) =~ ^bunker\|archer$ ]]; then  # pipe needs escape when sourcin
     alias tm=tmux
     alias tma='tmux attach'
     alias bunker='ssh bunker'
+    alias mbp='ssh mbp'
 
     alias ww=gnash
     alias wo=/data/fire/s.sh

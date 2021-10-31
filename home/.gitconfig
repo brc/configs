@@ -17,6 +17,7 @@
 [alias]
     ctags    = !.git/hooks/ctags
     emc      = !git-config.sh emc
+    kajabi   = !git-config.sh kajabi
     liberty  = !git-config.sh liberty
     logmein  = !git-config.sh lmi
     xentaurs = !git-config.sh xentaurs-bitbucket
