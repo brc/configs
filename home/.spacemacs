@@ -388,6 +388,15 @@ you should place your code here."
     "w_" 'spacemacs/maximize-vertically)  ;; defined below
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Use Helm for Company completions
+  ;;
+  (autoload 'helm-company "helm-company")
+  (eval-after-load 'company
+    '(progn
+       (define-key company-mode-map (kbd "C-M-i") 'helm-company)
+       (define-key company-active-map (kbd "C-M-i") 'helm-company)))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Man-mode
   ;;
   ;; override page width
