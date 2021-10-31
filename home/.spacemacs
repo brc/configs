@@ -54,7 +54,7 @@ values."
      ;;       shell-default-height 30
      ;;       shell-default-position 'bottom)
      (spell-checking :variables spell-checking-enable-by-default nil)
-     syntax-checking  ;; enable flycheck
+     ;;syntax-checking  ;; enable flycheck
      themes-megapack
      vimscript
      )
