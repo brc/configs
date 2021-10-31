@@ -5,8 +5,7 @@
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="Arch"
-
-GRUB_CMDLINE_LINUX_DEFAULT="iomem=relaxed ipv6.disable=1"
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 ipv6.disable=1"
 GRUB_CMDLINE_LINUX=""
 
 # For Dell XPS @ RAX
@@ -58,4 +57,7 @@ GRUB_DISABLE_RECOVERY=true
 
 # Uncomment to make GRUB remember the last selection. This requires
 # setting 'GRUB_DEFAULT=saved' above.
-#GRUB_SAVEDEFAULT="true"
+#GRUB_SAVEDEFAULT=true
+
+# Uncomment to disable submenus in boot menu
+#GRUB_DISABLE_SUBMENU=y
