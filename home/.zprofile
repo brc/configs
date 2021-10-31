@@ -27,6 +27,7 @@ mypaths=(
     $(printf "%s/bin " "${gempaths[@]}")
     /usr/local/sbin
     /usr/local/bin
+    /git/git-when-merged/bin
     /bin
     /sbin
     /usr/bin
