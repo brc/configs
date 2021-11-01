@@ -94,60 +94,15 @@ export VAGRANT_VM_MEM=1536
 
 export QMK_HOME=/git/qmk/qmk_firmware
 
-# configure basic history
-export HISTSIZE=10000
-export SAVEHIST=9990        # smaller than HISTSIZE for hist_expire_dups_first
-export HISTFILE=~/.zsh/history
-setopt extended_history         # ":start:elapsed;command" format
-setopt inc_append_history       # write history immediately (not after exit)
-setopt hist_ignore_dups         # don't record consecutively duplicate events
-setopt hist_expire_dups_first   # rotate global dups out first
-setopt hist_find_no_dups        # skip dups during history search
-setopt hist_verify              # expand history before executing command
-
 # setup fpath
 fpath=(~/.zsh/fpath $fpath)
-
-# load and run compinit
-autoload -U compinit
-compinit -i -d ~/.zsh/.zcompdump-${ZSH_VERSION}
-
-# load functions
-# setopt null_glob  # don't bomb if glob expansion fails
-# for f in ~/.zsh/fpath/*.zsh; do
-#     source $f
-# done
-# setopt no_null_glob
 
 # run other scripts
 for f in $(echo ~/.zsh/lib/*.{sh,zsh} |sort); do
     source $f
 done
 
-## smart urls
-autoload -U url-quote-magic
-zle -N self-insert url-quote-magic
-
-# git theming defaults
-#ZSH_THEME_GIT_PROMPT_PREFIX="(" # prefix at very beginning of prompt
-#ZSH_THEME_GIT_PROMPT_SUFFIX=")" # postfix at end of prompt
-#ZSH_THEME_GIT_PROMPT_DIRTY="*"  # text to display if branch is dirty
-#ZSH_THEME_GIT_PROMPT_CLEAN=""   # text to display if branch is clean
-
-#autoload -U promptinit
-#promptinit
-#prompt walters
-
-#source ~/.zsh/prompts/peepcode.zsh
-#source ~/.zsh/prompts/gitprompt
-source ~/.zsh/prompts/duck.zsh
-
-
-
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-
+# show fortune
 if which fortune >/dev/null; then
     echo -e "\e[34m"
     if which cowsay >/dev/null; then
@@ -157,3 +112,4 @@ if which fortune >/dev/null; then
     fi
     echo -e "\e[0m"
 fi
+
