@@ -6,28 +6,27 @@ zmodload zsh/zprof
 
 export GOPATH=/data/go
 
-#ruby_version=2.7.0
-ruby_version=3.0.0
-export GEM_HOME=~/.gem/ruby/${ruby_version}
-system_gems=/usr/lib/ruby/gems/${ruby_version}
-gempaths=(
-    ~/.gem/ruby/2.0.0
-    ~/.gem/ruby/2.1.0
-    ~/.gem/ruby/2.2.0
-    ~/.gem/ruby/2.3.0
-    ~/.gem/ruby/2.4.0
-    ~/.gem/ruby/2.5.0
-    ~/.gem/ruby/2.7.0
-    ~/.gem/ruby/3.0.0
-    ${GEM_HOME}
-    ${system_gems}
-)
-export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
+# Don't export Ruby variables--it just makes a mess with chruby, rbenv, etc.,
+# and the technique of mixing versions into a single $GEM_PATH doesn't work.
+#
+# Saving for future reference:
+#
+#    ruby_version=3.0.0
+#    export GEM_HOME=~/.gem/ruby/${ruby_version}
+#    system_gems=/usr/lib/ruby/gems/${ruby_version}
+#    gempaths=(
+#        ~/.gem/ruby/2.7.0
+#        ~/.gem/ruby/3.0.0
+#        ${GEM_HOME}
+#        ${system_gems}
+#    )
+#    export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
 
 mypaths=(
     ~/bin
     ~/.local/bin
-    $(printf "%s/bin " "${gempaths[@]}")
+    #$(printf "%s/bin " "${gempaths[@]}")
+    $(gem env gempath |cut -f1 -d:)/bin
     /usr/local/sbin
     /usr/local/bin
     /git/git-when-merged/bin

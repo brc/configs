@@ -151,6 +151,7 @@ alias tf='tail -f'
 alias wtf='sudo tail -f'
 alias tmm='tmux ls'
 alias tma='tmux attach'
+alias be='bundle exec'
 
 if command dmesg -V 2>&1 |grep -q 'invalid option'; then
     # XXX which version of util-linux introduced `-H'?  same one as `-V'?!
