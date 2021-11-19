@@ -60,5 +60,9 @@ xset m 8 3 &
 #exec openbox
 #exec compiz
 
+if [ "$(hostname)" = archer ]; then
+    xhost +bunker
+fi
+
 export DESKTOP_SESSION=plasma
 exec startplasma-x11
