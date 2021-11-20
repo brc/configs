@@ -44,4 +44,5 @@ Encoding=UTF-8
 FontName=Hack NF 12
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=TRUE
+ScrollingUnlimited=TRUE
 
