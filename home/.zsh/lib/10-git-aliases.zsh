@@ -1,3 +1,7 @@
+function master_branch {
+  git rev-parse master &>/dev/null && echo master || echo main
+}
+
 function current_branch {
   git symbolic-ref --short HEAD
 }
@@ -9,9 +13,9 @@ alias g=git
 alias gl='git log --stat'
 alias gll='git log --oneline'
 alias glg='git log --grep'
-alias glum='git log --stat upstream/master'
+alias glum='git log --stat upstream/$(master_branch)'
 alias glud='git log --stat upstream/develop'
-alias glom='git log --stat origin/master'
+alias glom='git log --stat origin/$(master_branch)'
 alias glod='git log --stat origin/develop'
 
 # grep
@@ -32,15 +36,15 @@ alias gfu='git fetch -v upstream'
 
 # merge
 alias gm='git merge'
-alias gmum='git merge upstream/master'
+alias gmum='git merge upstream/$(master_branch)'
 alias gmud='git merge upstream/develop'
-alias gmom='git merge origin/master'
+alias gmom='git merge origin/$(master_branch)'
 alias gmod='git merge origin/develop'
 
 # rebase
-alias grum='git rebase upstream/master'
+alias grum='git rebase upstream/$(master_branch)'
 alias grud='git rebase upstream/develop'
-alias grom='git rebase origin/master'
+alias grom='git rebase origin/$(master_branch)'
 alias grod='git rebase origin/develop'
 
 # pull
@@ -69,16 +73,16 @@ alias gtp='git stash pop'
 
 # checkout
 alias gco='git checkout'
-alias gcom='git checkout master'
+alias gcom='git checkout $(master_branch)'
 alias gcod='git checkout develop'
 alias gcob='git checkout -b'
 
 # diff
 alias gd='git diff'
 alias gdc='git diff --cached'
-alias gdum='git log -p upstream/master'
+alias gdum='git log -p upstream/$(master_branch)'
 alias gdud='git log -p upstream/develop'
-alias gdom='git log -p origin/master'
+alias gdom='git log -p origin/$(master_branch)'
 alias gdod='git log -p origin/develop'
 
 # add
