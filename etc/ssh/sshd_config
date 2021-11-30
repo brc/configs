@@ -107,15 +107,16 @@ PrintMotd no # pam does that
 #Banner none
 
 # override default of no subsystems
-#Subsystem	sftp	/usr/lib/ssh/sftp-server
-# brc enable sshfs for Kajabi MBP
-Subsystem	sftp	internal-sftp
+Subsystem	sftp	/usr/lib/ssh/sftp-server
 
-Match User kajabi-sshfs
-	ChrootDirectory /opt/kajabi-chroot
-	X11Forwarding no
-	AllowTcpForwarding no
-	ForceCommand internal-sftp
+# brc enable sshfs for Kajabi MBP
+# Subsystem	sftp	internal-sftp
+
+# Match User kajabi-sshfs
+# 	ChrootDirectory /opt/kajabi-chroot
+# 	X11Forwarding no
+# 	AllowTcpForwarding no
+# 	ForceCommand internal-sftp
 
 # Example of overriding settings on a per-user basis
 #Match User anoncvs
@@ -123,3 +124,6 @@ Match User kajabi-sshfs
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
+
+Match User brc
+    X11Forwarding yes
