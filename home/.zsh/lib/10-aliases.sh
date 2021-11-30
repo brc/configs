@@ -110,4 +110,7 @@ if [[ $(hostname) =~ ^bunker\|archer$ ]]; then  # pipe needs escape when sourcin
     alias kgp='kubectl get pods'
     alias kgpw='kubectl get pods -o wide'
     alias kd='kubectl describe'
+
+    # kajabi bullshit
+    alias gkk='cd /gk/kajabi-products'
 fi
