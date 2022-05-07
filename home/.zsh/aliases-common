@@ -1,3 +1,4 @@
+# -*- mode: shell-script; -*-
 # vim: set ft=sh:
 
 function have {
@@ -18,7 +19,7 @@ alias as='ls -ahF --color=auto -Sr'
 
 if have 'ls++'
 then
-    alias aa='ls++ --potsf -a '
+    alias aa='ls++ --potsf -a'
     alias aa.='ls++ --potsf -a .*'
     alias aad='ls++ --potsf -a -d'
     alias aad.='ls++ --potsf -a -d .*'
@@ -133,9 +134,12 @@ alias td='sudo tcpdump -nn'
 
 alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
 alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+
 if have rg; then
     alias gr=rg
+    alias gri='gr --ignore'  # honor .gitignore
     alias wgr='sudo rg'
+    alias wgri='wgr --ignore'
 fi
 
 function t { local p="${1:-.}"; find "$p" -path .git -o -path .tox -prune -o -print; }
