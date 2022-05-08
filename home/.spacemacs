@@ -658,7 +658,8 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-mode overrides
   ;;
-  (evil-define-key nil sh-mode-map (kbd "C-c C-n") 'brc/sh-send-line-or-region)  ;; defined below
+  (evil-define-key nil sh-mode-map (kbd "C-c C-e") 'brc/sh-send-line-or-region)  ;; defined below
+  (evil-define-key nil sh-mode-map (kbd "C-c C-n") 'brc/sh-send-line-or-region-and-step)
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -771,35 +772,34 @@ before packages are loaded."
         (t
          (message "No previous Swoop buffer found"))))
 
-;; Modeled from `sh-send-line-or-region-and-step' in
+;; Taken from `sh-send-line-or-region-and-step' in
 ;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
 ;;
-;; The original function doesn't jump to the correct place in the *shell*
-;; buffer. It seems that comint only tracks your previous prompts based on
-;; interactively typed input--when you send lines to the *shell* buffer via
-;; `sh-send-line-or-region-and-step', comint doesn't know there is a new
-;; command/output/prompt and so repeated uses of this function will lead to the
-;; buffer growing with more and more output each time, but it will always "step"
-;; to the last interactively typed command after every invocation (this results
-;; in the user typing `G' to jump to the end of the buffer to see the output
-;; from the command that was just sent, the next command moving point to a prior
-;; place in the buffer where you can't see the output of the command, `G' again,
-;; etc).
+;; The original function selects the window with the *shell* buffer and stays
+;; there.  This one returns focus to the code window that sent the input.
 ;;
 (defun brc/sh-send-line-or-region ()
-  "Send the current line to the inferior shell.
-When the region is active, send the region instead."
+  "Send the current line to the inferior shell; remain in current code window.
+When region is active, send region instead."
   (interactive)
-  (let (from to end)
+  (let (from to (src-window (get-buffer-window)))
     (if (use-region-p)
         (setq from (region-beginning)
-              to (region-end)
-              end to)
+              to (region-end))
       (setq from (line-beginning-position)
-            to (line-end-position)
-            end (1+ to)))
+            to (line-end-position)))
     (sh-send-text (buffer-substring-no-properties from to))
-    (select-window (get-mru-window nil nil nil))))
+    (select-window src-window)))
+
+(defun brc/sh-send-line-or-region-and-step ()
+  "Send the current line to the inferior shell and move point to next line;
+remain in current code window. When region is active, send region instead."
+  (interactive)
+  (brc/sh-send-line-or-region)
+  (if (use-region-p)
+      (goto-char (region-end))
+    (goto-char (1+ (line-end-position)))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -828,7 +828,11 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(comint-move-point-for-output t)
+ '(comint-process-echoes t)
+ '(comint-scroll-to-bottom-on-input t)
  '(evil-want-Y-yank-to-eol t)
+ '(explicit-bash-args '("-i"))
  '(helm-ag-base-command
    "rg --no-config --no-heading --color=never --line-number --smart-case --hidden --glob=!.{git,tox}")
  '(helm-completion-style 'helm)
@@ -840,6 +844,7 @@ This function is called at the very end of Spacemacs initialization."
    '((encoding . utf-8)
      (eval ansible 1)
      (eval add-to-list 'company-backends 'company-ansible)))
+ '(sh-shell-file "/bin/bash")
  '(treemacs-git-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
