@@ -32,8 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     ;; ----------------------------------------------------------------
+   '(;; ----------------------------------------------------------------
      ;; Add some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
@@ -47,8 +46,11 @@ This function should only modify configuration layer settings."
      helm
      html
      javascript
+     kubernetes
      markdown
      org
+     pdf
+     perl5
      php
      protobuf
      puppet
@@ -56,9 +58,12 @@ This function should only modify configuration layer settings."
      ranger
      ruby
      ruby-on-rails
-     ;(shell :variables
-     ;       shell-default-height 30
-     ;       shell-default-position 'bottom)
+     ;; (shell :variables
+     ;;       shell-default-height 30
+     ;;       shell-default-position 'bottom)
+     ;; (spacemacs-evil :variables
+     ;;                 spacemacs-evil-collection-allowed-list
+     ;;                 '(eww dired quickrun ztree))
      (spacemacs-layouts :variables
                         spacemacs-layouts-restrict-spc-tab t)
      (spell-checking :variables
@@ -92,6 +97,7 @@ This function should only modify configuration layer settings."
      ox-jira
      strace-mode
      terraform-mode
+     ztree
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -257,8 +263,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(darkokai
-                         spacemacs-dark
+   dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -609,7 +614,8 @@ before packages are loaded."
 
   ;; Jenkinsfile mode
   (require 'jenkinsfile-mode)
-  (add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
+  ;; (add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
+  (add-to-list 'auto-mode-alist '("\\.jenkinsfile$" . jenkinsfile-mode))
 
   ;; Arch PKGBUILDs
   (add-to-list 'auto-mode-alist '("PKGBUILD" . shell-script-mode))
@@ -618,49 +624,87 @@ before packages are loaded."
   (add-to-list 'auto-mode-alist '("\\.j2$" . jinja2-mode))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Backspace with C-h and Help with M-h
+  ;; Backspace using C-h
   ;;
   (global-set-key (kbd "C-h") 'delete-backward-char)
+  (evil-define-key nil helm-find-files-map (kbd "C-h") 'delete-backward-char)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Get Help with M-h
+  ;;
   (global-set-key (kbd "M-h") 'help-command)  ;; overrides (mark-paragraph)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Yank X11 PRIMARY selection (cut-buffer) using <Shift>-Insert
+  ;;
+  (global-set-key (kbd "<S-insert>")
+                  '(lambda () (interactive)(mouse-yank-primary (point))))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Don't transpose words with M-t
+  ;; (too much collateral damage from pressing tmux macro keys in Emacs! :))
+  ;;
+  (global-unset-key (kbd "M-t"))
+  ;;(evil-define-key nil evil-normal-state-map (kbd "M-t") nil)  ;; needed?!
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Evil-mode overrides
   ;;
   ;; retain some Emacs movement bindings
   (evil-define-key nil evil-insert-state-map (kbd "C-a") nil)  ;; unbind
+  (evil-define-key nil evil-insert-state-map (kbd "C-b") nil)  ;; unbind
+  (evil-define-key nil evil-insert-state-map (kbd "C-d") nil)  ;; unbind
   (evil-define-key nil evil-insert-state-map (kbd "C-e") nil)  ;; unbind
+  (evil-define-key nil evil-insert-state-map (kbd "C-f") nil)  ;; unbind
 
   ;; override `evil-repeat-pop-next' and `pop-tag-mark' bindings
-  (evil-define-key nil evil-normal-state-map (kbd "M-,") 'evil-scroll-left)
-  (evil-define-key nil evil-normal-state-map (kbd "M-.") 'evil-scroll-right)
+  ;; (evil-define-key nil evil-normal-state-map (kbd "M-,") 'evil-scroll-left)
+  ;; (evil-define-key nil evil-normal-state-map (kbd "M-.") 'evil-scroll-right)
 
   ;; override `evil-jump-to-tag' binding to use GNU Global
   ;(evil-define-key nil evil-normal-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
 
-  ;; yank from X11 selections
-  (evil-define-key nil evil-insert-state-map (kbd "S-insert") 'mouse-yank-primary);; X11 PRIMARY selection (cut buffer)
-  (evil-define-key nil evil-insert-state-map (kbd "M-v") 'clipboard-yank)  ;; X11 clipboard
+  ;; yank from X11 clipboard
+  (evil-define-key nil evil-insert-state-map (kbd "M-v") 'clipboard-yank)
 
   ;; don't update kill ring with visual text after yank
   (fset 'evil-visual-update-x-selection 'ignore)
 
   ;; allow keybindings for magit-popup magic in docker mode
   (add-to-list 'evil-emacs-state-modes 'docker-container-mode)
+  (add-to-list 'evil-emacs-state-modes 'ztree-mode)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Spacemacs overrides
   ;;
   (spacemacs/set-leader-keys
+    "gg" 'magit-status
     "w|" 'spacemacs/maximize-horizontally
     "w_" 'brc/maximize-vertically  ;; defined below
     "rS" 'brc/resume-last-swoop-buffer)   ;; defined below
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Magit overrides
+  ;;
+  (with-eval-after-load 'transient
+    (transient-bind-q-to-quit))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-mode overrides
   ;;
-  (evil-define-key nil sh-mode-map (kbd "C-c C-e") 'brc/sh-send-line-or-region)  ;; defined below
+  (evil-define-key nil sh-mode-map (kbd "C-c C-e") 'brc/sh-send-line-or-region)
   (evil-define-key nil sh-mode-map (kbd "C-c C-n") 'brc/sh-send-line-or-region-and-step)
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; eshell overrides
+  ;;
+  (evil-define-key nil eshell-mode-map (kbd "M-r") 'helm-eshell-history)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; inf-ruby overrides
+  ;;
+  (evil-define-key nil inf-ruby-minor-mode-map (kbd "C-c C-e") 'brc/ruby-send-line-or-region)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Use Helm for Company completions
@@ -688,18 +732,16 @@ before packages are loaded."
                   (mode . Man-mode))))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; ztree overrides
+  ;;
+  ;; (evil-define-key nil ztree-mode-map (kbd "RET") 'ztree-perform-soft-action)
+  ;; (evil-define-key nil ztree-mode-map (kbd "g r") 'ztree-refresh-buffer)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Misc
   ;;
   (xterm-mouse-mode -1)  ;; disable mouse for terminal
   (define-key help-map (kbd "h") nil)  ;; unbind accidental hello-file (<Esc> hh)
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Magit
-  ;;
-  (with-eval-after-load 'transient
-    (transient-bind-q-to-quit))
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Custom variables
@@ -763,6 +805,7 @@ before packages are loaded."
     (while (condition-case nil (windmove-down) (error nil))
       (delete-window))))
 
+
 ;; modeled from `resume-last-search-buffer' in ~/.emacs.d/layers/+completion/helm/funcs.el
 (defun brc/resume-last-swoop-buffer ()
   "Open last helm-swoop buffer."
@@ -771,6 +814,7 @@ before packages are loaded."
          (helm-resume "*Helm Swoop*"))
         (t
          (message "No previous Swoop buffer found"))))
+
 
 ;; Taken from `sh-send-line-or-region-and-step' in
 ;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
@@ -791,6 +835,7 @@ When region is active, send region instead."
     (sh-send-text (buffer-substring-no-properties from to))
     (select-window src-window)))
 
+
 (defun brc/sh-send-line-or-region-and-step ()
   "Send the current line to the inferior shell and move point to next line;
 remain in current code window. When region is active, send region instead."
@@ -800,6 +845,14 @@ remain in current code window. When region is active, send region instead."
       (goto-char (region-end))
     (goto-char (1+ (line-end-position)))))
 
+
+(defun brc/ruby-send-line-or-region ()
+  "Send the current line or active region to the inferior Ruby process."
+  (interactive)
+  ;; FIXME region doesn't work
+  (if (use-region-p)
+      (ruby-send-region)
+    (ruby-send-line)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -836,10 +889,11 @@ This function is called at the very end of Spacemacs initialization."
  '(helm-ag-base-command
    "rg --no-config --no-heading --color=never --line-number --smart-case --hidden --glob=!.{git,tox}")
  '(helm-completion-style 'helm)
+ '(js-indent-level 2)
  '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
  '(mouse-yank-at-point t)
  '(package-selected-packages
-   '(bash-completion tern company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+   '(pdf-view-restore pdf-tools company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
  '(safe-local-variable-values
    '((encoding . utf-8)
      (eval ansible 1)
@@ -855,5 +909,6 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t))))
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
  '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
- '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red")))))
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red"))))
+ '(ztreep-diff-model-add-face ((t (:foreground "deep sky blue")))))
 )
