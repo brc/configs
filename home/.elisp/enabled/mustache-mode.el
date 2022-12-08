@@ -1,0 +1,1 @@
+../available/mustache-emacs/mustache-mode.el

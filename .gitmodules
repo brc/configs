@@ -115,3 +115,6 @@
 [submodule "home/.elisp/available/jenkinsfile-mode"]
 	path = home/.elisp/available/jenkinsfile-mode
 	url = git@github.com:john2x/jenkinsfile-mode.git
+[submodule "home/.elisp/available/mustache-emacs"]
+	path = home/.elisp/available/mustache-emacs
+	url = https://github.com/mustache/emacs
