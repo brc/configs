@@ -1,0 +1,19 @@
+# nvm is like rvm, but for NodeJS.
+#
+# You may install node.js versions (e.g. nvm install 10) and
+# activate them (e.g. nvm use 10).
+#
+# `init-nvm.sh' is a convenience script which does the following:
+#
+#     [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+#     source /usr/share/nvm/nvm.sh
+#     source /usr/share/nvm/bash_completion
+#     source /usr/share/nvm/install-nvm-exec
+#
+# You may wish to use these commands directly and customize them
+# if, for example, you would like an NVM_DIR other than ~/.nvm or
+# you don't want bash completion.
+#
+# See the nvm readme for more information: https://github.com/creationix/nvm
+
+source /usr/share/nvm/init-nvm.sh

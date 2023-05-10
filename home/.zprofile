@@ -5,6 +5,7 @@
 zmodload zsh/zprof
 
 export GOPATH=/data/go
+export GOCACHE=/data/go/.cache
 
 # Don't export Ruby variables--it just makes a mess with chruby, rbenv, etc.,
 # and the technique of mixing versions into a single $GEM_PATH doesn't work.
@@ -25,6 +26,8 @@ export GOPATH=/data/go
 mypaths=(
     ~/bin
     ~/.local/bin
+    ~/.krew/bin
+    ~/.ebcli-virtual-env/executables
     #$(printf "%s/bin " "${gempaths[@]}")
     $(gem env gempath |cut -f1 -d:)/bin
     /usr/local/sbin
@@ -40,6 +43,7 @@ mypaths=(
     /git/invsblduck/fakecloud
     /git/powerline/scripts
     ${GOPATH}/bin
+    /dr/bin  # rachio
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
@@ -75,6 +79,8 @@ export LESS="-QRFim -j4"
 #export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
 #export LESS_TERMCAP_se=$'\E[0m'         # end
 
+export BAT_THEME='Solarized (light)'
+
 eval "$(dircolors -b ~/.dircolors)"
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 #export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
@@ -84,6 +90,7 @@ export ANSIBLE_NOCOWS=true
 export ANSIBLE_FORCE_COLOR=true
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 export GTAGSLABEL=pygments
+export KUBECTL_EXTERNAL_DIFF='colordiff -N -U3'
 
 #export PYTHONDONTWRITEBYTECODE=1
 export VIRTUAL_ENV_DISABLE_PROMPT=1

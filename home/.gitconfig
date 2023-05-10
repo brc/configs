@@ -61,7 +61,6 @@
     kajabi   = !git-config.sh kajabi
     liberty  = !git-config.sh liberty
     logmein  = !git-config.sh lmi
-    reltio   = !git-config.sh reltio
     xentaurs = !git-config.sh xentaurs-bitbucket
     who      = !git-who.sh
     where    = !git-where.sh

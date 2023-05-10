@@ -2,32 +2,38 @@
 # ~/.bash_profile
 #
 
-export GEM_HOME=~/.gem/ruby/2.1.0
-system_gems=/usr/lib/ruby/gems/2.1.0
-gempaths=(
-    ${GEM_HOME}
-    ${system_gems}
-    ~/.gem/ruby/2.0.0
-)
-export GEM_PATH=$(printf ":%s" "${gempaths[@]}" |cut -b2-)
-
+# TODO make this shared with zsh (this is copied from .zprofile)
+export GOPATH=/data/go
 mypaths=(
     ~/bin
+    ~/.local/bin
+    ~/.krew/bin
+    ~/.ebcli-virtual-env/executables
+    #$(printf "%s/bin " "${gempaths[@]}")
+    $(gem env gempath |cut -f1 -d:)/bin
     /usr/local/sbin
     /usr/local/bin
+    /git/git-when-merged/bin
+    /bin
+    /sbin
     /usr/bin
+    /usr/sbin
     /usr/bin/vendor_perl
     /usr/bin/core_perl
-    $(printf "%s/bin " "${gempaths[@]}")
-    /git/invsblduck/chef_dev_utils/rcb
-    /git/invsblduck/chef_dev_utils/stackforge
-    /git/invsblduck/chef_dev_utils/vm_kick/knife/bootstrap
+    /git/emcrubicon/campbb6/dev-utils/bin
     /git/invsblduck/fakecloud
+    /git/powerline/scripts
+    ${GOPATH}/bin
+    /dr/bin  # rachio
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
+if [ -n "$TMUX" ]; then
+    export TERM=screen-256color
+fi
+
 stty erase ^H
-export EDITOR=vim
+export EDITOR='emacsclient -t -a vim'
 
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
@@ -64,7 +70,6 @@ for f in ~/.openrc ~/.bashrc; do
 done
 
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
-export JENKINS_URL=http://build.monkeypuppetlabs.com:8080/
 unset SSH_ASKPASS
 
 if which fortune >/dev/null; then

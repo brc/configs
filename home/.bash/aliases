@@ -1,7 +1,0 @@
-# vim: set ft=sh:
-
-EC_PUPPET=/opt/ec/puppet/bin/puppet
-
-alias pa="sudo ${EC_PUPPET} agent"
-alias pat="sudo ${EC_PUPPET} agent --test"
-alias pl='sudo less /var/log/puppet/puppet.log'

@@ -13,4 +13,5 @@ shopt -s checkwinsize
 # Not sure why comint shell has echo disabled for bash (but not zsh)
 if [ -n "$INSIDE_EMACS" ]; then
     stty echo
+    export SHELL=/bin/bash
 fi

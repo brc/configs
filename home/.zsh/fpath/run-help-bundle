@@ -1,0 +1,5 @@
+if [ $# -eq 0 ]; then
+    bundle --help
+else
+    bundle $1 --help
+fi

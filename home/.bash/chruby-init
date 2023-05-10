@@ -1,6 +1,0 @@
-# vim: set ft=sh :
-
-function chruby-init() {
-    local file=/usr/share/chruby/chruby.sh
-    [ -e $file ] && . $file
-}

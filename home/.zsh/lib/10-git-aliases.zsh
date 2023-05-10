@@ -2,6 +2,10 @@ function master_branch {
   git rev-parse master &>/dev/null && echo master || echo main
 }
 
+function dev_branch {
+  git rev-parse develop &>/dev/null && echo develop || echo development
+}
+
 function current_branch {
   git symbolic-ref --short HEAD
 }
@@ -74,7 +78,7 @@ alias gtp='git stash pop'
 # checkout
 alias gco='git checkout'
 alias gcom='git checkout $(master_branch)'
-alias gcod='git checkout develop'
+alias gcod='git checkout $(dev_branch)'
 alias gcob='git checkout -b'
 
 # diff

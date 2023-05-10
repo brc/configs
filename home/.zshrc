@@ -18,6 +18,7 @@ setopt extended_history         # ":start:elapsed;command" format
 setopt inc_append_history       # don't wait for shell exit to write history
 setopt hist_allow_clobber       # add `|' to output redirections in history
 setopt hist_ignore_dups         # don't record consecutively duplicate events
+setopt hist_save_no_dups        # exclude old dups when writing history file
 setopt hist_expire_dups_first   # rotate global dups out first
 #setopt hist_find_no_dups        # skip dups during history search
 setopt hist_verify              # expand bang commands instead of executing them

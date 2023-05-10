@@ -7,7 +7,7 @@ autoload -Uz edit-command-line
 # lower key timeout to 0.1 seconds so we can switch between vi modes faster
 KEYTIMEOUT=1
 
-# emacs bindings
+# bash/emacs bindings
 bindkey ^b      backward-char
 bindkey ^f      forward-char
 bindkey ^a      beginning-of-line
@@ -20,17 +20,20 @@ bindkey "\ed"   kill-word
 bindkey ^w      backward-kill-word
 bindkey "\e^?"  backward-kill-word
 bindkey ^k      kill-line
-bindkey ^u      kill-whole-line
+#bindkey ^u      kill-whole-line
 bindkey ^t      transpose-chars
 bindkey ^p      up-history
+bindkey "\ep"   up-history  # compatibility with emacs comint
 bindkey ^n      down-history
 bindkey ^y      yank
 bindkey "\ey"   yank-pop
 bindkey "\e."   insert-last-word
-bindkey "\ep"   _history-complete-older
+# bindkey "\ep"   _history-complete-older  # XXX conflicts with comint above
 bindkey ^r      history-incremental-search-backward
-bindkey       undo
-#bindkey ^x^e    edit-command-line
+bindkey ^x^e    edit-command-line
+bindkey ^xa     _expand_alias
+#bindkey ^x\*   find command for glob expansion
+# TODO bind all the awesome ^x bash stuff
 
 # Make the delete key work (or Fn + Delete on the Mac)
 bindkey '^?'    backward-delete-char
@@ -60,7 +63,6 @@ bindkey "\eh"   run-help
 
 bindkey -s "\ea" "|awk '{print $}'^B^B"
 bindkey -s "\ec" "|count "
-bindkey -s "\ee" ".expertcity.com"
 bindkey -s "\eg" "|grep -i "
 bindkey -s "\el" "|less"
 bindkey -s "\en" ">/dev/null "
@@ -69,3 +71,4 @@ bindkey -s "\er" "|recolorize_grep.sh "
 bindkey -s "\es" "|sed 's///'^B^B^B"
 bindkey -s "\ew" "|while read x; do ; done^B^B^B^B^B^B"
 bindkey -s "\ex" "|xargs "
+bindkey -s     " /"  # prevent accidental C-/ when attempting to type "SPC /" (TODO: why is it underscore?)
