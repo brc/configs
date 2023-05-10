@@ -1,3 +1,6 @@
+# XXX belongs as udev config or similar somewhere else
+sudo ip l s wlan0 down
+
 # orient screens
 # if [ "$(hostname)" = bunker ]; then
 #     ~/.screenlayout/tai-fighter.sh
