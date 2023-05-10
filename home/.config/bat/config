@@ -1,0 +1,10 @@
+# See https://github.com/sharkdp/bat/issues/1053
+#     https://github.com/sharkdp/bat/issues/322
+#
+# bat(1) can't deal with SIGWINCH and reformat its output because it's already
+# pipeed the output to less(1); less can't communicate the winch back to bat.
+#
+# Don't wrap anything and just let less(1) deal with the wrapping, since it
+# can trap SIGWINCH and re-wrap the data however it wants to.
+#
+--wrap=never
