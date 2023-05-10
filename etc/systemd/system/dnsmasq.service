@@ -1,8 +1,8 @@
 # brc
-# Normally, you would want dnsmasq to come online very early in the boot process,
-# but for this jank VM, where we don't serve DHCP, nor any meaningful DNS, we
-# need it to come up *after* docker since we specifically bind docker0 in the
-# config file. Otherwise, dnsmasq will fail to start because docker isn't up yet.
+# Normally, you would want dnsmasq to come online very early in the boot
+# process, but for this workstation we need it to come up *after* docker because
+# we specifically bind docker0 in the config file. Otherwise, dnsmasq will fail
+# to start because docker isn't up yet.
 [Unit]
 Description=dnsmasq - A lightweight DHCP and caching DNS server
 Documentation=man:dnsmasq(8)
