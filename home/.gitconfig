@@ -2,6 +2,47 @@
     name  = Brett Campbell
     email = invsblduck@gmail.com
 
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    # Settings here will always be applied unless the user supplies
+    #  --no-gitconfig on the command line.
+    #
+    # These settings will override delta's defaults.
+    #
+    navigate = true    # use n and N to move between diff sections
+    light = false      # for light background terminal
+    dark = true
+    syntax-theme = Coldark-Dark
+
+    # See https://github.com/dandavison/delta/issues/446  and
+    #     https://github.com/dandavison/magit-delta/issues/13
+    #line-numbers = true
+    features = line-numbers
+
+[delta "magit"]
+    # This is just a named collection of key-value pairs.
+    # It has no effect at all unless the user has added "magit" to their
+    # "features" list.
+    # They could do that via one of the following:
+    #   (a) on the command line via `--features`; or
+    #   (b) in the main `[delta]` section via `features = magit`; or
+    #   (c) by setting the env var: DELTA_FEATURES=magit
+    #
+    # See https://github.com/dandavison/magit-delta/issues/13
+    # Line numbers break magit because it expects a valid patch for git-apply
+    line-numbers = false
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
 [init]
     templatedir = ~/.git_template
 
@@ -20,6 +61,7 @@
     kajabi   = !git-config.sh kajabi
     liberty  = !git-config.sh liberty
     logmein  = !git-config.sh lmi
+    reltio   = !git-config.sh reltio
     xentaurs = !git-config.sh xentaurs-bitbucket
     who      = !git-who.sh
     where    = !git-where.sh
