@@ -118,3 +118,6 @@
 [submodule "home/.elisp/available/mustache-emacs"]
 	path = home/.elisp/available/mustache-emacs
 	url = https://github.com/mustache/emacs
+[submodule "home/.elisp/available/emacs-pager"]
+	path = home/.elisp/available/emacs-pager
+	url = https://github.com/mbriggs/emacs-pager

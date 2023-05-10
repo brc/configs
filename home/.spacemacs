@@ -27,7 +27,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
@@ -93,6 +93,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
+     bash-completion
      company-quickhelp
      company-terraform
      ;; diff-hl
@@ -408,8 +409,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -421,6 +422,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -598,11 +604,9 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Hooks
-  ;;
-  (add-hook 'after-init-hook 'inf-ruby-switch-setup))
+  (add-hook 'after-init-hook 'inf-ruby-switch-setup)
+  (setq goto-address-uri-schemes-ignored
+        '("go:" "data:" "mailto:")))  ;; ignore Golang output like foo.go:123
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -641,8 +645,10 @@ before packages are loaded."
   ;; Jinja2
   (add-to-list 'auto-mode-alist '("\\.j2$" . jinja2-mode))
 
-  ;; Enable helm icons for `helm-{recentf,find-file,projectile-*,buffers-list}'
-  (helm-icons-enable)
+  ;; $PAGER support in shell-mode (see https://github.com/mbriggs/emacs-pager)
+  (require 'emacs-pager)
+  (add-to-list 'auto-mode-alist '("\\.emacs-pager$" . emacs-pager-mode))
+  (evil-define-key nil emacs-pager-mode-map (kbd "q") 'emacs-pager-kill-pager)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Backspace using C-h
@@ -666,18 +672,49 @@ before packages are loaded."
   ;; (too much collateral damage from pressing tmux macro keys in Emacs! :))
   ;;
   (global-unset-key (kbd "M-t"))
-  ;;(evil-define-key nil evil-normal-state-map (kbd "M-t") nil)  ;; needed?!
+  ;;
+  ;; Evil-Genius idea: Use it move around like tmux instead >:)
+  ;;
+  ;; TODO figure out how to loop over the keymaps and DRY it
+  ;(dolist (kmap '(evil-insert-state-map
+  ;                  evil-normal-state-map
+  ;                  evil-visual-state-map
+  ;                  evil-treemacs-state-map))
+  ;  (evil-define-key nil kmap
+  ;    (kbd "M-t h") 'evil-window-left
+  ;    (kbd "M-t l") 'evil-window-right
+  ;    (kbd "M-t j") 'evil-window-down
+  ;    (kbd "M-t k") 'evil-window-up))
+  (evil-define-key nil evil-insert-state-map
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up)
+  (evil-define-key nil evil-normal-state-map
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up)
+  (evil-define-key nil evil-treemacs-state-map
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up)
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Evil-mode overrides
   ;;
   ;; retain some Emacs movement bindings
-  (evil-define-key nil evil-insert-state-map (kbd "C-a") nil)  ;; unbind
-  (evil-define-key nil evil-insert-state-map (kbd "C-b") nil)  ;; unbind
-  (evil-define-key nil evil-insert-state-map (kbd "C-d") nil)  ;; unbind
-  (evil-define-key nil evil-insert-state-map (kbd "C-e") nil)  ;; unbind
-  (evil-define-key nil evil-insert-state-map (kbd "C-f") nil)  ;; unbind
+  (evil-define-key nil evil-insert-state-map
+    (kbd "C-a") nil  ;; unbind
+    (kbd "C-b") nil  ;;
+    (kbd "C-d") nil  ;;
+    (kbd "C-e") nil  ;;
+    (kbd "C-f") nil) ;;
+
+  ;; don't record macros with "q" in Evil normal mode (too error prone)
+  (evil-define-key nil evil-normal-state-map (kbd "q") nil)
 
   ;; override `evil-repeat-pop-next' and `pop-tag-mark' bindings
   ;; (evil-define-key nil evil-normal-state-map (kbd "M-,") 'evil-scroll-left)
@@ -689,7 +726,9 @@ before packages are loaded."
   ;; yank from X11 clipboard
   (evil-define-key nil evil-insert-state-map (kbd "M-v") 'clipboard-yank)
 
-  ;; don't update kill ring with visual text after yank
+  ;; From Evil FAQ: don't update X11 PRIMARY selection with current visual region
+  ;; brc: Looks like this should instead be done by setting
+  ;;      `evil-visual-update-x-selection-p' to nil.
   (fset 'evil-visual-update-x-selection 'ignore)
 
   ;; allow keybindings for magit-popup magic in docker mode
@@ -701,33 +740,107 @@ before packages are loaded."
   ;;
   (spacemacs/set-leader-keys
     "gg" 'magit-status
+    "#"  'spacemacs/alternate-buffer
+    "w#" 'spacemacs/alternate-window
     "w|" 'spacemacs/maximize-horizontally
-    "w_" 'brc/maximize-vertically  ;; defined below
-    "rS" 'brc/resume-last-swoop-buffer)   ;; defined below
+    "or" 'brc/sh-send-line-or-region
+    "oR" 'brc/sh-send-line-or-region-and-go
+    "os" 'sh-show-shell
+    "w_" 'brc/maximize-vertically
+    "rS" 'brc/resume-last-swoop-buffer)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Magit overrides
   ;;
-  (with-eval-after-load 'transient
-    (transient-bind-q-to-quit))
+  (with-eval-after-load 'transient (transient-bind-q-to-quit))
   (evil-define-key nil magit-status-mode-map (kbd "C-n") 'magit-section-forward)
+  (add-hook 'magit-process-mode-hook 'goto-address-mode)  ;; Clickable URLs
+  ;; Disable line numbers for magit-delta
+  ;;   see https://github.com/dandavison/magit-delta/issues/13
+  ;; (add-to-list 'magit-delta-delta-args "--features=magit" t) ;; XXX value doesn't get set
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Shell-mode overrides
+  ;; Org-mode overrides
   ;;
-  (evil-define-key nil sh-mode-map (kbd "C-c C-e") 'brc/sh-send-line-or-region)
-  (evil-define-key nil sh-mode-map (kbd "C-c C-n") 'brc/sh-send-line-or-region-and-step)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode
+    "/" 'helm-org-rifle)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Shell-SCRIPT-mode (i.e., editing scripts)
+  ;;
+  (evil-define-key nil sh-mode-map
+    (kbd "C-c C-e") 'brc/sh-send-line-or-region
+    (kbd "C-c C-n") 'brc/sh-send-line-or-region-and-step)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Shell-mode overrides (comint process)
+  ;;
+  (autoload 'bash-completion-dynamic-complete
+    "bash-completion"
+    "BASH completion hook")
+  (add-hook 'shell-dynamic-complete-functions
+            'bash-completion-dynamic-complete)
+  (add-hook 'shell-mode-hook 'goto-address-mode)  ;; Clickable URLs
+  (evil-define-key 'normal shell-mode-map (kbd "<return>") 'comint-send-input)
+  (evil-define-key 'insert shell-mode-map
+    (kbd "C-j") 'comint-send-input
+    (kbd "C-k") 'kill-line
+    (kbd "C-u") 'comint-kill-input
+    (kbd "M-3") "-n r361 "
+    (kbd "M-.") 'comint-insert-previous-argument
+    (kbd "M-a") '(lambda ()
+                   (interactive)
+                   (insert "|awk '{print $}'")
+                   (backward-char 2))
+    (kbd "M-c") "|count"
+    (kbd "M-g") "|grep -i "
+    (kbd "M-h M-h") "--help"
+    (kbd "M-i") "-n helm-istio-system "
+    (kbd "M-k") "-n kube-system "
+    (kbd "M-l") "|${PAGER}"
+    (kbd "M-o") "-n otel-collector "
+    (kbd "M-q") "pacman -Q"
+    (kbd "M-s") "pacman -Q"
+    ;(kbd "M-t") "-n tst-01 "  ;; conflicts with new window movement bindings
+    (kbd "M-w") '(lambda ()
+                   (interactive)
+                   (insert "|while read x; do ; done")
+                   (evil-backward-word-begin 2))
+    (kbd "M-x") "|xargs ")
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; eshell overrides
   ;;
-  (evil-define-key nil eshell-mode-map (kbd "M-r") 'helm-eshell-history)
-  (evil-define-key nil eshell-mode-map (kbd "M-.") 'brc/eshell-yank-last-arg)
+  (evil-define-key nil eshell-mode-map
+    (kbd "M-r") 'helm-eshell-history
+    (kbd "M-.") 'brc/eshell-yank-last-arg)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; inf-ruby overrides
   ;;
   (evil-define-key nil inf-ruby-minor-mode-map (kbd "C-c C-e") 'brc/ruby-send-line-or-region)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; kubernetes-el overrides
+  ;;
+  ;; These keys normally dispatch "logs" and "describe-mode" when you're looking
+  ;; at an object -- in the case of looking at a ConfigMap, for instance, I
+  ;; don't even think "logs" is useful; I'd rather have sane Evil motion state.
+  ;;
+  (evil-define-key 'motion kubernetes-display-thing-mode-map
+    (kbd "l") 'evil-forward-char
+    (kbd "h") 'evil-backward-char
+    (kbd "E") 'evil-forward-WORD-end
+    (kbd "n") 'evil-ex-search-next
+    (kbd "?") 'evil-ex-search-backward)
+
+  (evil-define-key 'motion kubernetes-logs-mode-map
+    (kbd "l") 'evil-forward-char
+    (kbd "h") 'evil-backward-char
+    (kbd "E") 'evil-forward-WORD-end
+    (kbd "n") 'evil-ex-search-next
+    (kbd "?") 'evil-ex-search-backward)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Use Helm for Company completions
@@ -744,15 +857,22 @@ before packages are loaded."
   ;; override page width
   (setenv "MANWIDTH" "80")
   ;; navigate sections easily
-  (evil-define-key nil Man-mode-map (kbd "M-n") 'Man-next-section)
-  (evil-define-key nil Man-mode-map (kbd "M-p") 'Man-previous-section)
-  (evil-define-key nil Man-mode-map (kbd "S")   'Man-goto-section)
+  (evil-define-key nil Man-mode-map
+    (kbd "M-n") 'Man-next-section
+    (kbd "M-p") 'Man-previous-section
+    (kbd "S")   'Man-goto-section)
   ;; reuse current window for new Man buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Man .*\\*\\'" .
                  (display-buffer-reuse-mode-window
                   (inhibit-same-window . nil)
                   (mode . Man-mode))))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Info-mode overrides for Evil
+  ;;
+  ;; use RET to follow nodes
+  (evil-define-key nil Info-mode-map (kbd "<return>") 'Info-follow-nearest-node)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; ztree overrides
@@ -765,6 +885,8 @@ before packages are loaded."
   ;;
   (xterm-mouse-mode -1)  ;; disable mouse for terminal
   (define-key help-map (kbd "h") nil)  ;; unbind accidental hello-file (<Esc> hh)
+  (add-hook 'find-file-hook 'brc/truncate-syslog-lines)  ;; don't wrap syslog
+  (helm-icons-enable)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Custom variables
@@ -790,8 +912,9 @@ before packages are loaded."
    ;; org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold)))
    org-todo-keyword-faces '(("INPROGRESS" . "yellow"))
    ;; Bug-fix see https://www.reddit.com/r/emacs/comments/aruxah/python_shell_doesnt_work_with_multiple_lines_of/egtwe3l/
-   python-shell-prompt-block-regexp "\\.\\.\\.:? "))
-
+   python-shell-prompt-block-regexp "\\.\\.\\.:? ")
+   ;; magit-delta-delta-args '("--max-line-distance" "0.6" "--true-color=always" "--color-only" "--features=magit")  ;; XXX value doesn't get set
+) ;dotspacemacs/user-config()
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -843,16 +966,13 @@ before packages are loaded."
          (message "No previous Swoop buffer found"))))
 
 
-;; Taken from `sh-send-line-or-region-and-step' in
+;; Modeled after `sh-send-line-or-region-and-step' in
 ;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
 ;;
-;; The original function selects the window with the *shell* buffer and stays
-;; there.  This one returns focus to the code window that sent the input.
-;;
-(defun brc/sh-send-line-or-region ()
-  "Send the current line to the inferior shell; remain in current code window.
-When region is active, send region instead."
-  (interactive)
+(defun brc/sh-send-command (go)
+  "Send the current line to the inferior shell.
+When region is active, send region instead.
+When GO is non-nil, move point to shell process after sending text."
   (let (from to (src-window (get-buffer-window)))
     (if (use-region-p)
         (setq from (region-beginning)
@@ -860,14 +980,29 @@ When region is active, send region instead."
       (setq from (line-beginning-position)
             to (line-end-position)))
     (sh-send-text (buffer-substring-no-properties from to))
-    (select-window src-window)))
+    (if go
+        (progn
+            (sh-show-shell)
+            (evil-insert 0))
+      (select-window src-window))))
 
+(defun brc/sh-send-line-or-region ()
+  "Send the current line to the inferior shell; remain in current code window.
+When region is active, send region instead."
+  (interactive)
+  (brc/sh-send-command nil))
+
+(defun brc/sh-send-line-or-region-and-go ()
+  "Send the current line to the inferior shell and move there.
+When region is active, send region instead."
+  (interactive)
+  (brc/sh-send-command t))
 
 (defun brc/sh-send-line-or-region-and-step ()
   "Send the current line to the inferior shell and move point to next line;
 remain in current code window. When region is active, send region instead."
   (interactive)
-  (brc/sh-send-line-or-region)
+  (brc/sh-send-command nil)
   (if (use-region-p)
       (goto-char (region-end))
     (goto-char (1+ (line-end-position)))))
@@ -880,6 +1015,12 @@ remain in current code window. When region is active, send region instead."
   (if (use-region-p)
       (ruby-send-region)
     (ruby-send-line)))
+
+
+(defun brc/truncate-syslog-lines ()
+  "Toggle line truncation on when file name ends in `.log'"
+  (if (string-suffix-p ".log" (buffer-name))
+      (toggle-truncate-lines 1)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -934,23 +1075,33 @@ This function is called at the very end of Spacemacs initialization."
  '(comint-move-point-for-output t)
  '(comint-process-echoes t)
  '(comint-scroll-to-bottom-on-input t)
+ '(emacs-pager-max-line-coloring 5000)
  '(evil-want-Y-yank-to-eol t)
+ '(exec-path
+   '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin" "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
  '(explicit-bash-args '("-i"))
  '(helm-ag-base-command
    "rg --no-config --no-heading --color=never --line-number --smart-case --hidden --follow --glob=!.{git,tox}")
  '(helm-completion-style 'helm)
  '(js-indent-level 2)
+ '(kubernetes-pod-restart-warning-threshold 2)
+ '(kubernetes-poll-frequency 300)
+ '(kubernetes-redraw-frequency 5)
+ '(magit-delta-delta-args
+   '("--max-line-distance" "0.6" "--true-color" "always" "--color-only" "--features" "magit"))
  '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
  '(mouse-yank-at-point t)
  '(package-selected-packages
-   '(git-gutter company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+   '(bash-completion magit-delta treemacs-magit tern company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+ '(paradox-github-token t)
  '(safe-local-variable-values
    '((encoding . utf-8)
      (eval ansible 1)
      (eval add-to-list 'company-backends 'company-ansible)))
  '(sh-shell-file "/bin/bash")
  '(treemacs-git-mode t)
- '(warning-suppress-types '((comp))))
+ '(undo-tree-incompatible-major-modes '(term-mode emacs-pager-mode))
+ '(warning-suppress-types '((emacs) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
