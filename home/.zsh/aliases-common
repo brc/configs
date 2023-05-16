@@ -169,25 +169,25 @@ alias n='sudo lsof -Pni 2>/dev/null |grep LIST'
 alias td='sudo tcpdump -nn'
 
 alias grep='grep -E --color=auto'
-alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
-alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox'
+alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.venv'
+alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.venv'
 
 if have rg; then
     alias gr=rg
     alias grq='gr --no-filename --no-heading --no-line-number'  # STFU
-    alias gri='gr --ignore'  # use .gitignore patterns
-    alias griq='grq --ignore'
+    alias gri="gr --ignore -g'!.{git,tox,venv}/**'"  # use .gitignore patterns
+    alias griq="grq --ignore -g'!.{git,tox,venv}/**'"
     alias wgr='sudo rg'
-    alias wgri='wgr --ignore'
+    alias wgri="gr --ignore -g'!.{git,tox,venv}/**'"
 fi
 
 if have tree; then
-    alias t='tree -aCI .git\|.tox'
-    alias tt='tree -apDFhCI .git\|.tox'
+    alias t='tree -aCI .git\|.tox\|.venv'
+    alias tt='tree -apDFhCI .git\|.tox\|.venv'
 else
     function t {
         local p="${1:-.}"
-        find "$p" -path .git -o -path .tox -prune -o -print
+        find "$p" -path .git -o -path .tox -o path .venv -prune -o -print
     }
 fi
 
