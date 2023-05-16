@@ -1,4 +1,8 @@
+# -*- mode: shell-script; -*-
 # vim: set ft=sh :
+
+# TODO Make a better prompt for shell-mode comint inferior shell?
+[ -n "${INSIDE_EMACS}" ] && return
 
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWSTASHSTATE=true
