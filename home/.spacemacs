@@ -965,47 +965,76 @@ before packages are loaded."
         (t
          (message "No previous Swoop buffer found"))))
 
-
 ;; Modeled after `sh-send-line-or-region-and-step' in
 ;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
 ;;
-(defun brc/sh-send-command (go)
+(defun brc/sh-send-command (stay)
   "Send the current line to the inferior shell.
 When region is active, send region instead.
 When GO is non-nil, move point to shell process after sending text."
-  (let (from to (src-window (get-buffer-window)))
+  ;; FIXME `sh-send-txt' in `shell-script.el' is causing issues sending a
+  ;;       *multiline* region when the region includes any command that needs to
+  ;;       read stdin from the user.  Sending a single entire line or typing the
+  ;;       line manually to comint (in shell-mode) doesn't exhibit the behavior.
+  ;;       The problem is simply caused by the concatenation of the input with a
+  ;;       newline character `\n'; when sending a region that contains WHOLE
+  ;;       LINES, the appended newline will appear as user input instead of
+  ;;       acting to submit the input to comint.  However, this only occurs when
+  ;;       a multiline region contains *entire lines* (i.e., not when a
+  ;;       multiline region is selected character-wise and contains only part of
+  ;;       a line at the beginning or end).  `comint.el' has two methods for
+  ;;       sending text: `comint-send-string' and `comint-send-region' (these
+  ;;       are just wrappers around `process-send-string' and
+  ;;       `process-send-region').  `sh-send-text' only ever uses the former,
+  ;;       which always concatenates a newline to the input. Currently, the
+  ;;       solution is to detect whether we're sending a multiline region or not
+  ;;       and conditionally use `comint-send-region'.  The problem still occurs
+  ;;       when a MULTILINE region doesn't include whole lines.  This is all
+  ;;       tested with Evil in visual select mode; haven't tried with mark and
+  ;;       point in vanilla Emacs.  Fix this upstream in `shell-script.el'.
+  ;;
+  ;; TODO Investigate `sh-execute-region' in `sh-script.el'.
+  ;; TODO Is it possible to use high-level `comint-send-input' interface instead
+  ;;      low-level `comint-send-string' so that the shell buffer can be aware
+  ;;      of the injected input?  That way, `C-c C-p' and `C-c C-o' would work.
+  ;;
+  (let ((src-window (get-buffer-window))
+        (shell-buffer (process-buffer (sh-shell-process t))))
     (if (use-region-p)
-        (setq from (region-beginning)
-              to (region-end))
-      (setq from (line-beginning-position)
-            to (line-end-position)))
-    (sh-send-text (buffer-substring-no-properties from to))
-    (if go
-        (progn
-            (sh-show-shell)
-            (evil-insert 0))
-      (select-window src-window))))
+        (let ((numlines (count-lines (region-beginning) (region-end)))
+              (from (region-beginning))
+              (to (region-end)))
+          (if (eq numlines 1)
+              (sh-send-text (buffer-substring-no-properties from to))
+            (comint-send-region (sh-shell-process t) from to)))
+      (let ((from (line-beginning-position))
+            (to (line-end-position)))
+        (sh-send-text (buffer-substring-no-properties from to))))
+    (display-buffer shell-buffer)
+    (unless stay (pop-to-buffer shell-buffer))))
 
 (defun brc/sh-send-line-or-region ()
   "Send the current line to the inferior shell; remain in current code window.
 When region is active, send region instead."
   (interactive)
-  (brc/sh-send-command nil))
+  (brc/sh-send-command t))
 
 (defun brc/sh-send-line-or-region-and-go ()
   "Send the current line to the inferior shell and move there.
 When region is active, send region instead."
   (interactive)
-  (brc/sh-send-command t))
+  (brc/sh-send-command nil))
 
-(defun brc/sh-send-line-or-region-and-step ()
-  "Send the current line to the inferior shell and move point to next line;
-remain in current code window. When region is active, send region instead."
-  (interactive)
-  (brc/sh-send-command nil)
-  (if (use-region-p)
-      (goto-char (region-end))
-    (goto-char (1+ (line-end-position)))))
+;; TODO re-implement per changes to `brc/sh-send-command' above
+;;
+;; (defun brc/sh-send-line-or-region-and-step ()
+;;   "Send the current line to the inferior shell and move point to next line;
+;; remain in current code window. When region is active, send region instead."
+;;   (interactive)
+;;   (brc/sh-send-command nil)
+;;   (if (use-region-p)
+;;       (goto-char (region-end))
+;;     (goto-char (1+ (line-end-position)))))
 
 
 (defun brc/ruby-send-line-or-region ()
@@ -1117,11 +1146,11 @@ This function is called at the very end of Spacemacs initialization."
  '(comint-move-point-for-output t)
  '(comint-process-echoes t)
  '(comint-scroll-to-bottom-on-input t)
+ '(comint-terminfo-terminal "xterm-color")
  '(emacs-pager-max-line-coloring 5000)
  '(evil-want-Y-yank-to-eol t)
  '(exec-path
    '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin" "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
- '(explicit-bash-args '("-i"))
  '(helm-completion-style 'helm)
  '(js-indent-level 2)
  '(kubernetes-pod-restart-warning-threshold 2)
