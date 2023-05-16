@@ -509,7 +509,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -1061,6 +1061,48 @@ remain in current code window. When region is active, send region instead."
 ;;                          (makunbound 'oldret)))
 ;;             nil t))
 
+;; XXX Brokenness with `helm-ag' and ripgrep.
+;;
+;;     This has no affect:
+;;       (custom-set-variables
+;;         '(helm-ag-base-command
+;;           "rg --no-config --no-heading --no-ignore --color=never \
+;;            --line-number --smart-case --hidden --follow --glob=!.git/**"))
+;;
+;;     The `helm-ag-base-command' variable fundamentally doesn't work with
+;;     `spacemacs/helm-files-do-rg' (the default function used by
+;;     `spacemacs/helm-project-smart-do-search' when `rg' is installed).
+;;
+;;     `spacemacs/helm-files-do-rg' is simply a wrapper that calls `helm-do-ag'
+;;      (see: /gi/configs/home/spacemacs/layers/+completion/helm/funcs.el).
+;;
+;;     The plethora of `--ignore=foo' options below don't even make sense for rg.
+;;     These default options are defined by `grep.el' (see
+;;     /usr/share/emacs/28.2/lisp/progmodes/grep.el.gz) because `helm-ag' uses
+;;     the variables from that code in `helm-ag--grep-ignore-list-to-options'.
+;;
+;;     When I became suspicous that my `helm-ag-base-command' settings
+;;     weren't being honored, I first snooped the process table and found:
+;;
+;; /usr/bin/rg --smart-case --no-heading --color=never --line-number
+;;   --max-columns=512 --ignore=.#* --ignore=*.o --ignore=*~ --ignore=*.bin
+;;   --ignore=*.lbin --ignore=*.so --ignore=*.a --ignore=*.ln --ignore=*.blg
+;;   --ignore=*.bbl --ignore=*.elc --ignore=*.lof --ignore=*.glo --ignore=*.idx
+;;   --ignore=*.lot --ignore=*.fmt --ignore=*.tfm --ignore=*.class --ignore=*.fas
+;;   --ignore=*.lib --ignore=*.mem --ignore=*.x86f --ignore=*.sparcf
+;;   --ignore=*.dfsl --ignore=*.pfsl --ignore=*.d64fsl --ignore=*.p64fsl
+;;   --ignore=*.lx64fsl --ignore=*.lx32fsl --ignore=*.dx64fsl --ignore=*.dx32fsl
+;;   --ignore=*.fx64fsl --ignore=*.fx32fsl --ignore=*.sx64fsl --ignore=*.sx32fsl
+;;   --ignore=*.wx64fsl --ignore=*.wx32fsl --ignore=*.fasl --ignore=*.ufsl
+;;   --ignore=*.fsl --ignore=*.dxl --ignore=*.lo --ignore=*.la --ignore=*.gmo
+;;   --ignore=*.mo --ignore=*.toc --ignore=*.aux --ignore=*.cp --ignore=*.fn
+;;   --ignore=*.ky --ignore=*.pg --ignore=*.tp --ignore=*.vr --ignore=*.cps
+;;   --ignore=*.fns --ignore=*.kys --ignore=*.pgs --ignore=*.tps --ignore=*.vrs
+;;   --ignore=*.pyc --ignore=*.pyo --ignore=SCCS --ignore=RCS --ignore=CVS
+;;   --ignore=MCVS --ignore=.src --ignore=.svn --ignore=.git --ignore=.hg
+;;   --ignore=.bzr --ignore=_MTN --ignore=_darcs --ignore={arch} 'my.*search'
+;;
+;; This confirmed my suspicion.
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -1080,8 +1122,6 @@ This function is called at the very end of Spacemacs initialization."
  '(exec-path
    '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin" "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
  '(explicit-bash-args '("-i"))
- '(helm-ag-base-command
-   "rg --no-config --no-heading --color=never --line-number --smart-case --hidden --follow --glob=!.{git,tox}")
  '(helm-completion-style 'helm)
  '(js-indent-level 2)
  '(kubernetes-pod-restart-warning-threshold 2)
