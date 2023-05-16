@@ -36,7 +36,7 @@ xset r rate 180 100 &
 #########################################
 
 # increase mouse acceleration (vmware)
-xset m 8 3 &
+#xset m 8 3 &
 
 # lower key-repeat rate (vbox)
 #xset r rate 180 50 &
