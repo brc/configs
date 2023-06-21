@@ -62,6 +62,7 @@
     liberty  = !git-config.sh liberty
     logmein  = !git-config.sh lmi
     xentaurs = !git-config.sh xentaurs-bitbucket
+    reltio   = !git-config.sh reltio
     who      = !git-who.sh
     where    = !git-where.sh
 	  root     = !git rev-parse --show-toplevel
