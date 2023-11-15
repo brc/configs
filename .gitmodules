@@ -124,3 +124,6 @@
 [submodule "home/.elisp/available/emacs-pager"]
 	path = home/.elisp/available/emacs-pager
 	url = https://github.com/mbriggs/emacs-pager
+[submodule "home/.elisp/available/terraform-doc"]
+	path = home/.elisp/available/terraform-doc
+	url = git@github.com:TxGVNN/terraform-doc.git
