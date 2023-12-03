@@ -1,4 +1,5 @@
-#	$OpenBSD: sshd_config,v 1.104 2021/07/02 05:11:21 dtucker Exp $
+# Include drop-in configurations
+Include /etc/ssh/sshd_config.d/*.conf
 
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
@@ -59,7 +60,7 @@ AuthorizedKeysFile	.ssh/authorized_keys
 #PermitEmptyPasswords no
 
 # Change to no to disable s/key passwords
-KbdInteractiveAuthentication no
+#KbdInteractiveAuthentication yes
 
 # Kerberos options
 #KerberosAuthentication no
@@ -76,11 +77,11 @@ KbdInteractiveAuthentication no
 # be allowed through the KbdInteractiveAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
 # PAM authentication via KbdInteractiveAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
+# the setting of "PermitRootLogin prohibit-password".
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and KbdInteractiveAuthentication to 'no'.
-UsePAM yes
+#UsePAM no
 
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
@@ -89,7 +90,7 @@ UsePAM yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-PrintMotd no # pam does that
+#PrintMotd yes
 #PrintLastLog yes
 #TCPKeepAlive yes
 #PermitUserEnvironment no
