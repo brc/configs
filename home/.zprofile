@@ -56,7 +56,7 @@ fi
 #stty erase ^H  # going down the rabbit hole of terminal emacs
 
 #export EDITOR=vim  # see comment immediately above! and lib/99-emacs.zsh
-export MANPAGER="bash -c 'col -bx | bat -l man -p'"
+#export MANPAGER="bash -c 'col -bx | bat -l man -p'"  # using batman(1) now
 export MANWIDTH=80
 
 export MAKEFLAGS="-j$(nproc)"

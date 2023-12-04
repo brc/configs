@@ -16,7 +16,7 @@
 alias run-help='nocorrect run-help'
 
 #alias sudo='nocorrect sudo'    # interferes with run-help-sudo
-alias man='nocorrect man'
+alias man='nocorrect batman'
 alias mv='nocorrect mv'
 alias mysql='nocorrect mysql'
 alias mkdir='nocorrect mkdir'

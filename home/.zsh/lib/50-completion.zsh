@@ -154,3 +154,6 @@ bindkey "^I" expand-or-complete-prefix-with-dots
 
 # allow g2sh to complete hostnames
 compdef _hosts g2sh.pl gnash
+
+# allow batman to complete man pages
+compdef _man batman
