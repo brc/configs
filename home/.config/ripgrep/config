@@ -1,4 +1,5 @@
 --follow
 --smart-case
 --hidden
---no-ignore
+--max-columns=512
+--glob=!.{git,tox,venv}/**
