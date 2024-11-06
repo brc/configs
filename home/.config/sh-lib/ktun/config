@@ -1,0 +1,2 @@
+VPN_CONF="/dr/vpn/ssh/wrapper.conf"
+SSH_CONF="/dr/vpn/ssh/ssh-config"
