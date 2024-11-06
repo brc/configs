@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-terminal" version="1.0">
+  <property name="binding-backspace" type="string" value="TERMINAL_ERASE_BINDING_ASCII_DELETE"/>
+  <property name="color-foreground" type="string" value="#d3d3d4d4d4d4"/>
+  <property name="color-background" type="string" value="#191828283737"/>
+  <property name="color-cursor-foreground" type="string" value="#000000000000"/>
+  <property name="color-cursor" type="string" value="#c0c06161cbcb"/>
+  <property name="color-cursor-use-default" type="bool" value="false"/>
+  <property name="color-palette" type="string" value="rgb(0,0,0);rgb(202,47,47);rgb(0,170,0);rgb(170,85,0);rgb(58,121,181);rgb(170,0,170);rgb(0,170,170);rgb(170,170,170);rgb(85,85,85);rgb(255,85,85);rgb(85,255,85);rgb(255,255,85);rgb(85,85,255);rgb(173,129,172);rgb(85,255,255);rgb(255,255,255)"/>
+  <property name="command-login-shell" type="bool" value="true"/>
+  <property name="run-custom-command" type="bool" value="true"/>
+  <property name="custom-command" type="string" value="run-tmux.sh"/>
+  <property name="encoding" type="string" value="UTF-8"/>
+  <property name="font-name" type="string" value="Hack NF 12"/>
+  <property name="misc-always-show-tabs" type="bool" value="false"/>
+  <property name="misc-bell" type="bool" value="false"/>
+  <property name="misc-bell-urgent" type="bool" value="true"/>
+  <property name="misc-borders-default" type="bool" value="true"/>
+  <property name="misc-cursor-blinks" type="bool" value="true"/>
+  <property name="misc-cursor-shape" type="string" value="TERMINAL_CURSOR_SHAPE_BLOCK"/>
+  <property name="misc-default-geometry" type="string" value="80x24"/>
+  <property name="misc-inherit-geometry" type="bool" value="false"/>
+  <property name="misc-menubar-default" type="bool" value="true"/>
+  <property name="misc-mouse-autohide" type="bool" value="false"/>
+  <property name="misc-mouse-wheel-zoom" type="bool" value="true"/>
+  <property name="misc-toolbar-default" type="bool" value="false"/>
+  <property name="misc-confirm-close" type="bool" value="true"/>
+  <property name="misc-cycle-tabs" type="bool" value="true"/>
+  <property name="misc-tab-close-buttons" type="bool" value="true"/>
+  <property name="misc-tab-close-middle-click" type="bool" value="false"/>
+  <property name="misc-tab-position" type="string" value="GTK_POS_TOP"/>
+  <property name="misc-highlight-urls" type="bool" value="true"/>
+  <property name="misc-middle-click-opens-uri" type="bool" value="false"/>
+  <property name="misc-copy-on-select" type="bool" value="false"/>
+  <property name="misc-show-relaunch-dialog" type="bool" value="true"/>
+  <property name="misc-rewrap-on-resize" type="bool" value="true"/>
+  <property name="misc-slim-tabs" type="bool" value="false"/>
+  <property name="misc-new-tab-adjacent" type="bool" value="false"/>
+  <property name="misc-search-dialog-opacity" type="uint" value="100"/>
+  <property name="misc-show-unsafe-paste-dialog" type="bool" value="true"/>
+  <property name="scrolling-lines" type="uint" value="512"/>
+  <property name="scrolling-on-output" type="bool" value="false"/>
+  <property name="scrolling-unlimited" type="bool" value="true"/>
+  <property name="shortcuts-no-menukey" type="bool" value="true"/>
+  <property name="shortcuts-no-mnemonics" type="bool" value="true"/>
+  <property name="word-chars" type="string" value="-A-Za-z0-9./?%&amp;#:_~$"/>
+</channel>
