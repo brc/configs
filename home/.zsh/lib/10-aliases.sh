@@ -21,7 +21,11 @@ if ! inside-emacs; then
     alias em='emacsclient -t'
 fi
 
-# `vim' is alias for emacsclient when inside emacs; see ~/.zsh/aliases-common
+#
+# These are _SAFE_ for emacs!
+#
+# !!! `vim' is alias for emacsclient inside emacs; see ~/.zsh/aliases-common
+#
 alias va='vim ~/.zsh/lib/10-aliases.sh'
 alias na='source ~/.zsh/lib/10-aliases.sh'
 
@@ -45,36 +49,33 @@ if [ "$(hostname)" = bunker ] || [ "$(hostname)" = archer ]; then
     # alias wi='sudo wifi-menu'
     # alias kf='pkill plugin-containe'
 
-    markdown_reader() {
-        if have glow; then
-            echo "glow -p"
-        elif have bat; then
-            echo "bat"
-        else
-            echo "/bin/cat"
-        fi
-    }
-
-    get_readme() {
-        local paths=(README.md README.rst README.txt README /dev/null)
-        for p in "${paths[@]}"; do
-            [ -e "${p}" ] && echo "${p}" && break
-        done
-    }
-
-    rtfm() {
-        if [ -n "$1" ]; then
-            $(markdown_reader) "$1"
-        else
-            $(markdown_reader) "$(get_readme)"
-        fi
-    }
-
     if ! inside-emacs; then
         alias tm=tmux
         alias tma='tmux attach'
         have ranger && alias r=ranger
         have bpytop && alias top=bpytop
+        markdown_reader() {
+            if have glow; then
+                echo "glow -p"
+            elif have bat; then
+                echo "bat"
+            else
+                echo "/bin/cat"
+            fi
+        }
+        get_readme() {
+            local paths=(README.md README.rst README.txt README /dev/null)
+            for p in "${paths[@]}"; do
+                [ -e "${p}" ] && echo "${p}" && break
+            done
+        }
+        rtfm() {
+            if [ -n "$1" ]; then
+                $(markdown_reader) "$1"
+            else
+                $(markdown_reader) "$(get_readme)"
+            fi
+        }
     fi
 
     if [ "$(hostname)" = archer ]; then
@@ -85,9 +86,9 @@ if [ "$(hostname)" = bunker ] || [ "$(hostname)" = archer ]; then
     alias ww=gnash
     alias wo=/data/fire/s.sh
 
-    alias gi='cd /git/invsblduck'
-    alias configs='cd /git/invsblduck/configs/home'
-    alias bin='cd /git/invsblduck/bin'
+    alias gi='cd /git/brc'
+    alias configs='cd /git/brc/configs/home'
+    alias bin='cd /git/brc/bin'
 
     # zsh global aliases
     if is-zsh; then
@@ -117,20 +118,23 @@ if [ "$(hostname)" = bunker ] || [ "$(hostname)" = archer ]; then
     fi
 
     alias start='sudo systemctl start'
-    alias restart='sudo systemctl restart'
+    if ! inside-emacs; then
+        # conflicts with sh-lib k8s.sh
+        alias restart='sudo systemctl restart'
+    fi
     alias stop='sudo systemctl stop'
-    alias status='sudo systemctl status'
+    alias status='systemctl status -l'
 
     alias startu='systemctl --user start'
     alias restartu='systemctl --user restart'
     alias stopu='systemctl --user stop'
-    alias statusu='systemctl --user status'
+    alias statusu='systemctl --user status -l'
 
     # rax bullshit
     # alias fc='sudo fakecloud'  # conflicts with builtin history command
-    alias fcc='cd /git/invsblduck/fakecloud_configs/dotfiles'
+    alias fcc='cd /git/brc/fakecloud_configs/dotfiles'
     # alias nr='next-review -u invsblduck -l stackforge/cookbook'
-    # alias cdcd='cd /git/invsblduck/chef_dev_utils'
+    # alias cdcd='cd /git/brc/chef_dev_utils'
 
     # alias kc='knife client list'
     # alias kcc='knife client show'
@@ -191,16 +195,27 @@ if [ "$(hostname)" = bunker ] || [ "$(hostname)" = archer ]; then
     alias rtk='cd /gr/terraform-k8s'
     alias rkc='cd /gr/kubernetes-config'
 
-    alias kls="ls -1 /dr/k8s/kubeconfigs/kubeconfig-*-sa \
-        |sed -e 's#/dr/k8s/kubeconfigs/kubeconfig-##' -e 's/-sa$//' \
-        |sort -u"
+    # alias kls="ls -1 /dr/k8s/kubeconfigs/kubeconfig-*-sa \
+    #     |sed -e 's#/dr/k8s/kubeconfigs/kubeconfig-##' -e 's/-sa$//' \
+    #     |sort -u"
 
-    alias kls="(cd /dr/k8s/kubeconfigs && ls kubeconfig-*-sa \
-        |sed -e s/kubeconfig-// -e 's/-sa$//' \
-        |sort -u)"
+    # alias kls="(cd /dr/k8s/kubeconfigs && ls kubeconfig-*-sa \
+    #     |sed -e s/kubeconfig-// -e 's/-sa$//' \
+    #     |sort -u)"
 
-    alias kuc=k8s-context.sh
-    alias ktt='ktun.sh status'
-    alias kshut="ktt |awk '{print \$1}' |parallel -r ktun.sh stop"
+    # kls() {
+    #     if [[ "$1" =~ ^--?v(erbose)? ]]; then
+    #         ls -1 /dr/k8s/kubeconfigs/kubeconfig-*-sa
+    #     else
+    #         cd /dr/k8s/kubeconfigs &&
+    #             ls kubeconfig-*-sa \
+    #             |sed -e s/kubeconfig-// -e 's/-sa$//' \
+    #             |sort -u
+    #     fi
+    # }
+
+    # alias kuc=k8s-context.sh
+    # alias ktt='ktun.sh status'
+    # alias kshut="ktt |grep '^status:' |awk '{print \$2}' |parallel -r ktun.sh stop"
 
 fi #if bunker

@@ -26,6 +26,7 @@ export GOCACHE=/data/go/.cache
 mypaths=(
     ~/bin
     ~/.local/bin
+    /data/gcloud/google-cloud-sdk/bin
     ~/.krew/bin
     ~/.ebcli-virtual-env/executables
     #$(printf "%s/bin " "${gempaths[@]}")
@@ -44,6 +45,7 @@ mypaths=(
     /git/powerline/scripts
     ${GOPATH}/bin
     /dr/bin  # rachio
+    /gr/sh-lib/bin  # rachio
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 

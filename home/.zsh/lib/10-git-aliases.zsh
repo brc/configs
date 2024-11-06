@@ -115,8 +115,10 @@ alias gppf='git push origin $(current_branch):$(current_branch) --force'
 # pull-request
 alias hpr='hub pull-request -b'
 
-# cd to root of repo
-alias g/='cd $(git rev-parse --show-toplevel || echo ".")'
+if is-zsh; then
+    # cd to root of repo
+    alias g/='cd $(git rev-parse --show-toplevel || echo ".")'
+fi
 
 # rank authors by num commits
 alias gw='git who'

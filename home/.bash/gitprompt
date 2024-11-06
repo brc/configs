@@ -103,6 +103,7 @@ PathFull="\W"
 NewLine="\n"
 Jobs="\j"
 
+# TODO Make this script generic to support multiple features, such as k8s context
 
 export PROMPT_COMMAND="__git_ps1 \
     '${IBlack}[${Color_Off}' \

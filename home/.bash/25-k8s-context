@@ -1,0 +1,10 @@
+# -*- mode: shell-script; -*-
+# vim: set ft=sh :
+# Override the incompatible ZSH function
+__k8s_ps1_colorize_context() {
+    local context="$1"
+    local color='36' # cyan
+    [[ $context =~ prod ]] && color='01;31'  # bold red
+    printf -- "%b" "[\e[${color}m${context}\e[0m]"  # %b interprets escapes
+}
+

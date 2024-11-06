@@ -7,6 +7,7 @@ export GOPATH=/data/go
 mypaths=(
     ~/bin
     ~/.local/bin
+    /data/gcloud/google-cloud-sdk/bin
     ~/.krew/bin
     ~/.ebcli-virtual-env/executables
     #$(printf "%s/bin " "${gempaths[@]}")
@@ -25,6 +26,7 @@ mypaths=(
     /git/powerline/scripts
     ${GOPATH}/bin
     /dr/bin  # rachio
+    /gr/sh-lib/bin  # rachio
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
@@ -41,7 +43,6 @@ if [ -n "$TMUX" ]; then
     export TERM=screen-256color
 fi
 
-export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$ "
 # case ${TERM} in
 #     xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
 #         export PROMPT_COMMAND='printf "\033]0;%s\007" "${PWD/#$HOME/~}"'
@@ -91,15 +92,24 @@ for f in ~/.bash/*; do
     source $f
 done
 
+export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$(__k8s_ps1_current_context)\$ "
+
 # make a smarter shell
 shopt -s nocaseglob
 shopt -s extglob
 shopt -s checkwinsize
 
-# Not sure why comint shell has echo disabled for bash (but not zsh)
-# EDIT: Highly doubtful it's related to comint-process-echoes var, but check.
-if [ -n "$INSIDE_EMACS" ]; then
-    stty echo
+if inside-emacs; then
     export SHELL=/bin/bash
     unset PROMPT_COMMAND
+
+    # use default dircolors database (renders better with ef-dream theme)
+    eval $(dircolors)
+
+    # just in case... these have historically screwed me with sh-lib
+    unalias cat d restart grep 2>/dev/null
+
+    # Not sure why comint shell has echo disabled for bash (but not zsh)
+    # EDIT: Highly doubtful it's related to comint-process-echoes var, but check.
+    stty echo
 fi

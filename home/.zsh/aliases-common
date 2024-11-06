@@ -11,8 +11,10 @@ function inside-emacs {
 }
 
 if inside-emacs; then
+    # TODO make $LESS more emacs-friendly in case it is accidentally invoked by something else (e.g., bat(1))
+    alias less=emacs-pager
     export PAGER=emacs-pager
-    alias less="${PAGER}"
+    export SYSTEMD_PAGER=cat  # systemd won't honor /home/brc/bin/emacs-pager for some reason
 fi
 
 # Don't need this shim anymore because have emacs-pager-mode now.
@@ -33,7 +35,7 @@ fi
 #     fi
 # }
 
-if [ "$TERM" != dumb ]; then  # emacs sh-mode
+if ! inside-emacs; then
     have bat && alias cat=bat
 fi
 
@@ -42,19 +44,19 @@ fi
 #
 #have exa && alias ls=exa  # incompatible ls(1) flags
 
-alias a='ls -ahF --color=auto'
-alias a.='ls -ahF --color=auto .*'
-alias ad='ls -ahF --color=auto -d'
-alias ad.='ls -ahF --color=auto -d .*'
-alias at='ls -ahF --color=auto -tr'
-alias as='ls -ahF --color=auto -Sr'
+alias a='ls -ah --color=auto'
+alias a.='ls -ah --color=auto .*'
+alias ad='ls -ah --color=auto -d'
+alias ad.='ls -ah --color=auto -d .*'
+alias at='ls -ah --color=auto -tr'
+alias as='ls -ah --color=auto -Sr'
 
-alias aa='ls -ahF --color=auto -l'
-alias aa.='ls -ahF --color=auto -l .*'
-alias aad='ls -ahF --color=auto -l -d'
-alias aad.='ls -ahF --color=auto -l -d .*'
-alias aat='ls -ahF --color=auto -l -tr -L'  # deref symlinks
-alias aas='ls -ahF --color=auto -l -Sr -L'  #
+alias aa='ls -ah --color=auto -l'
+alias aa.='ls -ah --color=auto -l .*'
+alias aad='ls -ah --color=auto -l -d'
+alias aad.='ls -ah --color=auto -l -d .*'
+alias aat='ls -ah --color=auto -l -tr -L'  # deref symlinks
+alias aas='ls -ah --color=auto -l -Sr -L'  #
 
 if have 'ls++' && ! inside-emacs
 then
@@ -68,21 +70,21 @@ then
     alias aaas='ls++ --potsf -a -Sr -L'  #
 fi
 
-alias wa='sudo ls -ahF --color=auto'
-alias wa.='sudo ls -ahF --color=auto .*'
-alias wad='sudo ls -ahF --color=auto -d'
-alias wad.='sudo ls -ahF --color=auto -d .*'
-alias wat='sudo ls -ahF --color=auto -tr'
-alias was='sudo ls -ahF --color=auto -Sr'
+alias wa='sudo ls -ah --color=auto'
+alias wa.='sudo ls -ah --color=auto .*'
+alias wad='sudo ls -ah --color=auto -d'
+alias wad.='sudo ls -ah --color=auto -d .*'
+alias wat='sudo ls -ah --color=auto -tr'
+alias was='sudo ls -ah --color=auto -Sr'
 
-alias waa='sudo ls -ahF --color=auto -l'
-alias waa.='sudo ls -ahF --color=auto -l .*'
-alias waad='sudo ls -ahF --color=auto -l -d'
-alias waad.='sudo ls -ahF --color=auto -l -d .*'
-alias waat='sudo ls -ahF --color=auto -l -tr'
-alias waas='sudo ls -ahF --color=auto -l -Sr'
-alias waat='sudo ls -ahF --color=auto -l -tr -L'  # deref symlinks
-alias waas='sudo ls -ahF --color=auto -l -Sr -L'  #
+alias waa='sudo ls -ah --color=auto -l'
+alias waa.='sudo ls -ah --color=auto -l .*'
+alias waad='sudo ls -ah --color=auto -l -d'
+alias waad.='sudo ls -ah --color=auto -l -d .*'
+alias waat='sudo ls -ah --color=auto -l -tr'
+alias waas='sudo ls -ah --color=auto -l -Sr'
+alias waat='sudo ls -ah --color=auto -l -tr -L'  # deref symlinks
+alias waas='sudo ls -ah --color=auto -l -Sr -L'  #
 
 alias rm='rm -i'  # woopsy
 alias mv='mv -i'  #
@@ -155,7 +157,7 @@ else
     function pgg { pg "$@"; }  # TODO: maybe make these funcs mimic pgrep better
 fi
 
-alias w='sudo'
+#alias w='sudo'  # conflicts with /dr/k8s/funcs
 alias count='wc -l'
 alias chx='chmod a+x'
 alias chw='sudo chmod a+w'
@@ -168,7 +170,11 @@ alias untarxz='tar xvJf'
 alias n='sudo lsof -Pni 2>/dev/null |grep LIST'
 alias td='sudo tcpdump -nn'
 
-alias grep='grep -E --color=auto'
+if ! inside-emacs; then
+    # grep -E screws up too many sourced scripts (sh-lib) that normally work in a non-interactive shell
+    alias grep='grep -E --color=auto'
+fi
+
 alias gr='grep -RIi --color --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.venv'
 alias wgr='sudo grep -RIi --color --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.venv'
 
@@ -206,124 +212,98 @@ inside-emacs || alias tma='tmux attach'
 alias be='bundle exec'
 
 alias k=kubectl
-alias kar='k api-resources |sort'
-alias kav='k api-versions |sort'
+# alias kar='k api-resources |sort'
+# alias kav='k api-versions |sort'
 alias kaf='k apply -f'
 alias kdf='k diff -f'
-alias kpf='k port-forward'
+# alias kpf='k port-forward'
 
-kubectl_get_nodes_by_inst() {
-    local type="$1"
-    if [ -z "$type" ]; then
-        >&2 echo "usage: kgni {INSTANCE_TYPE}"
-        >&2 echo "1 argument expected, received 0."
-        return 1
-    fi
-    kubectl get nodes -l node.kubernetes.io/instance-type="$type"
-}
+# # kubectl get
+# alias kg='k get'
+# alias kgr='k get --raw'
+# alias kgw='k get -w'
+# alias kga='k get all'
+# alias kgaa='k get all -A'
+# alias kgn='kg node'
+# alias kgnw='kgw node'
+# alias kgns='kg namespace'
+# alias kgsa='kg serviceaccount'
+# alias kgcm='kg configmap'
+# alias kgt='kg secret'
+# alias kgds='kg daemonset'
+# alias kgdsw='kgw daemonset'
+# alias kgrs='kg replicaset'
+# alias kgrsw='kgw replicaset'
+# alias kgsts='kg statefulset'
+# alias kgstsw='kgw statefulset'
+# alias kgd='kg deployment'
+# alias kgdw='kgw deployment'
+# alias kgp='kg pods'
+# alias kgpw='kgw pods'
+# alias kgpa='kgp -A'
+# alias kgs='kg service'
+# alias kgsw='kgw service'
+# alias kgi='kg ingress'
+# alias kgiw='kgw ingress'
+# alias kgpv='kg pv'
+# alias kgpvc='kg pvc'
+# alias kgpvcw='kgw pvc'
+# alias kgep='kg endpoints'
+# alias kgepw='kgw endpoints'
+# alias kges='kg es'
+# alias kgesa='kg es -A'
+# alias kgesaw='kgw es -A'
+# alias kgmp='kg meshpolicy'
+# alias kgmw='kg mutatingwebhookconfigurations'
+# alias kgoc='kg otelcol'
 
-kubectl_get_pods_by_node() {
-    local node="$1"
-    if [ -z "$node" ]; then
-        >&2 echo "usage: kgpn {NODE}"
-        >&2 echo "1 argument expected, received 0."
-        return 1
-    fi
-    kubectl get pods -A --field-selector spec.nodeName="$node" -o wide \
-        |awk '{NF-=2}1' \
-        |awk '(NR==1){NF-=2;print}(NR!=1)' \
-        |column -t
-}
-#export -f kubectl_get_pods_by_node
+# # kubectl describe
+# alias kd='k describe'
+# alias kdn='kd node'
+# alias kdns='kd namespace'
+# alias kdsa='kd serviceaccount'
+# alias kdcm='kd configmap'
+# alias kdt='kd secret'
+# alias kdds='kd daemonset'
+# alias kdrs='kd replicaset'
+# alias kdsts='kd statefulset'
+# alias kdd='kd deployment'
+# alias kdp='kd pod'
+# alias kds='kd service'
+# alias kdpv='kd pv'
+# alias kdpvc='kd pvc'
+# alias kdep='kd endpoints'
+# alias kdes='kd es'
+# alias kdmp='kd meshpolicy'
+# alias kdmw='kd mutatingwebhookconfigurations'
+# alias kdoc='kd otelcol'
 
-# kubectl get
-alias kg='k get'
-alias kgr='k get --raw'
-alias kgw='k get -w'
-alias kga='k get all'
-alias kgaa='k get all -A'
-alias kgn='kg node'
-alias kgnw='kgw node'
-alias kgni='kubectl_get_nodes_by_inst'
-alias kgns='kg namespace'
-alias kgsa='kg serviceaccount'
-alias kgcm='kg configmap'
-alias kgt='kg secret'
-alias kgds='kg daemonset'
-alias kgdsw='kgw daemonset'
-alias kgrs='kg replicaset'
-alias kgrsw='kgw replicaset'
-alias kgsts='kg statefulset'
-alias kgstsw='kgw statefulset'
-alias kgd='kg deployment'
-alias kgdw='kgw deployment'
-alias kgp='kg pods'
-alias kgpw='kgw pods'
-alias kgpa='kgp -A'
-alias kgpn='kubectl_get_pods_by_node'
-alias kgs='kg service'
-alias kgsw='kgw service'
-alias kgi='kg ingress'
-alias kgiw='kgw ingress'
-alias kgpv='kg pv'
-alias kgpvc='kg pvc'
-alias kgpvcw='kgw pvc'
-alias kgep='kg endpoints'
-alias kgepw='kgw endpoints'
-alias kges='kg es'
-alias kgesa='kg es -A'
-alias kgesaw='kgw es -A'
-alias kgmp='kg meshpolicy'
-alias kgmw='kg mutatingwebhookconfigurations'
-alias kgoc='kg otelcol'
+# # kubectl edit
+# alias ke='k edit'
+# alias kesa='ke serviceaccount'
+# alias kecm='ke configmap'
+# alias ket='ke secret'
+# alias ked='ke deployment'
+# alias keds='ke daemonset'
+# alias kers='ke replicaset'
+# alias kests='ke statefulset'
+# alias kep='ke pod'
+# alias kes='ke service'
+# alias keoc='ke otelcol'
 
-# kubectl describe
-alias kd='k describe'
-alias kdn='kd node'
-alias kdns='kd namespace'
-alias kdsa='kd serviceaccount'
-alias kdcm='kd configmap'
-alias kdt='kd secret'
-alias kdds='kd daemonset'
-alias kdrs='kd replicaset'
-alias kdsts='kd statefulset'
-alias kdd='kd deployment'
-alias kdp='kd pod'
-alias kds='kd service'
-alias kdpv='kd pv'
-alias kdpvc='kd pvc'
-alias kdep='kd endpoints'
-alias kdes='kd es'
-alias kdmp='kd meshpolicy'
-alias kdmw='kd mutatingwebhookconfigurations'
-alias kdoc='kd otelcol'
+# # kubectl scale
+# alias ksd='kubectl scale deploy --replicas'
 
-# kubectl edit
-alias ke='k edit'
-alias kesa='ke serviceaccount'
-alias kecm='ke configmap'
-alias ket='ke secret'
-alias ked='ke deployment'
-alias keds='ke daemonset'
-alias kers='ke replicaset'
-alias kests='ke statefulset'
-alias kep='ke pod'
-alias kes='ke service'
-alias keoc='ke otelcol'
+# # kubectl exec
+# alias kit='k exec -it'
 
-# kubectl scale
-alias ksd='kubectl scale deploy --replicas'
-
-# kubectl exec
-alias kit='k exec -it'
-
-# kubectl logs
-alias kl='k logs'
+# # kubectl logs
+# alias kl='k logs'
 
 # kubectl config
-alias kcc='k config get-contexts'
-alias kuc='k config use-context'
-alias kn='k config set-context --current --namespace'
+# alias kcc='k config get-contexts'
+# alias kuc='k config use-context'
+# alias kn='k config set-context --current --namespace'
 
 alias nat='sudo iptables -L -n -t nat'
 
@@ -346,7 +326,7 @@ elif uname -a |grep -Eq '\.el[0-9]+\.?'; then
     alias pmi='sudo yum install'
 elif grep -iwq arch /etc/issue; then
     alias aptdate='sudo pacman -Syy'
-    alias cache='pacaur -Ss'
-    alias show='pacaur -Si'
-    alias pmi='pacaur -S'
+    alias cache='yay -Ss'
+    alias show='yay -Si'
+    alias pmi='yay -S'
 fi
