@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(nginx
+   '(graphviz
+     nginx
      csv
      ;; ----------------------------------------------------------------
      ;; Add some layer names and press `SPC f e R' (Vim style) or
@@ -43,14 +44,19 @@ This function should only modify configuration layer settings."
      auto-completion
      docker
      emacs-lisp
-     (git :variables
-          git-enable-magit-delta-plugin t)
+     ;; Delta caused too many issues, such as interpreting ANSI escape seqs
+     ;; in diffs instead of showing the literal characters.  Disabling for now.
+     ;;
+     ;;     (git :variables
+     ;;          git-enable-magit-delta-plugin t)
+     git
      go
-     ;gtags
+                                        ;gtags
      helm
      html
+     (ibuffer :variables
+              ibuffer-group-buffers-by 'projects)
      javascript
-     kubernetes
      markdown
      org
      pdf
@@ -58,7 +64,8 @@ This function should only modify configuration layer settings."
      php
      protobuf
      puppet
-     python
+     (python :variables
+             python-test-runner 'pytest)
      ranger
      (ruby :variables
            ruby-version-manager 'rbenv)
@@ -74,7 +81,7 @@ This function should only modify configuration layer settings."
      (spell-checking :variables
                      spell-checking-enable-by-default nil)
      sql
-     ;syntax-checking  ;; enable flycheck
+                                        ;syntax-checking  ;; enable flycheck
      systemd
      themes-megapack
      (treemacs :variables
@@ -96,18 +103,25 @@ This function should only modify configuration layer settings."
      bash-completion
      company-quickhelp
      company-terraform
+     coterm
      ;; diff-hl
      git-gutter
      groovy-mode
      hcl-mode
      helm-icons
      helm-make  ;; I think this may already be included in Spacemacs...
+     helm-rg
      ini-mode
+     logview
      magit-delta
      ox-jira
+     rfc-mode
+     sicp
      sqlite3
      strace-mode
      terraform-mode
+     treesit-auto
+     yaml-pro
      ztree
      )
    ;; A list of packages that cannot be updated.
@@ -297,7 +311,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; Default font or prioritized list of fonts. This setting has no effect when
+   ;; running Emacs in terminal. The font set here will be used for default and
+   ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("SourceCode Pro"
@@ -381,6 +397,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -510,7 +530,15 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-tree', `undo-fu' and `undo-redo', see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; from undo-tree to undo-fu or undo-redo.
+   ;; The default is currently 'undo-tree, but it will likely be changed
+   ;; and at some point removed because undo-tree is not maintained anymore.
+   dotspacemacs-undo-system 'undo-redo
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -597,7 +625,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -614,7 +642,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -623,6 +651,21 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; Automatically enable Treesitter flavored modes in Emacs 29.
+  ;; See https://github.com/renzmann/treesit-auto?tab=readme-ov-file
+  ;;     https://archive.casouri.cc/note/2023/tree-sitter-in-emacs-29/index.html
+  ;;     https://www.reddit.com/r/emacs/comments/10iuim1/getting_emacs_29_to_automatically_use_treesitter/
+  ;;
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+
+  ;; Enable YAML-Pro minor mode for yaml-ts-mode
+  (add-hook 'yaml-ts-mode-hook #'yaml-pro-ts-mode)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Load custom files
@@ -638,7 +681,12 @@ before packages are loaded."
   (add-to-list 'auto-mode-alist '("\\.jenkinsfile$" . jenkinsfile-mode))
 
   ;; Mustache mode
-  (require 'mustache-mode)
+  ;; (require 'mustache-mode)  ;; Don't remember which file type I used this for...
+
+  ;; Go Template mode
+  (require 'go-template-mode)
+  (add-to-list 'auto-mode-alist '("\\.tpl$" . go-template-mode))
+  (add-hook 'go-template-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
   ;; Arch PKGBUILDs
   (add-to-list 'auto-mode-alist '("PKGBUILD" . shell-script-mode))
@@ -666,51 +714,139 @@ before packages are loaded."
   ;; Yank X11 PRIMARY selection (cut-buffer) using <Shift>-Insert
   ;;
   (global-set-key (kbd "<S-insert>")
-                  '(lambda () (interactive)(mouse-yank-primary (point))))
+                  #'(lambda () (interactive)(mouse-yank-primary (point))))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Don't transpose words with M-t
-  ;; (too much collateral damage from pressing tmux macro keys in Emacs! :))
+  ;;
+  ;;   Evil-Genius idea: Use it move around like tmux instead >:)
   ;;
   (global-unset-key (kbd "M-t"))
-  ;;
-  ;; Evil-Genius idea: Use it move around like tmux instead >:)
+
   ;;
   ;; TODO figure out how to loop over the keymaps and DRY it
-  ;(dolist (kmap '(evil-insert-state-map
-  ;                  evil-normal-state-map
-  ;                  evil-visual-state-map
-  ;                  evil-treemacs-state-map))
-  ;  (evil-define-key nil kmap
-  ;    (kbd "M-t h") 'evil-window-left
-  ;    (kbd "M-t l") 'evil-window-right
-  ;    (kbd "M-t j") 'evil-window-down
-  ;    (kbd "M-t k") 'evil-window-up))
+                                        ;(dolist (kmap '(evil-insert-state-map
+                                        ;                  evil-normal-state-map
+                                        ;                  evil-visual-state-map
+                                        ;                  evil-treemacs-state-map))
+                                        ;  (evil-define-key nil kmap
+                                        ;    (kbd "M-t p") 'persp-prev
+                                        ;    (kbd "M-t n") 'persp-next
+                                        ;    (kbd "M-t h") 'evil-window-left
+                                        ;    (kbd "M-t l") 'evil-window-right
+                                        ;    (kbd "M-t j") 'evil-window-down
+                                        ;    (kbd "M-t k") 'evil-window-up))
+
+  ;; TODO Can (global-set-key) key called like this instead of using
+  ;;      (evil-define-key) for every map? Did I ever try it?
+  ;;
+  ;;      This binding sure seems to work !
+  (global-set-key (kbd "M-t :") 'eval-expression)
+
   (evil-define-key nil evil-insert-state-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
     (kbd "M-t h") 'evil-window-left
     (kbd "M-t l") 'evil-window-right
     (kbd "M-t j") 'evil-window-down
-    (kbd "M-t k") 'evil-window-up)
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
   (evil-define-key nil evil-normal-state-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
     (kbd "M-t h") 'evil-window-left
     (kbd "M-t l") 'evil-window-right
     (kbd "M-t j") 'evil-window-down
-    (kbd "M-t k") 'evil-window-up)
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
   (evil-define-key nil evil-treemacs-state-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
     (kbd "M-t h") 'evil-window-left
     (kbd "M-t l") 'evil-window-right
     (kbd "M-t j") 'evil-window-down
-    (kbd "M-t k") 'evil-window-up)
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
   (evil-define-key nil Man-mode-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
     (kbd "M-t h") 'evil-window-left
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
     (kbd "M-t l") 'evil-window-right
     (kbd "M-t j") 'evil-window-down
-    (kbd "M-t k") 'evil-window-up)
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
   (evil-define-key nil help-mode-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
     (kbd "M-t h") 'evil-window-left
     (kbd "M-t l") 'evil-window-right
     (kbd "M-t j") 'evil-window-down
-    (kbd "M-t k") 'evil-window-up)
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
+  (evil-define-key nil ranger-mode-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
+  (evil-define-key nil spacemacs-buffer-mode
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
+  (evil-define-key nil package-menu-mode-map
+    (kbd "M-t M-p") 'persp-prev
+    (kbd "M-t M-n") 'persp-next
+    (kbd "M-t p") 'persp-prev
+    (kbd "M-t n") 'persp-next
+    (kbd "M-t h") 'evil-window-left
+    (kbd "M-t l") 'evil-window-right
+    (kbd "M-t j") 'evil-window-down
+    (kbd "M-t k") 'evil-window-up
+    (kbd "M-t <prior>") #'(lambda ()
+                            (interactive)
+                            (evil-scroll-page-up 1)
+                            (evil-normal-state)))
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -718,21 +854,28 @@ before packages are loaded."
   ;;
   ;; retain some Emacs movement bindings
   (evil-define-key nil evil-insert-state-map
-    (kbd "C-a") nil  ;; unbind
+    (kbd "C-a") nil  ;; unbind these from Evil insert mode
     (kbd "C-b") nil  ;;
     (kbd "C-d") nil  ;;
     (kbd "C-e") nil  ;;
-    (kbd "C-f") nil) ;;
+    (kbd "C-f") nil  ;; (M-b, M-f, M-v, M-y, etc aren't shadowed as of 20240325)
+    (kbd "C-n") nil  ;;
+    (kbd "C-p") nil  ;;
+    (kbd "C-v") nil  ;;
+    (kbd "C-y") nil) ;;
 
   ;; don't record macros with "q" in Evil normal mode (too error prone)
   (evil-define-key nil evil-normal-state-map (kbd "q") nil)
+
+  ;; use custom function for ffap with ace window
+  (evil-define-key nil evil-normal-state-map (kbd "gA") 'brc/ffap-ace-window)
 
   ;; override `evil-repeat-pop-next' and `pop-tag-mark' bindings
   ;; (evil-define-key nil evil-normal-state-map (kbd "M-,") 'evil-scroll-left)
   ;; (evil-define-key nil evil-normal-state-map (kbd "M-.") 'evil-scroll-right)
 
   ;; override `evil-jump-to-tag' binding to use GNU Global
-  ;(evil-define-key nil evil-normal-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
+                                        ;(evil-define-key nil evil-normal-state-map (kbd "C-]") 'ggtags-find-tag-dwim)
 
   ;; yank from X11 clipboard
   (evil-define-key nil evil-insert-state-map (kbd "M-v") 'clipboard-yank)
@@ -746,35 +889,93 @@ before packages are loaded."
   (add-to-list 'evil-emacs-state-modes 'docker-container-mode)
   (add-to-list 'evil-emacs-state-modes 'ztree-mode)
 
+  ;; overload `evil-lookup' motion to call `evil-lookup-func' interactively.
+  ;; this allows for using `man' with `K' instead of `woman'.
+  ;; see https://implementations-list.ourproject.narkive.com/utzxrdQu/evil-lookup-func-settings-in-evil-mode#post3
+  (evil-define-motion evil-lookup ()
+    "Look up the keyword at point interactively (brc).
+Calls `evil-lookup-func'."
+    (call-interactively evil-lookup-func))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Spacemacs overrides
   ;;
   (spacemacs/set-leader-keys
-    "gg" 'magit-status
     "#"  'spacemacs/alternate-buffer
-    "w#" 'spacemacs/alternate-window
-    "w|" 'spacemacs/maximize-horizontally
-    "or" 'brc/sh-send-line-or-region
+    "/"  'helm-projectile-rg
+    "gg" 'magit-status
+    "of" 'hs-toggle-hiding
     "oR" 'brc/sh-send-line-or-region-and-go
+    "or" 'brc/sh-send-line-or-region
+    "op" 'brc/sh-send-paragraph
+    "oP" 'brc/fix-ps1-prompt-for-comint
     "os" 'sh-show-shell
+    "rS" 'brc/resume-last-swoop-buffer
+    "w#" 'spacemacs/alternate-window
     "w_" 'brc/maximize-vertically
-    "rS" 'brc/resume-last-swoop-buffer)
+    "w|" 'spacemacs/maximize-horizontally)
+
+  ;; ;; enable these keys for bash scripts
+  ;; (spacemacs/set-leader-keys-for-major-mode 'sh-mode
+  ;;   "oR" 'brc/sh-send-line-or-region-and-go
+  ;;   "or" 'brc/sh-send-line-or-region
+  ;;   "op" 'brc/sh-send-paragraph)
+
+  ;;     ;; (...same, but with treesitter enabled)
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'bash-ts-mode
+  ;;     "oR" 'brc/sh-send-line-or-region-and-go
+  ;;     "or" 'brc/sh-send-line-or-region
+  ;;     "op" 'brc/sh-send-paragraph)
+
+  ;;     ;; (...same, but in Org mode)
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'org-mode
+  ;;     "oR" 'brc/sh-send-line-or-region-and-go
+  ;;     "or" 'brc/sh-send-line-or-region
+  ;;     "op" 'brc/sh-send-paragraph)
+
+  ;;   ;; (...same, but in Fundamental mode)
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'fundamental-mode
+  ;;     "oR" 'brc/sh-send-line-or-region-and-go
+  ;;     "or" 'brc/sh-send-line-or-region
+  ;;     "op" 'brc/sh-send-paragraph)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Magit overrides
   ;;
   (with-eval-after-load 'transient (transient-bind-q-to-quit))
   (evil-define-key nil magit-status-mode-map (kbd "C-n") 'magit-section-forward)
+  (evil-define-key nil magit-status-mode-map (kbd "C-p") 'magit-section-backward)
   (add-hook 'magit-process-mode-hook 'goto-address-mode)  ;; Clickable URLs
   ;; Disable line numbers for magit-delta
   ;;   see https://github.com/dandavison/magit-delta/issues/13
-  ;; (add-to-list 'magit-delta-delta-args "--features=magit" t) ;; XXX value doesn't get set
+  ;;   (value for `magit-delta-delta-args' moved to Customize)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Org-mode overrides
   ;;
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode
-    "/" 'helm-org-rifle)
+  ;; Always use Rifle for evil search
+  ;; Update: Disabling this. Feature is available in Spacemacs via `SPC a o /'
+                                        ;(evil-define-key 'normal org-mode-map (kbd "/") 'helm-org-rifle)
+  ;;
+  ;; TODO: Possibly implement this insanity instead:
+  ;;       https://www.youtube.com/watch?v=a2jHqB1qWiY
+  ;;
+  ;;       ^ Major-mode keybindings in src blocks.
+  ;;
+  ;; I have defined the following overrides specifically because they bug me
+  ;; while editing bash src blocks in org-mode, but they affect all of the
+  ;; major mode, not just src blocks. What is implemented in the video above
+  ;; would be required to only change bindings for src block regions.
+  ;;
+  ;; Override org-open-at-point because it wants to evaluate code blocks
+  (evil-define-key nil org-mode-map (kbd "<return>") 'evil-ret)
+  ;; Override evil-org-open-below because it pisses me off in bash src blocks
+  (evil-define-key 'normal org-mode-map (kbd "o") 'evil-open-below)
+  ;; Override org-metaleft because I expect M-h to show help!
+  (evil-define-key nil org-mode-map (kbd "M-h") 'help-command)
+  ;; Don't re-indent my code blocks! You're messing up my heredocs.
+  (setq org-src-preserve-indentation t)
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-SCRIPT-mode (i.e., editing scripts)
@@ -784,7 +985,7 @@ before packages are loaded."
     (kbd "C-c C-n") 'brc/sh-send-line-or-region-and-step)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Shell-mode overrides (comint process)
+  ;; Shell-mode (comint process)
   ;;
   (autoload 'bash-completion-dynamic-complete
     "bash-completion"
@@ -792,31 +993,32 @@ before packages are loaded."
   (add-hook 'shell-dynamic-complete-functions
             'bash-completion-dynamic-complete)
   (add-hook 'shell-mode-hook 'goto-address-mode)  ;; Clickable URLs
+  (with-eval-after-load 'ffap (add-to-list 'ffap-alist '(shell-mode . brc/shell-ffap)))
   (evil-define-key 'normal shell-mode-map (kbd "<return>") 'comint-send-input)
   (evil-define-key 'insert shell-mode-map
     (kbd "C-j") 'comint-send-input
     (kbd "C-k") 'kill-line
     (kbd "C-u") 'comint-kill-input
-    (kbd "M-3") "-n r361 "
+    (kbd "M-#") 'brc/comint-insert-comment ; XXX TODO
     (kbd "M-.") 'comint-insert-previous-argument
-    (kbd "M-a") '(lambda ()
-                   (interactive)
-                   (insert "|awk '{print $}'")
-                   (backward-char 2))
+    (kbd "M-a") #'(lambda ()
+                    (interactive)
+                    (insert "|awk '{print $}'")
+                    (backward-char 2))
     (kbd "M-c") "|count"
     (kbd "M-g") "|grep -i "
     (kbd "M-h M-h") "--help"
-    (kbd "M-i") "-n helm-istio-system "
-    (kbd "M-k") "-n kube-system "
+    (kbd "M-i") "$IS "
+    (kbd "M-k") "$KS "
     (kbd "M-l") "|${PAGER}"
-    (kbd "M-o") "-n otel-collector "
+    (kbd "M-o") "$OC "
+    (kbd "M-N") "-n ${NS} "
     (kbd "M-q") "pacman -Q"
     (kbd "M-s") "pacman -Q"
-    ;(kbd "M-t") "-n tst-01 "  ;; conflicts with new window movement bindings
-    (kbd "M-w") '(lambda ()
-                   (interactive)
-                   (insert "|while read x; do ; done")
-                   (evil-backward-word-begin 2))
+    (kbd "M-w") #'(lambda ()
+                    (interactive)
+                    (insert "|while read x; do ; done")
+                    (evil-backward-word-begin 2))
     (kbd "M-x") "|xargs ")
 
 
@@ -876,6 +1078,7 @@ before packages are loaded."
   (evil-define-key 'motion Man-mode-map
     (kbd "gf")  'find-file-at-point
     (kbd "gF")  'evil-find-file-at-point-with-line)
+  (evil-global-set-key 'motion (kbd "K") 'man)
   ;; reuse current window for new Man buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Man .*\\*\\'" .
@@ -904,32 +1107,42 @@ before packages are loaded."
   (helm-icons-enable)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Custom variables
+  ;; My defaults
   ;;
   (setq-default
    ;;create-lockfiles nil  ;; these broken symlinks wreak way too much havoc
    ;; (^ Actually: the broken symlinks are a nice indicator there is unsaved work :))
    evil-escape-key-sequence nil  ;; unbind default "fd" qwerty hack
    fci-rule-column 80  ;; vim `colorcolumn'
+   ;; show more than 100 candidates
+   helm-candidate-number-limit 500
+   ;; this finds Makefile targets more correctly (using `make -nqp') than the
+   ;; less-comprehensive regex in helm-make.el.
+   helm-make-list-target-method 'qp
+   org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+   org-todo-keyword-faces '(("INPROGRESS" . "yellow"))
+   ;; Bug-fix see https://www.reddit.com/r/emacs/comments/aruxah/python_shell_doesnt_work_with_multiple_lines_of/egtwe3l/
+   python-shell-prompt-block-regexp "\\.\\.\\.:? "
+   ranger-cleanup-on-disable nil ;; Don't auto-kill Deer buffers
    scroll-margin 5     ;; vim `scrolloff'
    ;; (emacs 26.1 changed `term-char-mode' to disallow cursor movement in evil's
    ;;  normal mode--restore the previous behavior)
    term-char-mode-point-at-process-mark nil
-   ;; this finds Makefile targets more correctly (using `make -nqp') than the
-   ;; less-comprehensive regex in helm-make.el.
-   helm-make-list-target-method 'qp
-   ;; show more than 100 candidates
-   helm-candidate-number-limit 250
-   ;; Magit stuff
-   magit-blame-echo-style 'margin
-   ;; Org-mode
-   org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-   ;; org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold)))
-   org-todo-keyword-faces '(("INPROGRESS" . "yellow"))
-   ;; Bug-fix see https://www.reddit.com/r/emacs/comments/aruxah/python_shell_doesnt_work_with_multiple_lines_of/egtwe3l/
-   python-shell-prompt-block-regexp "\\.\\.\\.:? ")
-   ;; magit-delta-delta-args '("--max-line-distance" "0.6" "--true-color=always" "--color-only" "--features=magit")  ;; XXX value doesn't get set
-) ;dotspacemacs/user-config()
+   ;; treesit-language-source-alist
+   ;;   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+   ;;     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+   ;;     (go "https://github.com/tree-sitter/tree-sitter-go")
+   ;;     (json "https://github.com/tree-sitter/tree-sitter-json")
+   ;;     (make "https://github.com/alemuller/tree-sitter-make")
+   ;;     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+   ;;     (python "https://github.com/tree-sitter/tree-sitter-python"))
+
+   ;; draw vundo tree with UTF-8 symbols instead of ASCII chars
+   ;; (requires a font that supports it!)
+   vundo-glyph-alist vundo-unicode-symbols
+   ) ;setq-default
+
+  ) ;dotspacemacs/user-config()
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -942,7 +1155,7 @@ before packages are loaded."
  '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
  '(mouse-yank-at-point t)
  '(package-selected-packages
-   '(company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+   '(company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
  '(safe-local-variable-values
    '((encoding . utf-8)
      (eval ansible 1)
@@ -958,6 +1171,26 @@ before packages are loaded."
  '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
  '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red")))))
 
+;; from https://www.reddit.com/r/emacs/comments/r3dzcw/findfileatpoint_in_acewindow_selected_window/
+(defun brc/ffap-ace-window ()
+  "Like `ffap-other-window', but window selected via ace window."
+  (interactive)
+  (let ((filename (thing-at-point 'filename)))
+    (if (> (length (aw-window-list)) 1)
+        (progn
+          (aw-switch-to-window (aw-select nil))
+          (find-file-at-point (ffap-prompter filename)))
+      (find-file-at-point (ffap-prompter filename)))))
+
+(defun brc/shell-ffap (name)
+  "My ffap-file-at-point helper for shell-mode major mode."
+  (concat "/tmp/" name))
+;;
+;; TODO Have a list of paths to try and iterate each one until found.
+;;      See (ffap-locate-file) for reference.
+;;
+                                        ;(let ((paths-to-try '("/tmp"))
+                                        ;      path found))
 
 ;; https://tsdh.wordpress.com/2007/03/
 (defun brc/maximize-vertically ()
@@ -1025,7 +1258,10 @@ When GO is non-nil, move point to shell process after sending text."
       (let ((from (line-beginning-position))
             (to (line-end-position)))
         (sh-send-text (buffer-substring-no-properties from to))))
-    (display-buffer shell-buffer)
+    ;; TODO Make sure shell buffer is visible in the last frame where it was
+    ;;      showing, possibly creating a new window if the buffer is not
+    ;;      currently visible. See `(display-buffer)' help for tons of options.
+    ;; (display-buffer shell-buffer)  ;; This shows buffer in current frame
     (unless stay (pop-to-buffer shell-buffer))))
 
 (defun brc/sh-send-line-or-region ()
@@ -1039,6 +1275,13 @@ When region is active, send region instead."
 When region is active, send region instead."
   (interactive)
   (brc/sh-send-command nil))
+
+(defalias 'brc/sh-send-paragraph
+  ;; Select paragraph (v i p),
+  ;; send region (SPC o r),
+  ;; deselect (ESC),
+  ;; move point to first column (0)
+  (kmacro "v i p SPC o r <escape> 0"))
 
 ;; TODO re-implement per changes to `brc/sh-send-command' above
 ;;
@@ -1066,6 +1309,95 @@ When region is active, send region instead."
   (if (string-suffix-p ".log" (buffer-name))
       (toggle-truncate-lines 1)))
 
+;; From https://emacs.stackexchange.com/questions/41222/how-can-i-pass-the-no-line-break-argument-to-base64-encode-region-in-m-x
+;;
+(defun brc/base64-encode-region-prefix-arg (&rest _args)
+  "Pass prefix arg as third arg to `base64-encode-region'."
+  (interactive "r\nP"))
+
+(advice-add 'base64-encode-region :before #'brc/base64-encode-region-prefix-arg)
+
+
+(defun brc/replace-ec2-hostname-with-ip ()
+  "Replace all occurrences of `ip-w-x-y-z.ec2.internal' with `w.x.y.z' on
+current line"
+  (interactive "*")  ;; fail if buffer readonly
+  ;; TODO Add region support
+  ;;
+  ;;      See https://stackoverflow.com/a/58308604/2228206
+  ;;          http://xahlee.info/emacs/emacs/elisp_command_working_on_string_or_region.html
+  ;;
+  ;;      Either make a separate function that works on a region and
+  ;;      conditionally call it from this function, or make a monolithic
+  ;;      function that handles all cases.
+  ;;
+  ;;      The bitch of this for implementing region support was figuring out why
+  ;;      BOUND wasn't being honored in the call to `(re-search-forward)'; it
+  ;;      turns out that shortening the size of the buffer (by changing it)
+  ;;      causes BOUND to now be farther out than we want it to be; see the
+  ;;      comment in the same SO post:
+  ;;
+  ;;        https://stackoverflow.com/a/58322478/2228206
+  ;;
+  ;;         ^ "Unfortunately `(use-region-p)' also has some quirks. BOUND needs
+  ;;            to be updated when a replacement will change the length of the
+  ;;            region."
+  ;;
+  ;; Hacky WIP
+                                        ; (let (start end)
+                                        ;   (if (use-region-p)
+                                        ;       (progn
+                                        ;         (setq start (region-beginning)
+                                        ;               end (region-end))
+                                        ;         ;; Linewise visual mode is selecting the newline and placing
+                                        ;         ;; my cursor on the following line (outside of region)
+                                        ;         ;; Detect this condition and reduce `end'
+                                        ;         (when (char-equal ?\C-j (char-after (- end 1)))
+                                        ;           (setq end (- end 2))
+                                        ;           (message "Found newline!")
+                                        ;           (message "Start is %d" start)
+                                        ;           (message "End is %d" end)))
+                                        ;     (setq start (line-beginning-position)
+                                        ;           end (line-end-position)))
+                                        ;  (goto-char start)
+  (save-excursion
+    (beginning-of-line)
+    (let ((re "ip-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)\\..+\\.internal")
+          (end (make-marker)))
+      (set-marker end (line-end-position))
+      (while (re-search-forward re end t)
+        (replace-match "\\1.\\2.\\3.\\4"))
+      (set-marker end nil))))
+
+
+(defun brc/replace-epoch-with-readable-date ()
+  "Replace all occurrences of Unix epoch timestamps on the current line with
+respective human-readable dates. For example, replace `1714834042' with
+\"Sat May 4 07:47:22 AM PDT 2024\""
+  (interactive "*")  ;; fail if buffer readonly
+  (save-excursion
+    (beginning-of-line)
+    (let ((re "\\b[0-9]\\{7,10\\}\\b")
+          (end (make-marker)))
+      (set-marker end (line-end-position))
+      (while (re-search-forward re end t)
+        (replace-match
+         (string-chop-newline
+          (shell-command-to-string
+           (concat "date --date=@"
+                   (string-chop-newline
+                    (number-to-string (number-at-point))))))))
+      (set-marker end nil))))
+
+
+(defun brc/make-buffer-plain-text ()
+  "Remove all text properties from entire buffer. Useful for yanking output
+from comint buffer and pasting it somewhere else so you can edit it. See
+https://emacs.stackexchange.com/questions/12526/how-to-remove-all-text-properties-in-a-buffer"
+  (interactive "*")  ;; fail if buffer readonly
+  ;; TODO: Operate on region instead of entire buffer
+  (let ((inhibit-read-only t))
+    (set-text-properties (point-min) (point-max) nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eshell functions
@@ -1075,10 +1407,10 @@ When region is active, send region instead."
   (with-temp-buffer
     (cd "/dr/k8s/kubeconfigs")
     (shell-command
-      (concat "ls kubeconfig-*-sa"
-              "|sed -e s/kubeconfig-// -e 's/-sa$//'"
-              "|sort -u")
-      (buffer-name))
+     (concat "ls kubeconfig-*-sa"
+             "|sed -e s/kubeconfig-// -e 's/-sa$//'"
+             "|sort -u")
+     (buffer-name))
     (buffer-string)))
 
 ;; TODO: Figure out how to cycle thru preceding commands and swap word upon
@@ -1087,8 +1419,8 @@ When region is active, send region instead."
   "Mimic Bash `yank-last-arg'."
   (interactive "p")
   (insert (car (reverse
-    (split-string
-      (eshell-previous-input-string (- n 1)))))))
+                (split-string
+                 (eshell-previous-input-string (- n 1)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Unimpaired-paste emulator (YOPO)
@@ -1100,9 +1432,9 @@ When region is active, send region instead."
 ;;   (setq-local oldret (key-binding "\C-m"))
 ;;   (local-set-key "\C-m" 'evil-ret)  ;; was 'newline-and-indent)
 ;;   (add-hook 'evil-insert-state-exit-hook
-;;             '(lambda () (when (boundp 'oldret)
-;;                          (local-set-key "\C-m" oldret)
-;;                          (makunbound 'oldret)))
+;;             #'(lambda () (when (boundp 'oldret)
+;;                           (local-set-key "\C-m" oldret)
+;;                           (makunbound 'oldret)))
 ;;             nil t))
 
 ;; XXX Brokenness with `helm-ag' and ripgrep.
@@ -1148,53 +1480,134 @@ When region is active, send region instead."
 ;;
 ;; This confirmed my suspicion.
 
+
+;; From https://xenodium.com/emacs-clone-git-repo-from-clipboard/
+;; Also see Reddit post: https://www.reddit.com/r/emacs/comments/k3iter/simplequick_git_repo_clone_from_browser_to_emacs/
+;;
+(defun brc/git-clone-clipboard-url ()
+  "Clone git URL in clipboard asynchronously and open in dired when finished."
+  (interactive)
+  (cl-assert (string-match-p "^\\(http\\|https\\|ssh\\)://" (current-kill 0)) nil "No URL in clipboard")
+  (let* ((url (current-kill 0))
+         (download-dir (expand-file-name "/git/"))
+         (project-dir (concat (file-name-as-directory download-dir)
+                              (file-name-base url)))
+         (default-directory download-dir)
+         (command (format "git clone %s" url))
+         (buffer (generate-new-buffer (format "*%s*" command)))
+         (proc))
+    (when (file-exists-p project-dir)
+      (if (y-or-n-p (format "%s exists. delete?" (file-name-base url)))
+          (delete-directory project-dir t)
+        (user-error "Bailed")))
+    (switch-to-buffer buffer)
+    (setq proc (start-process-shell-command (nth 0 (split-string command)) buffer command))
+    (with-current-buffer buffer
+      (setq default-directory download-dir)
+      (shell-command-save-pos-or-erase)
+      (require 'shell)
+      (shell-mode)
+      (view-mode +1))
+    (set-process-sentinel proc
+                          (lambda (process state)
+                            (let ((output (with-current-buffer (process-buffer process)
+                                            (buffer-string))))
+                              (kill-buffer (process-buffer process))
+                              (if (= (process-exit-status process) 0)
+                                  (progn
+                                    (message "finished: %s" command)
+                                    (dired project-dir))
+                                (user-error (format "%s\n%s" command output))))))
+    (set-process-filter proc #'comint-output-filter)))
+
+(defun brc/fix-ps1-prompt-for-comint ()
+  "Set new $PS1 value for the bash process being used by comint."
+  ;; TODO Check the current major mode first before doing anything?
+  (interactive)
+  (evil-insert 0)
+  ;; FIXME Kill any existing input text first.
+  ;;       (comint-send-input) will send whatever input already exists on the
+  ;;       line... maybe you can find out whether you actually killed any text
+  ;;       and then conditionally restore it after the comint-send-input.
+  (comint-kill-input)
+  (insert "unset PROMPT_COMMAND; ")
+  (insert "export PS1='[\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]]$ '")
+  (comint-send-input)
+  (move-beginning-of-line))
+
+
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(comint-move-point-for-output t)
- '(comint-process-echoes t)
- '(comint-scroll-to-bottom-on-input t)
- '(comint-terminfo-terminal "xterm-color")
- '(emacs-pager-max-line-coloring 5000)
- '(evil-want-Y-yank-to-eol t)
- '(exec-path
-   '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin" "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
- '(helm-completion-style 'helm)
- '(js-indent-level 2)
- '(kubernetes-pod-restart-warning-threshold 2)
- '(kubernetes-poll-frequency 300)
- '(kubernetes-redraw-frequency 5)
- '(magit-delta-delta-args
-   '("--max-line-distance" "0.6" "--true-color" "always" "--color-only" "--features" "magit"))
- '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
- '(mouse-yank-at-point t)
- '(package-selected-packages
-   '(sqlite3 bash-completion magit-delta treemacs-magit tern company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
- '(paradox-github-token t)
- '(safe-local-variable-values
-   '((encoding . utf-8)
-     (eval ansible 1)
-     (eval add-to-list 'company-backends 'company-ansible)))
- '(sh-shell-file "/bin/bash")
- '(treemacs-git-mode t)
- '(undo-tree-incompatible-major-modes '(term-mode emacs-pager-mode))
- '(warning-suppress-types '((emacs) (comp))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t))))
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
- '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
- '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red"))))
- '(ztreep-diff-model-add-face ((t (:foreground "deep sky blue")))))
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(Man-notify-method 'aggressive)
+   '(comint-move-point-for-output t)
+   '(comint-process-echoes t)
+   '(comint-scroll-to-bottom-on-input t)
+   '(comint-terminfo-terminal "xterm-color")
+   '(emacs-pager-max-line-coloring 5000)
+   '(evil-lookup-func 'man)
+   '(evil-want-Y-yank-to-eol t)
+   '(exec-path
+     '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin" "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
+   '(helm-buffer-max-length nil)
+   '(helm-completion-style 'helm)
+   '(js-indent-level 2)
+   '(kubernetes-pod-restart-warning-threshold 2)
+   '(kubernetes-poll-frequency 300)
+   '(kubernetes-redraw-frequency 5)
+   '(logview-additional-submodes
+     '(("brc/Spot.io-Ocean"
+        (format . "TIMESTAMP LEVEL MESSAGE")
+        (levels . "SLF4J")
+        (timestamp "ISO 8601 datetime (with 'T') + millis - UTC")
+        (aliases "ocean"))))
+   '(logview-additional-timestamp-formats
+     '(("ISO 8601 datetime (with 'T') + millis - UTC"
+        (java-pattern . "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        (datetime-options :any-decimal-separator t))))
+   '(magit-blame-echo-style 'margin)
+   '(magit-delta-delta-args
+     '("--max-line-distance" "0.6" "--true-color" "always" "--color-only" "--features" "magit"))
+   '(magit-diff-refine-hunk t)
+   '(magit-diff-refine-ignore-whitespace nil)
+   '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
+   '(mouse-yank-at-point t)
+   '(package-selected-packages
+     '(rfc-mode syslog-mode logview graphviz-dot-mode company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+   '(paradox-github-token t)
+   '(ranger-hidden-regexp 'nil)
+   '(safe-local-variable-values
+     '((encoding . utf-8)
+       (eval ansible 1)
+       (eval add-to-list 'company-backends 'company-ansible)))
+   '(savehist-additional-variables
+     '(dired-quick-sort-time-last dired-quick-sort-group-directories-last dired-quick-sort-reverse-last dired-quick-sort-sort-by-last evil-jumps-history projectile-project-command-history mark-ring global-mark-ring search-ring regexp-search-ring extended-command-history))
+   '(sh-imenu-generic-expression
+     '((sh
+        (nil "^\\s-*function\\s-+\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*\\(?:()\\)?" 1)
+        (nil "^\\s-*\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*()" 1))
+       (mksh
+        (nil "^\\s-*function\\s-+\\([^]\0\11\12 \"-$&-*/;-?[\\`|]+\\)\\s-*\\(?:()\\)?" 1)
+        (nil "^\\s-*\\([^]\0\11\12 \"-$&-*/;-?[\\`|]+\\)\\s-*()" 1))))
+   '(sh-shell-file "/bin/bash")
+   '(treemacs-git-mode t)
+   '(warning-suppress-types '((emacs) (comp))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(default ((t (:background nil))))
+   '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t))))
+   '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
+   '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
+   '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red"))))
+   '(ztreep-diff-model-add-face ((t (:foreground "deep sky blue")))))
+  )

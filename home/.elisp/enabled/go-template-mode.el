@@ -1,0 +1,1 @@
+../available/go-template-mode/go-template-mode.el
