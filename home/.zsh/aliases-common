@@ -44,22 +44,40 @@ fi
 #
 #have exa && alias ls=exa  # incompatible ls(1) flags
 
-alias a='ls -ah --color=auto'
-alias a.='ls -ah --color=auto .*'
-alias ad='ls -ah --color=auto -d'
-alias ad.='ls -ah --color=auto -d .*'
-alias at='ls -ah --color=auto -tr'
-alias as='ls -ah --color=auto -Sr'
+if inside-emacs; then
+    # enable colors for dumb terminal in comint
+    alias a='TERM=xterm-color ls -ah --color=auto'
+    alias a.='TERM=xterm-color ls -ah --color=auto .*'
+    alias ad='TERM=xterm-color ls -ah --color=auto -d'
+    alias ad.='TERM=xterm-color ls -ah --color=auto -d .*'
+    alias at='TERM=xterm-color ls -ah --color=auto -tr'
+    alias as='TERM=xterm-color ls -ah --color=auto -Sr'
 
-alias aa='ls -ah --color=auto -l'
-alias aa.='ls -ah --color=auto -l .*'
-alias aad='ls -ah --color=auto -l -d'
-alias aad.='ls -ah --color=auto -l -d .*'
-alias aat='ls -ah --color=auto -l -tr -L'  # deref symlinks
-alias aas='ls -ah --color=auto -l -Sr -L'  #
+    alias aa='TERM=xterm-color ls -ah --color=auto -l'
+    alias aa.='TERM=xterm-color ls -ah --color=auto -l .*'
+    alias aad='TERM=xterm-color ls -ah --color=auto -l -d'
+    alias aad.='TERM=xterm-color ls -ah --color=auto -l -d .*'
+    alias aat='TERM=xterm-color ls -ah --color=auto -l -tr -L'  # deref symlinks
+    alias aas='TERM=xterm-color ls -ah --color=auto -l -Sr -L'  #
+else
+    alias a='ls -ah --color=auto'
+    alias a.='ls -ah --color=auto .*'
+    alias ad='ls -ah --color=auto -d'
+    alias ad.='ls -ah --color=auto -d .*'
+    alias at='ls -ah --color=auto -tr'
+    alias as='ls -ah --color=auto -Sr'
+
+    alias aa='ls -ah --color=auto -l'
+    alias aa.='ls -ah --color=auto -l .*'
+    alias aad='ls -ah --color=auto -l -d'
+    alias aad.='ls -ah --color=auto -l -d .*'
+    alias aat='ls -ah --color=auto -l -tr -L'  # deref symlinks
+    alias aas='ls -ah --color=auto -l -Sr -L'  #
+fi
 
 if have 'ls++' && ! inside-emacs
 then
+    # doesn't render output correctly in a comint shell, no matter the $TERM
     alias aa='ls++ --potsf -a'
     alias aa.='ls++ --potsf -a .*'
     alias aad='ls++ --potsf -a -d'
@@ -324,7 +342,7 @@ elif uname -a |grep -Eq '\.el[0-9]+\.?'; then
     alias cache='yum search'
     alias show='yum info'
     alias pmi='sudo yum install'
-elif grep -iwq arch /etc/issue; then
+elif [ -f /etc/arch-release ]; then
     alias aptdate='sudo pacman -Syy'
     alias cache='yay -Ss'
     alias show='yay -Si'

@@ -1,3 +1,4 @@
+# -*- mode: sh; -*-
 # vim: set ft=sh:
 
 # XXX this should probably be a relative path, since we

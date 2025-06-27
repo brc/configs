@@ -7,6 +7,7 @@ export GOPATH=/data/go
 mypaths=(
     ~/bin
     ~/.local/bin
+    /data/npm/bin
     /data/gcloud/google-cloud-sdk/bin
     ~/.krew/bin
     ~/.ebcli-virtual-env/executables
@@ -36,11 +37,15 @@ export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 [[ $- != *i* ]] && return
 
 
-#
-# TODO pepper all of the following with checks for $INSIDE_EMACS
-#
-if [ -n "$TMUX" ]; then
-    export TERM=screen-256color
+# Get our insane symlink-jungle mudball hell
+for f in ~/.bash/*; do
+    source $f
+done
+
+if ! inside-emacs; then
+    if [ -n "$TMUX" ]; then
+        export TERM=screen-256color
+    fi
 fi
 
 # case ${TERM} in
@@ -78,6 +83,13 @@ eval "$(dircolors -b ~/.dircolors)"
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 unset SSH_ASKPASS
 
+source /usr/share/bash-completion/bash_completion
+source /data/gcloud/google-cloud-sdk/completion.bash.inc
+source <(kubectl completion bash)
+
+# Let gsutil discover the version of Python it wants
+# unset CLOUDSDK_PYTHON
+
 if which fortune >/dev/null; then
     echo -e "\e[34m"
     if which cowsay >/dev/null; then
@@ -87,10 +99,6 @@ if which fortune >/dev/null; then
     fi
     echo -e "\e[0m"
 fi
-
-for f in ~/.bash/*; do
-    source $f
-done
 
 export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$(__k8s_ps1_current_context)\$ "
 
