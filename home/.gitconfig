@@ -57,21 +57,15 @@
 
 [alias]
     ctags    = !.git/hooks/ctags
-    emc      = !git-config.sh emc
-    kajabi   = !git-config.sh kajabi
-    liberty  = !git-config.sh liberty
-    logmein  = !git-config.sh lmi
-    xentaurs = !git-config.sh xentaurs-bitbucket
-    reltio   = !git-config.sh reltio
     who      = !git-who.sh
     where    = !git-where.sh
-	  root     = !git rev-parse --show-toplevel
+    root     = !git rev-parse --show-toplevel
 
 [github]
-    user = invsblduck
+    user = brc
 
 [gitreview]
-    username = invsblduck
+    username = brc
 
 [grep]
     patternType = extended
@@ -79,3 +73,5 @@
     lineNumber = true
 [pull]
 	ff = only
+[safe]
+	directory = /mnt/terragrunt-code
