@@ -20,8 +20,8 @@ setopt list_types       # show trailing character in listing to id file type
 zmodload -i zsh/complist
 
 # enable bash completion support
-autoload -U bashcompinit
-bashcompinit
+#autoload -U bashcompinit
+#bashcompinit
 
 # normally this function comes from the `bash-completion' package;
 # define a zsh-equivalent here:
@@ -52,11 +52,11 @@ _get_comp_words_by_ref ()
 
 # source the files in /etc/bash_completion.d
 # (not sure we should source /usr/share/bash-completion/completions/*)
-setopt null_glob
-for f in /etc/bash_completion.d/*; do
-    source ${f}
-done
-unsetopt null_glob
+#setopt null_glob
+#for f in /etc/bash_completion.d/*; do
+#    source ${f}
+#done
+#unsetopt null_glob
 
 # add useful completion styles
 zstyle ':completion:*' matcher-list \

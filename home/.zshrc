@@ -4,6 +4,8 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 
 # expansion and globbing
+setopt kshglob              # most similar to bash `extglob'
+setopt no_bare_glob_qual    # don't handle trailing parens conditionally
 setopt no_case_match
 setopt nomatch              # bash failglob equivalent
 setopt numeric_glob_sort    # sort numeric globs in "human" order
