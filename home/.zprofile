@@ -26,6 +26,7 @@ export GOCACHE=/data/go/.cache
 mypaths=(
     ~/bin
     ~/.local/bin
+    /data/npm/bin
     /data/gcloud/google-cloud-sdk/bin
     ~/.krew/bin
     ~/.ebcli-virtual-env/executables
@@ -102,6 +103,9 @@ export VAGRANT_VM_MEM=1536
 #export salt_install_args='-g https://github.com/saltstack/salt.git git v2014.7.5'
 
 export QMK_HOME=/git/qmk/qmk_firmware
+
+# Let gsutil discover the version of Python it wants
+# unset CLOUDSDK_PYTHON
 
 # setup fpath
 fpath=(~/.zsh/fpath $fpath)
