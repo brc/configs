@@ -5,8 +5,13 @@
 /doc/tags
 .tox/
 .venv/
+.worktrees/
 GPATH
 GRTAGS
 GTAGS
 tags
 TAGS
+
+**/.claude/settings.local.json
+
+**/CLAUDE.local.md
