@@ -101,19 +101,6 @@ if [ "$(hostname)" = bunker ] || [ "$(hostname)" = archer ]; then
         alias -g J='|jq . |bat -l json'
         alias -g OJ='-o json J'
         alias -g KS='-n kube-system'
-        alias -g IS='-n helm-istio-system' # XXX rachio
-        alias -g HA='-n ha-poc'            #
-        alias -g DR='-n ha-poc-dr'         #
-        alias -g SO='-n splunk-otel'       #
-        alias -g OC='-n otel-collector'    #
-        alias -g SFX='-n signalfx'         #
-        alias -g MON='-n monitoring'       #
-        alias -g PROM='-n prometheus'      #
-        alias -g CM='-n cert-manager'      #
-        alias -g TST='-n tst-01'           #
-        alias -g AP='AWS_PROFILE=reltio'   #
-        alias -g CP='AWS_PROFILE=cp'       #
-        alias -g OP='AWS_PROFILE=op'       #
         alias -g OW='-o wide |awk "{NF-=2}1" |awk "(NR==1){NF-=2; print}(NR!=1)" |column -t'
         #alias -g MW='--max-width=$(tput cols)'  # configured this as env var
     fi

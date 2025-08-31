@@ -26,7 +26,7 @@ setopt hist_expire_dups_first   # rotate global dups out first
 setopt hist_verify              # expand bang commands instead of executing them
 
 # i/o
-#setopt rc_quotes        # allow '' to signify a single quote within '...' 
+#setopt rc_quotes        # allow '' to signify a single quote within '...'
 setopt dvorak           # base corrections off dvorak typos instead of qwerty
 setopt flow_control     # enable ^S/^Q flow control
 setopt hash_cmds        # cache command locations to avoid $PATH search
@@ -41,4 +41,4 @@ setopt notify           # report bg status immediately; don't wait for prompt
 
 # prompt
 setopt prompt_subst     # expand parameter/command/arithmetic expressions
-setopt prompt_percent   # expand '%' escape sequences 
+setopt prompt_percent   # expand '%' escape sequences
