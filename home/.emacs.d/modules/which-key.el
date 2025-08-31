@@ -42,14 +42,14 @@
   (which-key-mode 1))
 
 
-;; Optional: Add a simple toggle function (like Spacemacs does)
-(defun brc/toggle-which-key ()
+;; Simple toggle function (equivalent to Spacemacs macro-generated version)
+(defun spacemacs/toggle-which-key ()
   "Toggle which-key mode on and off."
   (interactive)
   (which-key-mode 'toggle)
   (message "Which-key mode %s" (if which-key-mode "enabled" "disabled")))
 
 ;; You can bind this to a key if you want:
-;; (global-set-key (kbd "C-c h k") #'brc/toggle-which-key)
+;; (global-set-key (kbd "C-c h k") #'spacemacs/toggle-which-key)
 
 ;;; modules/which-key.el ends here
