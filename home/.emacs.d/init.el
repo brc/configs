@@ -13,6 +13,7 @@
 
   ;; Load core modules
   (load (expand-file-name "core/packages" user-emacs-directory))
+  (load (expand-file-name "core/key-bindings" user-emacs-directory))
 
   ;; Load feature modules (add more as we implement them)
   ;; (load (expand-file-name "modules/evil" user-emacs-directory))
