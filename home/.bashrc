@@ -84,7 +84,7 @@ eval "$(dircolors -b ~/.dircolors)"
 unset SSH_ASKPASS
 
 source /usr/share/bash-completion/bash_completion
-source /data/gcloud/google-cloud-sdk/completion.bash.inc
+source /opt/google-cloud-cli/completion.bash.inc
 source <(kubectl completion bash)
 
 # Let gsutil discover the version of Python it wants
