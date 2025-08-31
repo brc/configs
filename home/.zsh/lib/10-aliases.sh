@@ -7,7 +7,7 @@ source ~/.zsh/aliases-common
 
 # needed because $SHELL value gets wonky
 function current-shell {
-    /bin/ps -p $$ -o comm=
+    ps -p $$ -o comm=
 }
 
 function is-bash {

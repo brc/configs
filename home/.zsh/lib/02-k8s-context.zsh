@@ -10,8 +10,7 @@ __k8s_ps1_current_context() {
     local context
     local kubeconfig="${KUBECONFIG:-${HOME}/.kube/config}"
     if [ -f "${kubeconfig}" ]; then
-        context=$(/bin/grep '^current-context:' "${kubeconfig}" \
-                    |/bin/awk '{print $2}')
+        context=$(grep '^current-context:' "${kubeconfig}" |cut -f2 -d' ')
         printf -- "%s" "$(__k8s_ps1_colorize_context ${context})"
     fi
 }

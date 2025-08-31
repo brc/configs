@@ -347,4 +347,9 @@ elif [ -f /etc/arch-release ]; then
     alias cache='yay -Ss'
     alias show='yay -Si'
     alias pmi='yay -S'
+elif [ "$(uname)" = Darwin ]; then
+    alias aptdate='brew update'
+    alias cache='brew search'
+    alias show='brew info'
+    alias pmi='brew install'
 fi
