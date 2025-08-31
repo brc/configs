@@ -103,7 +103,9 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
+     all-the-icons-nerd-fonts
      bash-completion
+     claude-code-ide
      company-quickhelp
      company-terraform
      ;; coterm  ;; eat works 1,000x better
@@ -125,17 +127,22 @@ This function should only modify configuration layer settings."
      nerd-icons-completion
      nerd-icons-dired
      nerd-icons-ibuffer
+     nerd-icons-xref
      ox-jira
      pacfiles-mode
+     prometheus-mode
      rfc-mode
      sicp
      sqlite3
      strace-mode
+     svg-lib  ;; Hopefully used for Material Design icons by LSP mode header line
      terraform-mode
      treesit-auto
+     vterm
      yaml-pro
      ztree
      )
+
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -724,12 +731,11 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Claude Code
   ;;
-  (use-package claude-code
-    :ensure t
-    :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
-    :config (claude-code-mode))
-  ;; :bind-keymap ("C-c c" . claude-code-command-map)) ;; or your preferred key
-
+  (use-package claude-code-ide
+    :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+    :config
+    (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+  ;; :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Backspace using C-h
@@ -945,7 +951,7 @@ Calls `evil-lookup-func'."
     ;; "/"  'helm-projectile-rg
     "/"  'helm-projectile-ag  ;; See comment about helm-rg in 'dotspacemacs-additional-packages
     "gg" 'magit-status
-    "oc" 'claude-code-transient
+    "oc" 'claude-code-ide-menu
     "of" 'hs-toggle-hiding
     "oR" 'brc/sh-send-line-or-region-and-go
     "or" 'brc/sh-send-line-or-region
@@ -1001,8 +1007,14 @@ Calls `evil-lookup-func'."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; GitLab configs
   ;;
-  (setq lab-host (s-trim(f-read-text "/f/.creds/gitlab-url"))
-        lab-token (s-trim(f-read-text "/f/.creds/gitlab-brc-token")))
+  (setq lab-host (s-trim(f-read-text "/f/c/gitlab/url"))
+        lab-token (s-trim(f-read-text "/f/c/gitlab/brc-token")))
+
+  (define-key project-prefix-map "M" #'lab-list-project-merge-requests)
+  (add-to-list 'project-switch-commands `(lab-list-project-merge-requests "List merge requests"))
+
+  (define-key project-prefix-map "P" #'lab-list-project-pipelines)
+  (add-to-list 'project-switch-commands `(lab-list-project-pipelines "List pipelines"))
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1048,9 +1060,8 @@ Calls `evil-lookup-func'."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-mode (comint process)
   ;;
-  (autoload 'bash-completion-dynamic-complete
-    "bash-completion"
-    "BASH completion hook")
+  (autoload 'bash-completion-dynamic-complete "bash-completion"
+    "Bash completion hook")
   (add-hook 'shell-dynamic-complete-functions
             'bash-completion-dynamic-complete)
   (add-hook 'shell-mode-hook 'goto-address-mode)  ;; Clickable URLs
@@ -1075,7 +1086,9 @@ Calls `evil-lookup-func'."
     (kbd "M-i t") "|tail "
     (kbd "M-i w") 'brc/sh-while-read
     (kbd "M-i x") "|xargs "
+    (kbd "C-N a") "-nathens "
     (kbd "C-N c") "-ncert-manager "
+    (kbd "C-N h") "-nhelm-repo "
     (kbd "C-N g") "-ngitlab "
     (kbd "C-N G") "-ngitlab-build "
     (kbd "C-N i") "-nistio-system "
@@ -1123,6 +1136,19 @@ Calls `evil-lookup-func'."
     (kbd "E") 'evil-forward-WORD-end
     (kbd "n") 'evil-ex-search-next
     (kbd "?") 'evil-ex-search-backward)
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; TRAMP wip
+  ;;
+  ;; (add-to-list 'tramp-methods
+  ;;              '("kubectl"
+  ;;                (tramp-login-program "kubectl")
+  ;;                (tramp-login-args (("exec" "-it") ("-n" "%r") ("-c" "%p") ("%h") ("--") ("sh")))
+  ;;                (tramp-remote-shell "/bin/sh")
+  ;;                (tramp-remote-shell-args ("-i"))
+  ;;                (tramp-connection-timeout 60)))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Use Helm for Company completions
@@ -1645,9 +1671,7 @@ This function is called at the very end of Spacemacs initialization."
    '(emacs-pager-max-line-coloring 5000)
    '(evil-lookup-func 'man)
    '(evil-want-Y-yank-to-eol t)
-   '(exec-path
-     '("/home/brc/.rbenv/bin" "/home/brc/.rbenv/shims" "/usr/local/bin" "/usr/bin"
-       "/data/go/bin" "/usr/lib/emacs/28.1/x86_64-pc-linux-gnu"))
+   '(explicit-shell-file-name "/bin/bash")
    '(helm-buffer-max-length nil)
    '(helm-completion-style 'helm)
    '(js-indent-level 2)
@@ -1672,48 +1696,48 @@ This function is called at the very end of Spacemacs initialization."
    '(mouse-yank-at-point t)
    '(package-selected-packages
      '(ac-ispell ace-jump-helm-line ace-link ace-window adaptive-wrap afternoon-theme
-                 aggressive-indent alect-themes alert ample-theme ample-zen-theme
-                 anaconda-mode ansible ansible-doc anti-zenburn-theme anzu
-                 apropospriate-theme arch-packer async auto-compile auto-complete
-                 auto-dictionary auto-highlight-symbol auto-yasnippet autothemer
-                 avy badwolf-theme bind-key bind-map birds-of-paradise-plus-theme
-                 bubbleberry-theme bundler busybee-theme cherry-blossom-theme
-                 chruby claude-code clean-aindent-mode clues-theme coffee-mode
+                 aggressive-indent alect-themes alert all-the-icons-nerd-fonts
+                 ample-theme ample-zen-theme anaconda-mode ansible ansible-doc
+                 anti-zenburn-theme anzu apropospriate-theme arch-packer async
+                 auto-compile auto-complete auto-dictionary auto-highlight-symbol
+                 auto-yasnippet autothemer avy badwolf-theme bash-completion
+                 bind-key bind-map birds-of-paradise-plus-theme bubbleberry-theme
+                 bundler busybee-theme cherry-blossom-theme chruby
+                 clean-aindent-mode clues-theme coffee-mode
                  color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow
                  column-enforce-mode company company-anaconda company-ansible
                  company-go company-quickhelp company-statistics company-terraform
                  company-web cyberpunk-theme cython-mode dactyl-mode dakrone-theme
                  darkburn-theme darkmine-theme darkokai-theme darktooth-theme dash
-                 dash-functional define-word difftastic diminish django-theme
-                 docker docker-tramp dockerfile-mode dracula-theme drupal-mode
-                 dumb-jump eat elisp-slime-nav emmet-mode epl esh-help
-                 eshell-prompt-extras eshell-z espresso-theme eval-sexp-fu evil
-                 evil-anzu evil-args evil-ediff evil-escape evil-exchange
-                 evil-iedit-state evil-indent-plus evil-lisp-state evil-magit
-                 evil-matchit evil-mc evil-nerd-commenter evil-numbers
-                 evil-search-highlight-persist evil-surround evil-tutor
-                 evil-unimpaired evil-visual-mark-mode evil-visualstar
-                 exec-path-from-shell exotica-theme expand-region eyebrowse f
-                 fancy-battery farmhouse-theme fill-column-indicator
+                 dash-functional define-word diminish django-theme docker
+                 docker-tramp dockerfile-mode dracula-theme drupal-mode dumb-jump
+                 elisp-slime-nav emmet-mode epl esh-help eshell-prompt-extras
+                 eshell-z espresso-theme eval-sexp-fu evil evil-anzu evil-args
+                 evil-ediff evil-escape evil-exchange evil-iedit-state
+                 evil-indent-plus evil-lisp-state evil-magit evil-matchit evil-mc
+                 evil-nerd-commenter evil-numbers evil-search-highlight-persist
+                 evil-surround evil-tutor evil-unimpaired evil-visual-mark-mode
+                 evil-visualstar exec-path-from-shell exotica-theme expand-region
+                 eyebrowse f fancy-battery farmhouse-theme fill-column-indicator
                  flatland-theme flatui-theme flx flx-ido flycheck flycheck-pos-tip
                  flyspell-correct flyspell-correct-helm fuzzy gandalf-theme ggtags
                  gh-md git-commit git-link git-messenger git-timemachine
                  gitattributes-mode gitconfig-mode gitignore-mode gntp gnuplot
                  go-eldoc go-guru go-mode golden-ratio google-translate
-                 gotham-theme goto-chg grandshell-theme graphviz-dot-mode
-                 groovy-mode gruber-darker-theme gruvbox-theme haml-mode
-                 hc-zenburn-theme hcl-mode helm helm-ag helm-c-yasnippet
-                 helm-company helm-core helm-css-scss helm-descbinds helm-flx
-                 helm-gitignore helm-gtags helm-make helm-mode-manager
-                 helm-projectile helm-pydoc helm-swoop helm-themes hemisu-theme
-                 heroku-theme highlight highlight-indentation highlight-numbers
-                 highlight-parentheses hl-todo htmlize hungry-delete hy-mode hydra
-                 iedit indent-guide inf-ruby ini-mode inkpot-theme ir-black-theme
+                 gotham-theme goto-chg grandshell-theme groovy-mode
+                 gruber-darker-theme gruvbox-theme haml-mode hc-zenburn-theme
+                 hcl-mode helm helm-ag helm-c-yasnippet helm-company helm-core
+                 helm-css-scss helm-descbinds helm-flx helm-gitignore helm-gtags
+                 helm-make helm-mode-manager helm-projectile helm-pydoc helm-swoop
+                 helm-themes hemisu-theme heroku-theme highlight
+                 highlight-indentation highlight-numbers highlight-parentheses
+                 hl-todo htmlize hungry-delete hy-mode hydra hyperbole iedit
+                 indent-guide inf-ruby ini-mode inkpot-theme ir-black-theme
                  jazz-theme jbeans-theme jinja2-mode js-doc js2-mode js2-refactor
                  json-mode json-reformat json-snatcher lab light-soap-theme
-                 link-hint linum-relative live-py-mode livid-mode log4e logview
-                 lorem-ipsum lsp-pyright lush-theme lv macrostep madhat2r-theme
-                 magit magit-gitflow magit-popup majapahit-theme markdown-mode
+                 link-hint linum-relative live-py-mode livid-mode log4e
+                 lorem-ipsum lush-theme lv macrostep madhat2r-theme magit
+                 magit-gitflow magit-popup majapahit-theme markdown-mode
                  markdown-toc material-theme minimal-theme minitest mmm-mode
                  moe-theme molokai-theme monochrome-theme monokai-theme move-text
                  multi-term multiple-cursors mustang-theme naquadah-theme
@@ -1721,33 +1745,35 @@ This function is called at the very end of Spacemacs initialization."
                  omtose-phellack-theme open-junk-file org-bullets
                  org-category-capture org-download org-mime org-plus-contrib
                  org-pomodoro org-present org-projectile organic-green-theme orgit
-                 pacfiles-mode packed paradox parent-mode pcre2el persp-mode
+                 packed paradox parent-mode pcre2el persp-mode
                  phoenix-dark-mono-theme phoenix-dark-pink-theme
                  php-auto-yasnippets php-extras php-mode phpcbf phpunit
                  pip-requirements pkg-info planet-theme popup popwin pos-tip
-                 powerline professional-theme projectile pug-mode puppet-mode
-                 purple-haze-theme py-isort pyenv-mode pytest pythonic pyvenv
-                 railscasts-theme rainbow-delimiters rake ranger rbenv
-                 rebecca-theme request restart-emacs reverse-theme rfc-mode robe
-                 rspec-mode rubocop ruby-test-mode ruby-tools rvm s sass-mode
-                 scss-mode seti-theme shell-pop sicp simple-httpd skewer-mode
-                 slim-mode smartparens smeargle smyx-theme soft-charcoal-theme
+                 powerline professional-theme projectile prometheus-mode pug-mode
+                 puppet-mode purple-haze-theme py-isort pyenv-mode pytest pythonic
+                 pyvenv railscasts-theme rainbow-delimiters rake ranger rbenv
+                 rebecca-theme request restart-emacs reverse-theme robe rspec-mode
+                 rubocop ruby-test-mode ruby-tools rvm s sass-mode scss-mode
+                 seti-theme shell-pop sicp simple-httpd skewer-mode slim-mode
+                 smartparens smeargle smyx-theme soft-charcoal-theme
                  soft-morning-theme soft-stone-theme solarized-theme soothe-theme
                  spacegray-theme spaceline spinner strace-mode subatomic-theme
-                 subatomic256-theme sublime-themes sunny-day-theme syslog-mode
-                 tablist tagedit tango-2-theme tango-plus-theme tangotango-theme
-                 tao-theme terraform-mode toc-org toxi-theme transient
+                 subatomic256-theme sublime-themes sunny-day-theme svg-lib tablist
+                 tagedit tango-2-theme tango-plus-theme tangotango-theme tao-theme
+                 terraform-mode toc-org toxi-theme transient
                  twilight-anti-bright-theme twilight-bright-theme twilight-theme
                  ujelly-theme underwater-theme use-package uuidgen vi-tilde-fringe
-                 vimrc-mode volatile-highlights web-beautify web-completion-data
-                 web-mode which-key white-sand-theme winum with-editor ws-butler
-                 xterm-color yaml-mode yapfify yasnippet
+                 vimrc-mode volatile-highlights vterm web-beautify
+                 web-completion-data web-mode which-key white-sand-theme winum
+                 with-editor ws-butler xterm-color yaml-mode yapfify yasnippet
                  yasnippet-classic-snippets zen-and-art-theme zenburn-theme zones))
    '(package-vc-selected-packages
      '((claude-code :url "https://github.com/stevemolitor/claude-code.el")))
    '(paradox-github-token t)
    '(ranger-hidden-regexp 'nil)
-   '(safe-local-variable-directories '("/data/git/flexa/infra/apps/gitlab/"))
+   '(safe-local-variable-directories
+     '("/home/brc/.emacs.d/elpa/30.1/develop/magit-20250621.2237/"
+       "/data/git/flexa/infra/apps/gitlab/"))
    '(safe-local-variable-values
      '((encoding . utf-8) (eval ansible 1)
        (eval add-to-list 'company-backends 'company-ansible)))
@@ -1768,6 +1794,7 @@ This function is called at the very end of Spacemacs initialization."
          "^\\s-*function\\s-+\\([^]\0\11\12 \"-$&-*/;-?[\\`|]+\\)\\s-*\\(?:()\\)?"
          1)
         (nil "^\\s-*\\([^]\0\11\12 \"-$&-*/;-?[\\`|]+\\)\\s-*()" 1))))
+   '(sh-indent-after-continuation 'always)
    '(sh-shell-file "/bin/bash")
    '(treemacs-git-mode t)
    '(warning-suppress-types '((emacs) (comp))))
