@@ -16,6 +16,7 @@
   (load (expand-file-name "core/key-bindings" user-emacs-directory))
 
   ;; Load feature modules (add more as we implement them)
+  (load (expand-file-name "modules/which-key" user-emacs-directory))
   ;; (load (expand-file-name "modules/evil" user-emacs-directory))
   ;; (load (expand-file-name "modules/completion" user-emacs-directory))
 
