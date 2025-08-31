@@ -1,6 +1,8 @@
 # -*- mode: shell-script; -*-
 # vim: set ft=sh :
 
+return
+
 # TODO Make a better prompt for shell-mode comint inferior shell?
 [ -n "${INSIDE_EMACS}" ] && return
 
