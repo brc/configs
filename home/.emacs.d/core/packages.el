@@ -40,5 +40,14 @@
       use-package-verbose t          ; Show loading info
       use-package-compute-statistics t) ; Enable statistics
 
+;; Core Utility Packages
+;; These are foundational libraries that multiple modules may depend on
+
+(use-package dash
+  :ensure t)
+
+(use-package f
+  :ensure t)
+
 (provide 'core-packages)
 ;;; core/packages.el ends here
