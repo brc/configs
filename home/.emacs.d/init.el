@@ -22,6 +22,7 @@
   (load (expand-file-name "modules/default-leader-keys" user-emacs-directory))
   (load (expand-file-name "modules/modeline" user-emacs-directory))
   (load (expand-file-name "modules/helm" user-emacs-directory))
+  (load (expand-file-name "modules/projectile" user-emacs-directory))
   ;; (load (expand-file-name "modules/completion" user-emacs-directory))
 
   ;; Restore garbage collection settings after startup
