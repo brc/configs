@@ -21,6 +21,7 @@
   (load (expand-file-name "modules/evil" user-emacs-directory))
   (load (expand-file-name "modules/default-leader-keys" user-emacs-directory))
   (load (expand-file-name "modules/modeline" user-emacs-directory))
+  (load (expand-file-name "modules/helm" user-emacs-directory))
   ;; (load (expand-file-name "modules/completion" user-emacs-directory))
 
   ;; Restore garbage collection settings after startup
@@ -36,6 +37,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages nil))
+ '(helm-minibuffer-history-key "M-p")
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
