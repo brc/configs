@@ -11,6 +11,9 @@
       (gc-cons-percentage 0.6)
       (file-name-handler-alist nil))
 
+  ;; Use dark theme until we configure better theme support
+  (load-theme 'wombat)
+
   ;; Load core modules
   (load (expand-file-name "core/packages" user-emacs-directory))
   (load (expand-file-name "core/key-bindings" user-emacs-directory))
