@@ -40,8 +40,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
  '(helm-minibuffer-history-key "M-p")
+ '(package-selected-packages
+   '(bind-map doom-modeline evil-anzu evil-args evil-cleverparens
+      evil-collection evil-exchange evil-goggles evil-iedit-state
+      evil-indent-plus evil-lion evil-matchit evil-nerd-commenter
+      evil-numbers evil-surround evil-textobj-line evil-tutor
+      evil-visual-mark-mode evil-visualstar helm projectile vi-tilde-fringe)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

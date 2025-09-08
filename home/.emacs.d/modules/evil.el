@@ -24,8 +24,11 @@
   (evil-define-key 'visual 'global (kbd "<") "<gv")
   (evil-define-key 'visual 'global (kbd ">") ">gv")
 
-  ;; Your custom binding from .spacemacs: C-i for xref-go-forward
-  (define-key evil-normal-state-map (kbd "C-i") 'xref-go-forward)
+  ;; evil-want-Y-yank-to-eol must be set via customize to have an effect
+  (customize-set-variable 'evil-want-Y-yank-to-eol t)
+
+  ;; bind evil-jump-forward for GUI only (TODO How is this "GUI only"?)
+  (define-key evil-motion-state-map [C-i] 'evil-jump-forward)
 
   ;; Fix shift width after major mode changes
   (defun spacemacs//set-evil-shift-width ()
@@ -196,5 +199,4 @@
 ;; eldoc: Show function signatures (built-in, enable globally)
 (global-eldoc-mode 1)
 
-(provide 'evil-config)
 ;;; modules/evil.el ends here

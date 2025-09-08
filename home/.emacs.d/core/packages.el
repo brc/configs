@@ -25,8 +25,8 @@
 (package-initialize)
 
 ;; Refresh package contents if we haven't done so
-;; (unless package-archive-contents
-;;   (package-refresh-contents))
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;; Install use-package if not already present
 (unless (package-installed-p 'use-package)
