@@ -19,6 +19,7 @@
   ;; Load feature modules (add more as we implement them)
   (load (expand-file-name "modules/which-key" user-emacs-directory))
   (load (expand-file-name "modules/evil" user-emacs-directory))
+  (load (expand-file-name "modules/default-leader-keys" user-emacs-directory))
   (load (expand-file-name "modules/modeline" user-emacs-directory))
   ;; (load (expand-file-name "modules/completion" user-emacs-directory))
 
