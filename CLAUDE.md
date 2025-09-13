@@ -52,8 +52,8 @@ The current list of features to implement from Spacemacs are:
 [x] Helm
 [x] SPC SPC helm-M-x-fuzzy-matching
 [x] Projectile
-[ ] Helm packages (such as swoop, wgrep, helm-projectile-ag, etc)
-[ ] SPC * (search project w/input)
+[x] Helm packages (such as swoop, wgrep, helm-projectile-ag, etc)
+[x] SPC * (search project w/input)
 [ ] SPC l (layouts-transient-state) (How does Spacemacs do it? What other options are there?)
 [ ] SPC p l (helm-persp-switch-project)
 [ ] Treemacs (plus my current Treemacs configuration)

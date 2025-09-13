@@ -46,7 +46,10 @@
       evil-collection evil-exchange evil-goggles evil-iedit-state
       evil-indent-plus evil-lion evil-matchit evil-nerd-commenter
       evil-numbers evil-surround evil-textobj-line evil-tutor
-      evil-visual-mark-mode evil-visualstar helm projectile vi-tilde-fringe)))
+      evil-visual-mark-mode evil-visualstar helm projectile vi-tilde-fringe))
+ '(package-vc-selected-packages
+   '((helm-ag :url "https://github.com/brett/helm-ag"
+              :rev "further-support-rg"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
