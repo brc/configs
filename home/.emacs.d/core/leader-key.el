@@ -8,8 +8,7 @@
 ;;; Code:
 
 ;; Install bind-map package
-(use-package bind-map
-  :ensure t)
+(use-package bind-map)
 
 ;; Create the base keymap for all leader key commands
 ;; Based on spacemacs/core/core-keybindings.el:29-30

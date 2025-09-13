@@ -4,7 +4,6 @@
 ;;; Provides core vim functionality without the heavy customizations.
 
 (use-package evil
-  :ensure t
   :init
   ;; Essential pre-configuration (must be set before evil loads)
   ;; From Spacemacs bootstrap: prepare for evil-collection
@@ -53,21 +52,18 @@
 
 ;; evil-collection: Evilifies 100+ major modes
 (use-package evil-collection
-  :ensure t
   :after evil
   :config
   (evil-collection-init))
 
 ;; evil-surround: Change surrounds with cs"'
 (use-package evil-surround
-  :ensure t
   :after evil
   :config
   (global-evil-surround-mode 1))
 
 ;; evil-nerd-commenter: Commenting with gc
 (use-package evil-nerd-commenter
-  :ensure t
   :after evil
   :bind
   (:map evil-normal-state-map
@@ -77,7 +73,6 @@
 
 ;; evil-numbers: Increment/decrement numbers with C-a/C-x
 (use-package evil-numbers
-  :ensure t
   :after evil
   :bind
   (:map evil-normal-state-map
@@ -89,7 +84,6 @@
 
 ;; evil-args: Argument text objects (da, ci,)
 (use-package evil-args
-  :ensure t
   :after evil
   :config
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
@@ -97,12 +91,10 @@
 
 ;; evil-textobj-line: Line text objects (il, al)
 (use-package evil-textobj-line
-  :ensure t
   :after evil)
 
 ;; evil-indent-plus: Indent-based text objects
 (use-package evil-indent-plus
-  :ensure t
   :after evil
   :config
   (define-key evil-inner-text-objects-map "i" 'evil-indent-plus-i-indent)
@@ -112,14 +104,12 @@
 
 ;; evil-matchit: Enhanced % matching
 (use-package evil-matchit
-  :ensure t
   :after evil
   :config
   (global-evil-matchit-mode 1))
 
 ;; evil-anzu: Search highlighting
 (use-package evil-anzu
-  :ensure t
   :after evil
   :config
   (global-anzu-mode 1)
@@ -127,14 +117,12 @@
 
 ;; evil-visualstar: * in visual mode
 (use-package evil-visualstar
-  :ensure t
   :after evil
   :config
   (global-evil-visualstar-mode))
 
 ;; evil-goggles: Visual feedback for operations
 (use-package evil-goggles
-  :ensure t
   :after evil
   :config
   (evil-goggles-mode)
@@ -142,14 +130,12 @@
 
 ;; evil-lion: Align with gl and gL
 (use-package evil-lion
-  :ensure t
   :after evil
   :config
   (evil-lion-mode))
 
 ;; evil-exchange: Exchange text with gx
 (use-package evil-exchange
-  :ensure t
   :after evil
   :config
   (evil-exchange-install))
@@ -162,33 +148,28 @@
 
 ;; vi-tilde-fringe: Visual line indicators
 (use-package vi-tilde-fringe
-  :ensure t
   :after evil
   :config
   (global-vi-tilde-fringe-mode))
 
 ;; evil-iedit-state: Multiple cursors with iedit
 (use-package evil-iedit-state
-  :ensure t
   :after evil
   :commands (evil-iedit-state/iedit-mode))
 
 ;; evil-cleverparens: Structural editing for Lisp
 (use-package evil-cleverparens
-  :ensure t
   :after evil
   :hook (emacs-lisp-mode . evil-cleverparens-mode))
 
 ;; evil-visual-mark-mode: Visual marks
 (use-package evil-visual-mark-mode
-  :ensure t
   :after evil
   :config
   (evil-visual-mark-mode))
 
 ;; evil-tutor: Learn Evil the hard way
 (use-package evil-tutor
-  :ensure t
   :after evil
   :commands (evil-tutor-start))
 

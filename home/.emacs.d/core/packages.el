@@ -9,7 +9,7 @@
 ;; Package Management Setup
 ;; Based on Spacemacs core/core-configuration-layer.el
 
-;; Initialize package system
+;; Use native package system
 (require 'package)
 
 ;; Set package archives - using the same ones as Spacemacs
@@ -34,6 +34,7 @@
 
 ;; Load use-package
 (require 'use-package)
+(require 'use-package-ensure)
 
 ;; Configure use-package defaults
 (setq use-package-always-ensure t    ; Always install packages if missing
@@ -43,10 +44,8 @@
 ;; Core Utility Packages
 ;; These are foundational libraries that multiple modules may depend on
 
-(use-package dash
-  :ensure t)
+(use-package dash)
 
-(use-package f
-  :ensure t)
+(use-package f)
 
 ;;; core/packages.el ends here

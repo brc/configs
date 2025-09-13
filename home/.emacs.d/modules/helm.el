@@ -11,12 +11,10 @@
 ;; =============================================================================
 
 ;; Install helm-core first (required dependency)
-(use-package helm-core
-  :ensure t)
+(use-package helm-core)
 
 ;; Main helm package
 (use-package helm
-  :ensure t
   :after helm-core
   :init
   ;; Use helm by default for M-x, C-x C-f, and C-x b

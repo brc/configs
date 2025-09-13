@@ -7,7 +7,6 @@
 ;;; Code:
 
 (use-package which-key
-  :ensure t
   :config
   ;; Core settings - extracted from Spacemacs spacemacs-bootstrap/init-which-key
   (setq which-key-add-column-padding 1
