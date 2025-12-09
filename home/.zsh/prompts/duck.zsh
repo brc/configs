@@ -1,4 +1,5 @@
 # vim: set tags=~/.zsh/tags :
+autoload zsh/terminfo
 
 # values to make a status line for indicating the current zle vi mode;
 # we're gonna emulate us some vim showmode!
@@ -54,21 +55,30 @@ ${terminfo[cud1]}"
 # (this line has to be in single quotes here)
 status_line='%{${terminfo_down_sc}[${vimode}]$(__k8s_ps1_current_context)${terminfo[rc]}%}'
 
-# change hostname color when SSH
-fqdn_color="${SSH_CLIENT:+cyan}"
-fqdn_color="${fqdn_color:-black}"
-
-# variables for $PROMPT
-venv="%{${fg_bold[white]}%}"\$(virtualenv_prompt_info)"%{${reset_color}%}"
-host="%{${fg_bold[${fqdn_color}]}%}%m%{${reset_color}%}"
-cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
-close="%{${fg[blue]}%}>%{${reset_color}%}"          # >
-
 PROMPT=
 if [ -z "$EMACS" ]; then
     PROMPT="${status_line}"
 fi
-PROMPT="${PROMPT}${host} ${cwdpath}${close}${venv} "
+
+if [ "$(hostname)" = bunker ]; then
+    # change hostname color when SSH
+    fqdn_color="${SSH_CLIENT:+cyan}"
+    fqdn_color="${fqdn_color:-black}"
+
+    # variables for $PROMPT
+    venv="%{${fg_bold[white]}%}"\$(virtualenv_prompt_info)"%{${reset_color}%}"
+    host="%{${fg_bold[${fqdn_color}]}%}%m%{${reset_color}%}"
+    cwdpath="%{%U${fg[green]}%}%~%{${reset_color}%u%}"  # %~
+    close="%{${fg[blue]}%}>%{${reset_color}%}"          # >
+
+    # set prompt
+    PROMPT="${PROMPT}${host} ${cwdpath}${close}${venv} "
+else
+    # do something different
+    cwdpath="%{%U${fg[white]}${bg[blue]}%}%~%{${reset_color}%u%}"
+    close=" %{${fg_bold[black]}%}%#%{${reset_color}%}"
+    PROMPT="${PROMPT}${cwdpath}${close}${venv} "
+fi
 
 GIT_PS1_SHOWDIRTYSTATE='true'
 GIT_PS1_SHOWSTASHSTATE='true'

@@ -9,7 +9,9 @@
 # - $FZF_COMPLETION_TRIGGER (default: '**')
 # - $FZF_COMPLETION_OPTS    (default: empty)
 
-export FZF_TMUX=1  # open fzf in new pane
+if have tmux; then
+    export FZF_TMUX=1  # open fzf in new pane
+fi
 export FZF_DEFAULT_OPTS='--no-mouse'
 
 # override find(1) command for fzf to prune .tox/ dir

@@ -3,16 +3,27 @@
 #
 
 # TODO make this shared with zsh (this is copied from .zprofile)
-export GOPATH=/data/go
+if [ "$(hostname)" = bunker ]; then
+    GOPATH=/data/go
+    GOCACHE=/data/go/.cache
+else
+    GOPATH="${HOME}/go"
+fi
+hb=/opt/homebrew
 mypaths=(
     ~/bin
     ~/.local/bin
     /data/npm/bin
-    /data/gcloud/google-cloud-sdk/bin
+    "${hb}"/opt/ruby/bin
+    "${hb}"/opt/gnu-sed/libexec/gnubin
+    "${hb}"/opt/python@3.12/libexec/bin
+    "${hb}"/share/google-cloud-sdk/bin
     ~/.krew/bin
-    ~/.ebcli-virtual-env/executables
     #$(printf "%s/bin " "${gempaths[@]}")
-    $(gem env gempath |cut -f1 -d:)/bin
+    $(gem=gem
+        [ -d "${hb}" ] && gem="${hb}"/opt/ruby/bin/gem
+        "${gem}" env gempath |cut -f1 -d:
+    )/bin
     /usr/local/sbin
     /usr/local/bin
     /git/git-when-merged/bin
@@ -22,20 +33,30 @@ mypaths=(
     /usr/sbin
     /usr/bin/vendor_perl
     /usr/bin/core_perl
-    /git/emcrubicon/campbb6/dev-utils/bin
-    /git/invsblduck/fakecloud
     /git/powerline/scripts
     ${GOPATH}/bin
-    /dr/bin  # rachio
     /gr/sh-lib/bin  # rachio
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
+
+if [ -d "${hb}" ]; then
+    eval "$("${hb}"/bin/brew shellenv)"
+    export CLOUDSDK_PYTHON=/opt/homebrew/opt/python@3.12/libexec/bin/python
+fi
+
+export BAT_THEME='Solarized (light)'
+export KUBECTL_EXTERNAL_DIFF='colordiff -N -U3'
+export LESS="-QRFim -j4"
+export LSCOLORS=Hefxcxdxbxegedabagacadah
+export MANPAGER="bash -c 'col -bx | bat -l man -p'"
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+
 
 ######################################################################
 # If not running interactively, don't do anything else
 ######################################################################
 [[ $- != *i* ]] && return
-
 
 # Get our insane symlink-jungle mudball hell
 for f in ~/.bash/*; do
@@ -78,17 +99,21 @@ export LESS_TERMCAP_ue=$'\E[0m'         # end
 export LESS_TERMCAP_so=$'\E[01;44;33m'  # begin
 export LESS_TERMCAP_se=$'\E[0m'         # end
 
-eval "$(dircolors -b ~/.dircolors)"
+if have dircolors; then
+    eval "$(dircolors -b ~/.dircolors)"
+fi
 
 [ -e ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=FALSE
 unset SSH_ASKPASS
 
-source /usr/share/bash-completion/bash_completion
-source /opt/google-cloud-cli/completion.bash.inc
+comp_files=(
+    /usr/share/bash-completion/bash_completion
+    /opt/google-cloud-cli/completion.bash.inc
+)
+for f in "${comp_files[@]}"; do
+    [ -f "$f" ] && source "$f"
+done
 source <(kubectl completion bash)
-
-# Let gsutil discover the version of Python it wants
-# unset CLOUDSDK_PYTHON
 
 if which fortune >/dev/null; then
     echo -e "\e[34m"
@@ -112,7 +137,7 @@ if inside-emacs; then
     unset PROMPT_COMMAND
 
     # use default dircolors database (renders better with ef-dream theme)
-    eval $(dircolors)
+    # eval $(dircolors)
 
     # just in case... these have historically screwed me with sh-lib
     unalias cat d restart grep 2>/dev/null
@@ -121,3 +146,5 @@ if inside-emacs; then
     # EDIT: Highly doubtful it's related to comint-process-echoes var, but check.
     stty echo
 fi
+
+unset hb mypaths comp_files

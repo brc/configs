@@ -1,0 +1,4 @@
+# Flexa
+export KEYBASE_USER=brc_dawg
+export GITLAB_TOKEN="$(cat /f/c/gitlab/brc-token)"
+export CLOUDFLARE_API_TOKEN="$(cat /f/c/cloudflare-api-token-*_network)"

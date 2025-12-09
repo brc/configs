@@ -1,0 +1,1 @@
+/data/git/brc/configs/home/.zsh/lib/00-boot.sh

@@ -26,7 +26,7 @@ alias glod='git log --stat origin/develop'
 alias ggr='git grep --heading --break'
 
 # show
-alias go='git show'
+#alias go='git show'  # conflicts with golang 'go' binary
 alias goh='git show HEAD'
 alias gohh='git show HEAD^'
 alias gohhh='git show HEAD^^'

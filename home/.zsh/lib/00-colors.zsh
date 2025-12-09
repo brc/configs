@@ -1,2 +1,3 @@
+# Needed by multiple prompt libs that follow...
 # see /usr/share/zsh/functions/Misc/colors
 autoload -U colors && colors
