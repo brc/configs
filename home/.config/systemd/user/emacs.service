@@ -8,6 +8,7 @@ ExecStart=/usr/bin/emacs --daemon
 ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
 Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 Environment=GTAGSLABEL=pygments
+Environment=PATH=/home/brc/.rbenv/bin:/home/brc/.rbenv/shims:/home/brc/bin:/home/brc/.local/bin:/data/npm/bin:/data/gcloud/google-cloud-sdk/bin:/home/brc/.krew/bin:/home/brc/.ebcli-virtual-env/executables:/home/brc/.gem/ruby/3.4.0/bin:/usr/local/sbin:/usr/local/bin:/git/git-when-merged/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl:/git/powerline/scripts:/data/go/bin:/dr/bin:/gr/sh-lib/bin
 Restart=on-failure
 
 [Install]

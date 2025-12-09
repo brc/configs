@@ -1,0 +1,1 @@
+../available/vterm-anti-flicker-filter/vterm-anti-flicker-filter.el
