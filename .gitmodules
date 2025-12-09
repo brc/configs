@@ -127,3 +127,6 @@
 [submodule "home/.elisp/available/terraform-doc"]
 	path = home/.elisp/available/terraform-doc
 	url = git@github.com:TxGVNN/terraform-doc.git
+[submodule "home/.elisp/available/vterm-anti-flicker-filter"]
+	path = home/.elisp/available/vterm-anti-flicker-filter
+	url = git@github.com:martinbaillie/vterm-anti-flicker-filter.git
