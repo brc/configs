@@ -12,6 +12,8 @@ GTAGS
 tags
 TAGS
 
+# Claude-related shit
 **/.claude/settings.local.json
-
 **/CLAUDE.local.md
+.channels_cache_v2.json
+.users_cache.json
