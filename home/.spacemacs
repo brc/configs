@@ -994,6 +994,10 @@ Calls `evil-lookup-func'."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-mode (comint process)
   ;;
+  (setq sh-shell-file (if (file-exists-p "/opt/homebrew/bin/bash")
+                          "/opt/homebrew/bin/bash"
+                        "/bin/bash"))
+
   (autoload 'bash-completion-dynamic-complete "bash-completion"
     "Bash completion hook")
   (add-hook 'shell-dynamic-complete-functions
@@ -1168,7 +1172,7 @@ Calls `evil-lookup-func'."
    ;; this finds Makefile targets more correctly (using `make -nqp') than the
    ;; less-comprehensive regex in helm-make.el.
    helm-make-list-target-method 'qp
-   projectile-project-search-path '("/git" "/gi" "/gr" ("/gf" . 2) ("/gf/infra" . 2) "/gf/infra/terraform" "/gf/spedn/service" ("/gf/common" . 3) ("/gf/spend" . 3))
+   projectile-project-search-path '("/git" "/gi" "/gr" ("/gf" . 2) ("/gf/infra" . 2) "/gf/infra/terraform" "/gf/spedn/service" "/gf/test/service" ("/gf/common" . 3) ("/gf/spend" . 3))
    org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
    org-todo-keyword-faces '(("INPROGRESS" . "yellow"))
    ranger-cleanup-on-disable nil ;; Don't auto-kill Deer buffers
@@ -1636,6 +1640,7 @@ This function is called at the very end of Spacemacs initialization."
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    '(Man-notify-method 'aggressive)
+   '(claude-code-ide-window-width 100)
    '(comint-process-echoes t)
    '(comint-scroll-to-bottom-on-input t)
    '(emacs-pager-max-line-coloring 5000)
@@ -1765,7 +1770,6 @@ This function is called at the very end of Spacemacs initialization."
          1)
         (nil "^\\s-*\\([^]\0\11\12 \"-$&-*/;-?[\\`|]+\\)\\s-*()" 1))))
    '(sh-indent-after-continuation 'always)
-   '(sh-shell-file "/opt/homebrew/bin/bash")
    '(treemacs-git-mode t)
    '(vterm-max-scrollback 100000)
    '(warning-suppress-types '((emacs) (comp)))
