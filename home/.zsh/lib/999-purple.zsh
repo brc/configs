@@ -6,7 +6,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     alias kpf='~/pf'
     alias gf-sync-all='/gf/common/tool/gitlab-sync/gitlab-sync --dir /gf/ --all'
 
-    export KEYBASE_USER=brc_dawg
+    export KEYBASE_USER="$(cat /f/c/keybase.username)"
     export GITLAB_TOKEN="$(cat /f/c/gitlab/brc-token)"
     export CLOUDFLARE_API_TOKEN="$(cat /f/c/cloudflare-api-token-*_network)"
     export CLOUDSDK_PYTHON=/opt/homebrew/opt/python@3.12/libexec/bin/python
@@ -23,7 +23,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     PERL_MM_OPT="INSTALL_BASE=/Users/brett/perl5"; export PERL_MM_OPT;
 
     ##########################################################################
-    # Functions to wrap rsync (to shovel back 'n forth)
+    # Functions to wrap rsync
     ##########################################################################
     copy() {
         if [ -z "$1" ]; then
@@ -106,6 +106,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         --backup-dir /df/rsync-saved/gf
         --exclude .claude/
         --exclude providers/registry.terraform.io/hashicorp/local/
+        --exclude 'backend/charts/vault/tmp/kubectl.*.out'
     )
 
     copy-git() {
@@ -146,6 +147,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         --exclude .git/index
         --exclude home/.vim/.undo/
         --exclude home/.zsh/history
+        --exclude 'home/.zsh/.zcompdump*'
         --exclude home/spacemacs/recentf
         --exclude home/spacemacs/tree-sitter/
         --exclude home/spacemacs/elpa/
