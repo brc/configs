@@ -25,7 +25,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     ##########################################################################
     # Functions to wrap rsync
     ##########################################################################
-    copy() {
+    vm-get() {
         if [ -z "$1" ]; then
             >&2 echo "usage: ${FUNCNAME[0]} <SRC> [<DST>]"
             return 1
@@ -40,7 +40,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         set +x
     }
 
-    backport() {
+    vm-backport() {
         if [ -z "$1" ]; then
             >&2 echo "usage: ${FUNCNAME[0]} <SRC> <DST>"
             return 1
@@ -62,13 +62,13 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         shift 2
 
         if [ -z "${op}" -o -z "${path_spec}" ] ||
-           [ "${op}" != copy -a "${op}" != backport ]
+           [ "${op}" != get -a "${op}" != backport ]
         then
-            >&2 echo "usage: ${me} {copy|backport} {<PATH>} [<RSYNC_ARGS>]"
+            >&2 echo "usage: ${me} {get|backport} {<PATH>} [<RSYNC_ARGS>]"
             return 1
         fi
 
-        "${op}" "${path_spec}" "${path_spec}" \
+        vm-"${op}" "${path_spec}" "${path_spec}" \
             "$@" \
             --itemize-changes \
             --dry-run ||
@@ -79,7 +79,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
             return 1
         fi
 
-        "${op}" "${path_spec}" "${path_spec}" "$@"
+        vm-"${op}" "${path_spec}" "${path_spec}" "$@"
     }
 
     rsync-confirm() {
@@ -109,9 +109,9 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         --exclude 'backend/charts/vault/tmp/kubectl.*.out'
     )
 
-    copy-git() {
+    get-git() {
         rsync-safe \
-            copy \
+            get \
             /gf/ \
             "${RSYNC_GIT_FILTER_ARGV[@]}" \
             "$@"
@@ -155,9 +155,9 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         --exclude home/spacemacs/eln-cache
     )
 
-    copy-dotfiles() {
+    get-dotfiles() {
         rsync-safe \
-            copy \
+            get \
             /git/brc/configs/ \
             "${RSYNC_DOTFILE_FILTER_ARGV[@]}" \
             "$@"
@@ -172,30 +172,67 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     }
 
     ##########################################################################
-    # /df
+    # /data
     ##########################################################################
-    RSYNC_PURPLE_FILTER_ARGV=(
+    RSYNC_DATA_FILTER_ARGV=(
         --delete            # delete stray files
         --backup            # save old files (too paranoid)
-        --backup-dir /df/rsync-saved/df
+        --backup-dir /df/rsync-saved/data
         --exclude .claude/
         --exclude rsync-saved/
         --exclude cluster.old/
     )
 
-    copy-data() {
-        rsync-safe \
-            copy \
-            /df/ \
-            "${RSYNC_PURPLE_FILTER_ARGV[@]}" \
-            "$@"
+    RSYNC_DATA_DIRS=(
+        /d/istio/
+        /d/k8s/
+        /df/
+    )
+
+    get-data() {
+        for d in "${RSYNC_DATA_DIRS[@]}"; do
+            rsync-safe \
+                get \
+                "$d" \
+                "${RSYNC_DATA_FILTER_ARGV[@]}" \
+                "$@"
+        done
     }
 
     backport-data() {
+        for d in "${RSYNC_DATA_DIRS[@]}"; do
+            rsync-safe \
+                backport \
+                "$d" \
+                "${RSYNC_DATA_FILTER_ARGV[@]}" \
+                "$@"
+        done
+    }
+
+    ##########################################################################
+    # sh-lib
+    ##########################################################################
+    RSYNC_SHLIB_FILTER_ARGV=(
+        --delete            # delete stray files
+        --backup            # save old files (too paranoid)
+        --backup-dir /df/rsync-saved/sh-lib
+        --exclude .claude/
+        --exclude .git/index
+    )
+
+    get-shlib() {
+        rsync-safe \
+            get \
+            /git/brc/sh-lib/ \
+            "${RSYNC_SHLIB_FILTER_ARGV[@]}" \
+            "$@"
+    }
+
+    backport-shlib() {
         rsync-safe \
             backport \
-            /df/ \
-            "${RSYNC_PURPLE_FILTER_ARGV[@]}" \
+            /git/brc/sh-lib/ \
+            "${RSYNC_SHLIB_FILTER_ARGV[@]}" \
             "$@"
     }
 fi
