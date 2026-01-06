@@ -53,7 +53,7 @@ mypaths=(
     /git/powerline/scripts
     ${GOPATH}/bin
     /dr/bin  # rachio
-    /gr/sh-lib/bin  # rachio
+    /gi/sh-lib/bin
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 

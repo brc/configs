@@ -215,7 +215,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     RSYNC_SHLIB_FILTER_ARGV=(
         --delete            # delete stray files
         --backup            # save old files (too paranoid)
-        --backup-dir /df/rsync-saved/sh-lib
+        --backup-dir /d/rsync-saved/sh-lib
         --exclude .claude/
         --exclude .git/index
     )

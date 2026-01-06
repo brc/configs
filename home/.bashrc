@@ -35,7 +35,7 @@ mypaths=(
     /usr/bin/core_perl
     /git/powerline/scripts
     ${GOPATH}/bin
-    /gr/sh-lib/bin  # rachio
+    /gi/sh-lib/bin
 )
 export PATH=$(printf ":%s" "${mypaths[@]}" |cut -b2-)
 
