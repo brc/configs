@@ -11,9 +11,11 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     export CLOUDFLARE_API_TOKEN="$(cat /f/c/cloudflare-api-token-*_network)"
     export CLOUDSDK_PYTHON=/opt/homebrew/opt/python@3.12/libexec/bin/python
 
-    source /opt/homebrew/share/zsh/site-functions/_google_cloud_sdk
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    if [ "${SHELL##*/}" = zsh ]; then
+        source /opt/homebrew/share/zsh/site-functions/_google_cloud_sdk
+        source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+        source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    fi
 
     # don't know where this came from, but got appended to ~/.zshrc or similar
     PATH="/Users/brett/perl5/bin${PATH:+:${PATH}}"; export PATH;
