@@ -3,7 +3,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     alias pb='vm cat /tmp/mbp |pbcopy'
     # alias emacs='vm /home/brc/bin/emacsclient.sh'
     # alias em=emacs
-    alias kpf='~/pf'
+    # alias kpf='~/pf'
     alias gf-sync-all='/gf/common/tool/gitlab-sync/gitlab-sync --dir /gf/ --all'
 
     export KEYBASE_USER="$(cat /f/c/keybase.username)"
@@ -11,7 +11,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     export CLOUDFLARE_API_TOKEN="$(cat /f/c/cloudflare-api-token-*_network)"
     export CLOUDSDK_PYTHON=/opt/homebrew/opt/python@3.12/libexec/bin/python
 
-    if [ "${SHELL##*/}" = zsh ]; then
+    if [ -n "${ZSH_VERSION}" ]; then
         source /opt/homebrew/share/zsh/site-functions/_google_cloud_sdk
         source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
         source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -186,6 +186,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     )
     FIND_GIT_EXCLUSIONS=(  # NB. Leading asterisk, no trailing slash
         '*/.git'  # NOTE don't show this in diff
+        '*/TAGS'
         '*/.claude'
         '*/.venv'
         '*/.terraform*'
@@ -248,9 +249,8 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     # /gi/configs
     ##########################################################################
     RSYNC_DOTFILE_EXCLUSIONS=(
-        'home/spacemacs/.cache/*'  # NOTE Used this way for prior --include
+        'home/spacemacs/.cache/*'  # NOTE Designed to work with --include below
         .claude/
-        .git/index
         home/.vim/.undo/
         home/.zsh/history
         'home/.zsh/.zcompdump*'
@@ -261,17 +261,12 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
         home/spacemacs/eln-cache
     )
     FIND_DOTFILE_EXCLUSIONS=(  # NB. Leading asterisk, no trailing slash
-        '*/home/spacemacs/.cache'
         '*/.claude'
         '*/.git'  # NOTE Don't show this in diff
         '*/home/.vim/.undo'
         '*/home/.zsh/history'
         '*/home/.zsh/.zcompdump*'
-        '*/home/spacemacs/recentf'
-        '*/home/spacemacs/tree-sitter'
-        '*/home/spacemacs/elpa'
-        '*/home/spacemacs/quelpa'
-        '*/home/spacemacs/eln-cache'
+        '*/home/spacemacs'
     )
 
     RSYNC_DOTFILE_FILTER_ARGV=(
@@ -374,7 +369,6 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     ##########################################################################
     RSYNC_SHLIB_EXCLUSIONS=(
         .claude/
-        .git/index
     )
     FIND_SHLIB_EXCLUSIONS=(  # NB. Leading asterisk, no trailing slash
         '*/.claude'
