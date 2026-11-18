@@ -4,10 +4,10 @@
 
 # TODO make this shared with zsh (this is copied from .zprofile)
 if [ "$(hostname)" = bunker ]; then
-    GOPATH=/data/go
-    GOCACHE=/data/go/.cache
+    export GOPATH=/data/go
+    export GOCACHE=/data/go/.cache
 else
-    GOPATH="${HOME}/go"
+    export GOPATH="${HOME}/go"
 fi
 hb=/opt/homebrew
 mypaths=(
