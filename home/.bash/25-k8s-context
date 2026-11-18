@@ -5,6 +5,18 @@ __k8s_ps1_colorize_context() {
     local context="$1"
     local color='36' # cyan
     [[ $context =~ prod ]] && color='01;31'  # bold red
-    printf -- "%b" "[\e[${color}m${context}\e[0m]"  # %b interprets escapes
+    #
+    # %b interprets escapes in printf.
+    #
+    # \001 and \002 (SOH and STX) must be used instead of "\[" and "\]" below
+    # for Bash $PS1 to render non-printing characters correctly. The reason for
+    # this is that Bash only evaluates the \[ \] brackets *once* when PS1 is
+    # loaded, not every time a sub-shell is executed as part of the prompt.
+    # Therefore, we cannot print \[ or \] from a sub-shell because they will
+    # not be parsed by Bash. We must use the internal equivalents to accomplish
+    # the same thing (otherwise the line-wrapping and interactive history
+    # navigation and such will become broken because it won't print correctly).
+    #
+    printf -- "%b" "[\001\e[${color}m\002${context}\001\e[0m\002]"
 }
 

@@ -125,7 +125,7 @@ if which fortune >/dev/null; then
     echo -e "\e[0m"
 fi
 
-export PS1="[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]\$(__k8s_ps1_current_context)\$ "
+export PS1='[\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]]$(__k8s_ps1_current_context)\$ '
 
 # make a smarter shell
 shopt -s nocaseglob
