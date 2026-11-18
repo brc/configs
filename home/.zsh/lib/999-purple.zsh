@@ -176,7 +176,7 @@ if [ "$(hostname)" = Bretts-MacBook-Pro.local ]; then
     # /gf
     ##########################################################################
     RSYNC_GIT_EXCLUSIONS=(
-        .claude/
+        #.claude/
         .venv/
         '.terraform*/'
         'backend/charts/vault/tmp/kubectl.*.out'
