@@ -43,9 +43,21 @@ This function should only modify configuration layer settings."
      ansible
      asciidoc
      auto-completion
+     ;; Note on `claude-code-ide-prevent-reflow-glitch':
+     ;; The reflow filter unconditionally suppresses height-only resize
+     ;; signals to work around claude bug #1422 / #826 (uncontrolled scroll
+     ;; with large scrollback). That bug is a classic-renderer pathology --
+     ;; it requires the conversation to live in terminal scrollback. With
+     ;; `claude-code-ide-no-flicker' (alt-screen / fullscreen) enabled,
+     ;; claude owns scroll position internally and the race can't form, so
+     ;; the workaround is unnecessary AND counterproductive: it also eats
+     ;; the resize signal that would auto-redraw vterm after window changes.
+     ;; If the runaway scroll ever returns, set this back to t.
      (claude-code :variables
                   claude-code-ide-window-side 'right
-                  claude-code-ide-window-width 100)
+                  claude-code-ide-window-width 100
+                  claude-code-ide-no-flicker t
+                  claude-code-ide-prevent-reflow-glitch nil)
      docker
      (elfeed :variables
              elfeed-feeds '(("http://nullprogram.com/feed/" blog emacs)
@@ -90,8 +102,8 @@ This function should only modify configuration layer settings."
      (spell-checking :variables
                      spell-checking-enable-by-default nil)
      sphinx
-     sql
-                                        ;syntax-checking  ;; enable flycheck
+     (sql :variables
+          sql-backend 'lsp)
      systemd
      themes-megapack
      (treemacs :variables
@@ -128,6 +140,7 @@ This function should only modify configuration layer settings."
      logview
      lsp-pyright
      magit-delta
+     magit-todos
      nerd-icons
      nerd-icons-completion
      nerd-icons-dired
@@ -680,6 +693,331 @@ before packages are loaded."
   ;;
   (exec-path-from-shell-initialize)
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Custom functions
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (defun brc/read-secret-or-nil (path)
+    "Return trimmed contents of PATH, or nil if unreadable."
+    (when (file-readable-p path)
+      (s-trim (f-read-text path))))
+
+  ;; from https://www.reddit.com/r/emacs/comments/r3dzcw/findfileatpoint_in_acewindow_selected_window/
+  (defun brc/ffap-ace-window ()
+    "Like `ffap-other-window', but window selected via ace window."
+    (interactive)
+    (let ((filename (thing-at-point 'filename)))
+      (if (> (length (aw-window-list)) 1)
+          (progn
+            (aw-switch-to-window (aw-select nil))
+            (find-file-at-point (ffap-prompter filename)))
+        (find-file-at-point (ffap-prompter filename)))))
+
+  (defun brc/shell-ffap (name)
+    "My ffap-file-at-point helper for shell-mode major mode."
+    (concat "/tmp/" name))
+  ;;
+  ;; TODO Have a list of paths to try and iterate each one until found.
+  ;;      See (ffap-locate-file) for reference.
+  ;;
+                                        ;(let ((paths-to-try '("/tmp"))
+                                        ;      path found))
+
+  ;; https://tsdh.wordpress.com/2007/03/
+  (defun brc/maximize-vertically ()
+    "Delete all windows above or below the current window."
+    (interactive)
+    (require 'windmove)
+    (save-excursion
+      (while (condition-case nil (windmove-up) (error nil))
+        (delete-window))
+      (while (condition-case nil (windmove-down) (error nil))
+        (delete-window))))
+
+  ;; modeled from `resume-last-search-buffer' in
+  ;; ~/.emacs.d/layers/+completion/helm/funcs.el
+  (defun brc/resume-last-swoop-buffer ()
+    "Open last helm-swoop buffer."
+    (interactive)
+    (cond ((get-buffer "*Helm Swoop*")
+           (helm-resume "*Helm Swoop*"))
+          (t
+           (message "No previous Swoop buffer found"))))
+
+  ;; Modeled after `sh-send-line-or-region-and-step' in
+  ;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
+  ;;
+  (defun brc/sh-send-command (stay)
+    "Send the current line to the inferior shell.
+  When region is active, send region instead.
+  When STAY is non-nil, keep point where it currently is, otherwise move point to shell process buffer after sending text."
+    ;; FIXME `sh-send-txt' in `shell-script.el' is causing issues sending a
+    ;;       *multiline* region when the region includes any command that needs
+    ;;       to read stdin from the user. Sending a single entire line or typing
+    ;;       the line manually to comint (in shell-mode) doesn't exhibit the
+    ;;       behavior. The problem is simply caused by the concatenation of the
+    ;;       text with a newline character `\n'. When sending a region that is
+    ;;       selected line- wise (i.e., S-v in Evil), the appended newline will
+    ;;       appear as user input instead of acting to submit the text to
+    ;;       comint; this only occurs when a multiline region contains *entire
+    ;;       lines* (i.e., not when a multiline region is selected
+    ;;       character-wise and contains only part of a line at the beginning or
+    ;;       end). `comint.el' has two methods for sending text:
+    ;;       `comint-send-string' and `comint-send-region' (these are just
+    ;;       wrappers around `process-send-string' and `process-send-region').
+    ;;       `sh-send-text' only ever uses the former, which always concatenates
+    ;;       a newline to the text. Currently, the solution is to detect whether
+    ;;       we're sending a multiline region or not and conditionally use
+    ;;       `comint-send-region'. This is all tested with Evil in visual select
+    ;;       mode; haven't tried with mark and point in vanilla Emacs. Fix this
+    ;;       upstream in `shell-script.el'.
+    ;;
+    ;; TODO Investigate `sh-execute-region' in `sh-script.el'.
+    ;;
+    ;; TODO Is it possible to use high-level `comint-send-input' interface
+    ;;      instead low-level `comint-send-string' so that the shell buffer can
+    ;;      be aware of the injected input? That way, `C-c C-p' and `C-c C-o'
+    ;;      would work.
+    ;;
+    (let ((src-window (get-buffer-window))
+          (shell-buffer (process-buffer (sh-shell-process t))))
+      (if (use-region-p)
+          (let ((numlines (count-lines (region-beginning) (region-end)))
+                (from (region-beginning))
+                (to (region-end)))
+            (if (eq numlines 1)
+                (sh-send-text (buffer-substring-no-properties from to))
+              (comint-send-region (sh-shell-process t) from to)))
+        (let ((from (line-beginning-position))
+              (to (line-end-position)))
+          (sh-send-text (buffer-substring-no-properties from to))))
+      ;; TODO Make sure shell buffer is visible in the last frame where it was
+      ;;      showing, possibly creating a new window if the buffer is not
+      ;;      currently visible. See `(display-buffer)' help for tons of options.
+      ;; (display-buffer shell-buffer)  ;; This shows buffer in current frame
+      (unless stay (pop-to-buffer shell-buffer))))
+
+  (defun brc/sh-send-line-or-region ()
+    "Send the current line to the inferior shell; remain in current code window.
+  When region is active, send region instead."
+    (interactive)
+    (brc/sh-send-command t))
+
+  (defun brc/sh-send-line-or-region-and-go ()
+    "Send the current line to the inferior shell and move there.
+  When region is active, send region instead."
+    (interactive)
+    (brc/sh-send-command nil))
+
+  (defalias 'brc/sh-send-paragraph
+    ;; Select paragraph (v i p),
+    ;; send region (SPC o r),
+    ;; deselect (ESC),
+    ;; move point to first column (0)
+    (kmacro "v i p SPC o r <escape> 0"))
+
+  ;; TODO re-implement per changes to `brc/sh-send-command' above
+  ;;
+  ;; (defun brc/sh-send-line-or-region-and-step ()
+  ;;   "Send the current line to the inferior shell and move point to next line;
+  ;; remain in current code window. When region is active, send region instead."
+  ;;   (interactive)
+  ;;   (brc/sh-send-command nil)
+  ;;   (if (use-region-p)
+  ;;       (goto-char (region-end))
+  ;;     (goto-char (1+ (line-end-position)))))
+
+  (defun brc/sh-awk-print ()
+    "Inject '|awk {print $}' and move point inside braces."
+    (interactive)
+    (insert "|awk '{print $}'")
+    (backward-char 2))
+
+  (defun brc/sh-sed-replace ()
+    "Inject '|sed s///' and move point inside slashes."
+    (interactive)
+    (insert "|sed -r -e 's///'")
+    (backward-char 3))
+
+  (defun brc/sh-while-read ()
+    "Inject '|while read x' and move point inside loop body."
+    (interactive)
+    (insert "|while read x; do ; done")
+    (backward-char 2))
+
+  (defun brc/ruby-send-line-or-region ()
+    "Send the current line or active region to the inferior Ruby process."
+    (interactive)
+    ;; FIXME region doesn't work
+    (if (use-region-p)
+        (ruby-send-region)
+      (ruby-send-line)))
+
+  (defun brc/truncate-syslog-lines ()
+    "Toggle line truncation on when file name ends in `.log'"
+    (if (string-suffix-p ".log" (buffer-name))
+        (toggle-truncate-lines 1)))
+
+  ;; From https://emacs.stackexchange.com/questions/41222/how-can-i-pass-the-no-line-break-argument-to-base64-encode-region-in-m-x
+  ;;
+  (defun brc/base64-encode-region-prefix-arg (&rest _args)
+    "Pass prefix arg as third arg to `base64-encode-region'."
+    (interactive "r\nP"))
+
+  (advice-add 'base64-encode-region :before #'brc/base64-encode-region-prefix-arg)
+
+  (defun brc/replace-ec2-hostname-with-ip ()
+    "Replace all occurrences of `ip-w-x-y-z.ec2.internal' with `w.x.y.z' on
+  current line"
+    (interactive "*")  ;; fail if buffer readonly
+    ;; TODO Add region support
+    ;;
+    ;;      See https://stackoverflow.com/a/58308604/2228206
+    ;;          http://xahlee.info/emacs/emacs/elisp_command_working_on_string_or_region.html
+    ;;
+    ;;      Either make a separate function that works on a region and
+    ;;      conditionally call it from this function, or make a monolithic
+    ;;      function that handles all cases.
+    ;;
+    ;;      The bitch of this for implementing region support was figuring out why
+    ;;      BOUND wasn't being honored in the call to `(re-search-forward)'; it
+    ;;      turns out that shortening the size of the buffer (by changing it)
+    ;;      causes BOUND to now be farther out than we want it to be; see the
+    ;;      comment in the same SO post:
+    ;;
+    ;;        https://stackoverflow.com/a/58322478/2228206
+    ;;
+    ;;         ^ "Unfortunately `(use-region-p)' also has some quirks. BOUND needs
+    ;;            to be updated when a replacement will change the length of the
+    ;;            region."
+    ;;
+    ;; Hacky WIP
+                                        ; (let (start end)
+                                        ;   (if (use-region-p)
+                                        ;       (progn
+                                        ;         (setq start (region-beginning)
+                                        ;               end (region-end))
+                                        ;         ;; Linewise visual mode is selecting the newline and placing
+                                        ;         ;; my cursor on the following line (outside of region)
+                                        ;         ;; Detect this condition and reduce `end'
+                                        ;         (when (char-equal ?\C-j (char-after (- end 1)))
+                                        ;           (setq end (- end 2))
+                                        ;           (message "Found newline!")
+                                        ;           (message "Start is %d" start)
+                                        ;           (message "End is %d" end)))
+                                        ;     (setq start (line-beginning-position)
+                                        ;           end (line-end-position)))
+                                        ;  (goto-char start)
+    (save-excursion
+      (beginning-of-line)
+      (let ((re "ip-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)\\..+\\.internal")
+            (end (make-marker)))
+        (set-marker end (line-end-position))
+        (while (re-search-forward re end t)
+          (replace-match "\\1.\\2.\\3.\\4"))
+        (set-marker end nil))))
+
+  (defun brc/epoch-at-point (arg)
+    "Display the Unix epoch timestamp at point as a human-readable date.
+    With universal argument, replace the timestamp with the formatted string."
+    (interactive "P")
+    (let ((epoch (thing-at-point 'number))
+          (bounds (bounds-of-thing-at-point 'number)))
+      (unless epoch
+        (user-error "No number at point"))
+      (unless (<= 1e8 epoch 1e10)
+        (user-error "Number at point (%s) doesn't look like an epoch timestamp" epoch))
+      (let ((formatted (format-time-string "%Y-%m-%d %H:%M:%S %Z" (seconds-to-time epoch))))
+        (if arg
+            (progn
+              (delete-region (car bounds) (cdr bounds))
+              (insert formatted))
+          (message "%s" formatted)))))
+
+  (defun brc/make-buffer-plain-text ()
+    "Remove all text properties from entire buffer. Useful for yanking output
+  from comint buffer and pasting it somewhere else so you can edit it. See
+  https://emacs.stackexchange.com/questions/12526/how-to-remove-all-text-properties-in-a-buffer"
+    (interactive "*")  ;; fail if buffer readonly
+    ;; TODO: Operate on region instead of entire buffer
+    (let ((inhibit-read-only t))
+      (set-text-properties (point-min) (point-max) nil)))
+
+  ;; From https://xenodium.com/emacs-clone-git-repo-from-clipboard/
+  ;; Also see Reddit post: https://www.reddit.com/r/emacs/comments/k3iter/simplequick_git_repo_clone_from_browser_to_emacs/
+  ;;
+  (defun brc/git-clone-clipboard-url ()
+    "Clone git URL in clipboard asynchronously and open in dired when finished."
+    (interactive)
+    (cl-assert (string-match-p "^\\(http\\|https\\|ssh\\)://" (current-kill 0)) nil "No URL in clipboard")
+    (let* ((url (current-kill 0))
+           (download-dir (expand-file-name "/git/"))
+           (project-dir (concat (file-name-as-directory download-dir)
+                                (file-name-base url)))
+           (default-directory download-dir)
+           (command (format "git clone %s" url))
+           (buffer (generate-new-buffer (format "*%s*" command)))
+           (proc))
+      (when (file-exists-p project-dir)
+        (if (y-or-n-p (format "%s exists. delete?" (file-name-base url)))
+            (delete-directory project-dir t)
+          (user-error "Bailed")))
+      (switch-to-buffer buffer)
+      (setq proc (start-process-shell-command (nth 0 (split-string command)) buffer command))
+      (with-current-buffer buffer
+        (setq default-directory download-dir)
+        (shell-command-save-pos-or-erase)
+        (require 'shell)
+        (shell-mode)
+        (view-mode +1))
+      (set-process-sentinel proc
+                            (lambda (process state)
+                              (let ((output (with-current-buffer (process-buffer process)
+                                              (buffer-string))))
+                                (kill-buffer (process-buffer process))
+                                (if (= (process-exit-status process) 0)
+                                    (progn
+                                      (message "finished: %s" command)
+                                      (dired project-dir))
+                                  (user-error (format "%s\n%s" command output))))))
+      (set-process-filter proc #'comint-output-filter)))
+
+  (defun brc/fix-ps1-prompt-for-comint ()
+    "Set new $PS1 value for the bash process being used by comint."
+    ;; TODO Check the current major mode first before doing anything?
+    (interactive)
+    (evil-insert 0)
+    ;; FIXME Kill any existing input text first.
+    ;;       (comint-send-input) will send whatever input already exists on the
+    ;;       line... maybe you can find out whether you actually killed any text
+    ;;       and then conditionally restore it after the comint-send-input.
+    (comint-kill-input)
+    (insert "unset PROMPT_COMMAND; ")
+    (insert "export PS1='[\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]]$ '")
+    (comint-send-input)
+    (move-beginning-of-line))
+
+  (defun brc/update-system-path ()
+    "Update Emacs' $PATH from the shell."
+    (interactive)
+    (let ((path-string (shell-command-to-string "bash -l -c 'echo $PATH'")))
+      (setenv "PATH" (car (split-string path-string "\n")))
+      (setq exec-path (split-string (getenv "PATH") path-separator))))
+
+  ;; (defun brc/go-mode-hook ()
+  ;;	"Custom settings for go-mode."
+  ;;	;; Use tabs for indentation
+  ;;	(setq-default indent-tabs-mode t)
+  ;;	;; Set the visual width of a tab character to 2 spaces
+  ;;	(setq-default tab-width 2)
+  ;;	;; Set the evil shift width to 4 (which will be a single tab due to indent-tabs-mode t)
+  ;;	(setq evil-shift-width 1)
+  ;;	;; If using go-ts-mode (tree-sitter mode for Go), set its specific offset
+  ;;	(when (boundp 'go-ts-mode-indent-offset)
+  ;;		(setq go-ts-mode-indent-offset 1)))
+
+  ;; (add-hook 'go-ts-mode-hook 'brc/go-mode-hook)
+
   ;; Automatically enable Treesitter flavored modes in Emacs 29.
   ;; See https://github.com/renzmann/treesit-auto?tab=readme-ov-file
   ;;     https://archive.casouri.cc/note/2023/tree-sitter-in-emacs-29/index.html
@@ -703,7 +1041,8 @@ before packages are loaded."
   ;;
   (add-to-list 'load-path "~/.elisp/enabled")
 
-  (require 'vterm-anti-flicker-filter)
+  ;; Now using "fullscreen" render in Claude
+  ;; (require 'vterm-anti-flicker-filter)
 
   ;; Jenkinsfile mode
   (require 'jenkinsfile-mode)
@@ -732,7 +1071,6 @@ before packages are loaded."
   ;; Ripgrep config for macOS
   (setenv "RIPGREP_CONFIG_PATH" (substitute-env-vars "${HOME}/.config/ripgrep/config"))
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; PyRight LSP for Python
   ;;
@@ -749,6 +1087,13 @@ before packages are loaded."
   (setq go-backend 'lsp)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; SQL LSP that is better
+  ;;
+  ;; Only disable the default Node client if the Go 'sqls' binary is installed
+  (when (executable-find "sqls")
+    (setq lsp-disabled-clients '(sql-ls)))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Claude Code
   ;;
   ;; (use-package claude-code-ide
@@ -760,10 +1105,67 @@ before packages are loaded."
   ;;   :load-path "/git/claude-code-ide.el"  ;; Both lines needed
   ;;   :requires (websocket web-server)      ;;
 
+
+  (with-eval-after-load 'claude-code-ide-mcp-handlers
+    (defun brc/claude-code-ide-diff-on-session-frame (orig-fn arguments)
+      "Run claude-code-ide's openDiff on the frame showing the session's Claude buffer.
+  Fixes ediff opening on the wrong frame in a multi-frame (GUI + tty) daemon."
+      (let* ((old-file (alist-get 'old_file_path arguments))
+             (session  (or (ignore-errors (claude-code-ide-mcp--find-session-for-file  old-file))
+                           (ignore-errors
+                             (claude-code-ide-mcp--get-current-session))))
+             (projdir  (and session (claude-code-ide-mcp-session-project-dir
+                                     session)))
+             (buf      (and projdir (get-buffer (funcall
+                                                 claude-code-ide-buffer-name-function
+                                                 (directory-file-name
+                                                  projdir)))))
+             (win      (and buf (get-buffer-window buf t)))
+             (frame    (and win (window-frame win))))
+        (if (and frame (frame-live-p frame))
+            (with-selected-frame frame (funcall orig-fn arguments))
+          (funcall orig-fn arguments))))
+    (advice-add 'claude-code-ide-mcp-handle-open-diff :around
+                #'brc/claude-code-ide-diff-on-session-frame))
+
+
   ;;   :config
   ;;   (claude-code-ide-emacs-tools-setup)) ;; Optionally enable Emacs MCP tools
   ;; ;; :bind ("C-c C-'" . claude-code-ide-menu) ;; Set your favorite keybinding
 
+  ;; Buffer-local key fixes for claude-code-ide vterm buffers. Buffer name
+  ;; prefix is "*claude-code[".
+  ;;   C-h: vterm leaves C-h in `vterm-keymap-exceptions' so it falls through
+  ;;        to our global `delete-backward-char' binding, which errors on
+  ;;        vterm's read-only buffer. Send backspace to the child instead.
+  ;;   C-o: in evil insert state, C-o is `evil-execute-in-normal-state'; in
+  ;;        normal state, `evil-jump-backward'. Both swallow the keystroke
+  ;;        before claude sees it. Override in both states.
+  (defun brc/claude-code-vterm-setup ()
+    "Apply claude-code-ide buffer-local keybindings in vterm buffers."
+    (when (string-prefix-p "*claude-code[" (buffer-name))
+      (local-set-key (kbd "C-h") #'vterm-send-backspace)
+      (local-set-key (kbd "C-c <escape>") #'vterm-send-escape)
+      (local-set-key (kbd "C-c C-k") #'vterm-send-C-k)
+      (local-set-key (kbd "C-c C-u") #'vterm-send-C-u)
+      (local-set-key (kbd "C-c C-o") #'vterm-send-C-o)))
+  (add-hook 'vterm-mode-hook #'brc/claude-code-vterm-setup)
+
+  ;; Keep Claude Code's flicker-free renderer but let Emacs/vterm handle the
+  ;; mouse natively (text selection, click-to-position, etc.) instead of
+  ;; claude capturing mouse events. See:
+  ;; https://code.claude.com/docs/en/fullscreen#keep-native-text-selection
+  (setenv "CLAUDE_CODE_DISABLE_MOUSE" "1")
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Qualia
+  ;;
+  (add-to-list 'load-path "/data/git/final/qualia-emacs")
+  (require 'qualia)
+  (qualia-global-mode 1)
+  (setq qualia-markdown-width 80
+        qualia-worktrees-directory ".worktrees"
+        qualia-data-directory "~/.local/share/qualia")
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Invert Mac keys: Command is Meta, Option is Super
@@ -800,6 +1202,7 @@ before packages are loaded."
     :doc "Global Brett-tmux-style navigation bindings in Emacs."
     ;; "g t" #'eyebrowse-next-window-config
     ;; "g T" #'eyebrowse-prev-window-config
+    "M-t M-t" #'spacemacs/layouts-transient-state/body
     "M-t M-p" #'persp-prev
     "M-t M-n" #'persp-next
     "M-t p" #'persp-prev
@@ -808,10 +1211,13 @@ before packages are loaded."
     "M-t l" #'evil-window-right
     "M-t j" #'evil-window-down
     "M-t k" #'evil-window-up
+    "M-t :" #'eval-expression
     "M-t <prior>" #'(lambda ()
                       (interactive)
                       (evil-scroll-page-up 1)
                       (evil-normal-state)))
+
+  ;; (global-set-key (kbd "M-t :") 'eval-expression)  ; TODO delete if works above
 
   (define-minor-mode brc/tmux-mode
     "Global Brett-tmux navigation keybindings."
@@ -823,14 +1229,7 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Mimic Vim <Ctrl-i> to move forward through the jump list
   ;;
-  ;; FIXME This break org-mode because TAB is now wrong;
-  ;;       do I really need to do this for only certain keymaps
-  ;;       (like the travesty below)?  :-(
   (evil-define-key nil evil-normal-state-map (kbd "C-i") 'xref-go-forward)
-
-
-
-  (global-set-key (kbd "M-t :") 'eval-expression)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Evil-mode overrides
@@ -885,8 +1284,7 @@ Calls `evil-lookup-func'."
   ;;
   (spacemacs/set-leader-keys
     "#"  'spacemacs/alternate-buffer
-    ;; "/"  'helm-projectile-rg
-    "/"  'helm-projectile-ag
+    "aa" 'qualia
     "gg" 'magit-status
     ;; "oc" 'claude-code-ide-menu
     "of" 'hs-toggle-hiding
@@ -896,7 +1294,7 @@ Calls `evil-lookup-func'."
     "oP" 'brc/fix-ps1-prompt-for-comint
     "os" 'sh-show-shell
     "rS" 'brc/resume-last-swoop-buffer
-    "ss" 'helm-occur
+    ;; "ss" 'helm-occur
     "w#" 'spacemacs/alternate-window
     "w_" 'brc/maximize-vertically
     "w|" 'spacemacs/maximize-horizontally)
@@ -941,18 +1339,24 @@ Calls `evil-lookup-func'."
   ;; Cycle eyebrowse workspaces from Magit buffers
   (with-eval-after-load 'magit
     (dolist (kmap '(magit-status-mode-map        ;; git status buffer
-                    magit-tag-section-map        ;;
                     magit-untracked-section-map  ;;
+                    magit-unstaged-section-map   ;;
+                    magit-hunk-section-map       ;;
                     magit-file-section-map       ;;
                     magit-stash-section-map      ;;
+                    magit-stashes-section-map    ;;
                     magit-commit-section-map     ;;
+                    magit-log-section-map        ;;
+                    magit-tag-section-map        ;;
                     magit-refs-mode-map               ;; git refs buffer
                     magit-remote-section-map          ;;
                     magit-branch-section-map          ;;
                     magit-shelved-branch-section-map  ;;
-                    magit-hunk-section-map
+                    magit-diff-mode-map        ;; magit-diff buffer
+                    magit-section-heading-map  ;;
                     magit-process-mode-map))
       (evil-define-key nil (symbol-value kmap)
+        (kbd "Z") 'magit-worktree
         (kbd "g t") 'eyebrowse-next-window-config
         (kbd "g T") 'eyebrowse-prev-window-config)))
 
@@ -961,10 +1365,49 @@ Calls `evil-lookup-func'."
   ;;       "COMMIT_EDITMSG"
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Forge overrides
+  ;;
+  ;; Forge filters topics by state (open/merged/rejected) and status (unread,
+  ;; pending, done), never by age.  `forge--topics-spec' does have an `updated'
+  ;; slot, but `forge--list-topics-2' never destructures it and emits no WHERE
+  ;; clause for it, so setting `:updated' is silently a no-op.  Ordering by
+  ;; recency and capping the count gets the overnight merges into view without
+  ;; needing an age predicate Forge cannot express.
+  (defun brc/forge-insert-recent-pullreqs ()
+    "Insert the 30 most recently updated pull-requests.
+Unlike `forge-insert-pullreqs', state is ignored: a PR merged overnight is
+still listed, which is the point."
+    (forge-insert-topics 'recent-pullreqs "Recent pull requests"
+      (lambda (_repo)
+        (forge--topics-spec :type 'pullreq
+                            :active nil :state nil :status nil
+                            :order 'recently-updated
+                            :limit 30))))
+
+  (with-eval-after-load 'forge
+    ;; `magit-insert-section--create' resolves a section's keymap from
+    ;; `forge-<type>-section-map', so a new section type needs one bound or the
+    ;; heading loses RET, the topic menu and the list menu.
+    (defvaralias 'forge-recent-pullreqs-section-map 'forge-pullreqs-section-map)
+
+    ;; Drop the stock open-PRs section, which the recent list already covers.
+    ;; Comment this line out to show both.
+    (remove-hook 'magit-status-sections-hook #'forge-insert-pullreqs)
+
+    ;; Remove-then-append, rather than `magit-add-section-hook' anchored on
+    ;; `forge-insert-pullreqs': the anchor is gone by the second evaluation of
+    ;; this file (SPC f e R), and `add-hook' then falls back to prepending,
+    ;; which strands the section above the status headers.  Appending needs no
+    ;; anchor, and the remove first makes the placement idempotent.
+    (remove-hook 'magit-status-sections-hook #'brc/forge-insert-recent-pullreqs)
+    (add-hook 'magit-status-sections-hook #'brc/forge-insert-recent-pullreqs t))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; GitLab configs
   ;;
-  (setq lab-host (s-trim(f-read-text "/f/c/gitlab/url"))
-        lab-token (s-trim(f-read-text "/f/c/gitlab/brc-token")))
+  (setq lab-host  (brc/read-secret-or-nil "/f/c/gitlab/url")
+        lab-token (brc/read-secret-or-nil "/f/c/gitlab/brc-pat"))
+  (when lab-token (setenv "GITLAB_TOKEN" lab-token))
 
   (define-key project-prefix-map "M" #'lab-list-project-merge-requests)
   (add-to-list 'project-switch-commands `(lab-list-project-merge-requests "List merge requests"))
@@ -972,14 +1415,31 @@ Calls `evil-lookup-func'."
   (define-key project-prefix-map "P" #'lab-list-project-pipelines)
   (add-to-list 'project-switch-commands `(lab-list-project-pipelines "List pipelines"))
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Org-mode overrides
   ;;
-  ;; Always use Rifle for evil search
-  ;; Update: Disabling this. Feature is available in Spacemacs via `SPC a o /'
-                                        ;(evil-define-key 'normal org-mode-map (kbd "/") 'helm-org-rifle)
-  ;;
+  (setq org-agenda-files '("/dg/final.org")
+        org-capture-templates
+        '(("t" "Task" entry (file+headline "/dg/final.org" "Tasks")
+           "* TODO %?\n  Entered on: %U\n  %i")
+          ("n" "Note" entry (file+headline "/dg/final.org" "Notes")
+           "* %? \n  Captured: %U\n  %a"))
+        org-agenda-custom-commands
+        '(("b" "Combined Backlog View"
+           ((agenda "" ((org-agenda-span 7)
+                        (org-agenda-overriding-header "📅 Scheduled This Week")))
+            (alltodo "" ((org-agenda-overriding-header "📋 Unscheduled & Backlog Tasks")
+                         ;; Prevents duplication by hiding items already on the calendar
+                         (org-agenda-todo-ignore-scheduled 'all)
+                         (org-agenda-todo-ignore-deadlines 'all)))))))
+
+  (with-eval-after-load 'org-agenda
+    (evil-define-key 'evilified org-agenda-mode-map
+      (kbd "J") 'org-agenda-do-date-later      ;; move tasks to next day
+      (kbd "K") 'org-agenda-do-date-earlier    ;; move tasks to prev day
+      (kbd "s") 'org-agenda-schedule           ;; schedule task at point
+      (kbd "S") 'org-agenda-write-date-file))  ;; save all org files
+
   ;; TODO: Possibly implement this insanity instead:
   ;;       https://www.youtube.com/watch?v=a2jHqB1qWiY
   ;;
@@ -999,7 +1459,6 @@ Calls `evil-lookup-func'."
   ;; Don't re-indent my code blocks! You're messing up my heredocs.
   (setq org-src-preserve-indentation t)
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-SCRIPT-mode (i.e., editing scripts)
   ;;
@@ -1011,7 +1470,6 @@ Calls `evil-lookup-func'."
             (lambda ()
               (setq-local xref-backend-functions
                           '(etags--xref-backend dumb-jump-xref-activate))))
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Shell-mode (comint process)
@@ -1077,13 +1535,11 @@ Calls `evil-lookup-func'."
     (kbd "C-N v") "-nvault "
     (kbd "C-N C-N") "-n${NS} ")
 
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; eshell overrides
   ;;
   (evil-define-key nil eshell-mode-map
-    (kbd "M-r") 'helm-eshell-history
-    (kbd "M-.") 'brc/eshell-yank-last-arg)
+    (kbd "M-r") 'helm-eshell-history)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; inf-ruby overrides
@@ -1110,7 +1566,6 @@ Calls `evil-lookup-func'."
     (kbd "E") 'evil-forward-WORD-end
     (kbd "n") 'evil-ex-search-next
     (kbd "?") 'evil-ex-search-backward)
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -1194,10 +1649,10 @@ Calls `evil-lookup-func'."
    ;; this finds Makefile targets more correctly (using `make -nqp') than the
    ;; less-comprehensive regex in helm-make.el.
    helm-make-list-target-method 'qp
-   projectile-project-search-path '("/git" "/gi" "/gr" ("/gf" . 2) ("/gf/infra" . 2) "/gf/infra/terraform" "/gf/spedn/service" "/gf/test/service" ("/gf/common" . 3) ("/gf/spend" . 3))
+   projectile-project-search-path '("/git" "/gi" "/gr" "/gg" ("/gf" . 2) ("/gf/common" . 3) ("/gf/infra" . 2) "/gf/infra/terraform" "/gf/spedn/service" "/gf/spedn/spedn-native/" "/gf/spedn/spedn-web" ("/gf/spend" . 3) "/gf/test/service")
    org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
    org-todo-keyword-faces '(("INPROGRESS" . "yellow"))
-   ranger-cleanup-on-disable nil ;; Don't auto-kill Deer buffers
+   ;; ranger-cleanup-on-disable nil ;; Don't auto-kill Deer buffers
    scroll-margin 5     ;; vim `scrolloff'
    ;; (emacs 26.1 changed `term-char-mode' to disallow cursor movement in evil's
    ;;  normal mode--restore the previous behavior)
@@ -1222,315 +1677,6 @@ Calls `evil-lookup-func'."
 
   ) ;dotspacemacs/user-config()
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol t)
- '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
- '(mouse-yank-at-point t)
- '(package-selected-packages
-   '(company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
- '(safe-local-variable-values
-   '((encoding . utf-8)
-     (eval ansible 1)
-     (eval add-to-list 'company-backends 'company-ansible))))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t))))
- '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
- '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red")))))
-
-;; from https://www.reddit.com/r/emacs/comments/r3dzcw/findfileatpoint_in_acewindow_selected_window/
-(defun brc/ffap-ace-window ()
-  "Like `ffap-other-window', but window selected via ace window."
-  (interactive)
-  (let ((filename (thing-at-point 'filename)))
-    (if (> (length (aw-window-list)) 1)
-        (progn
-          (aw-switch-to-window (aw-select nil))
-          (find-file-at-point (ffap-prompter filename)))
-      (find-file-at-point (ffap-prompter filename)))))
-
-(defun brc/shell-ffap (name)
-  "My ffap-file-at-point helper for shell-mode major mode."
-  (concat "/tmp/" name))
-;;
-;; TODO Have a list of paths to try and iterate each one until found.
-;;      See (ffap-locate-file) for reference.
-;;
-                                        ;(let ((paths-to-try '("/tmp"))
-                                        ;      path found))
-
-;; https://tsdh.wordpress.com/2007/03/
-(defun brc/maximize-vertically ()
-  "Delete all windows above or below the current window."
-  (interactive)
-  (require 'windmove)
-  (save-excursion
-    (while (condition-case nil (windmove-up) (error nil))
-      (delete-window))
-    (while (condition-case nil (windmove-down) (error nil))
-      (delete-window))))
-
-
-;; modeled from `resume-last-search-buffer' in ~/.emacs.d/layers/+completion/helm/funcs.el
-(defun brc/resume-last-swoop-buffer ()
-  "Open last helm-swoop buffer."
-  (interactive)
-  (cond ((get-buffer "*Helm Swoop*")
-         (helm-resume "*Helm Swoop*"))
-        (t
-         (message "No previous Swoop buffer found"))))
-
-;; Modeled after `sh-send-line-or-region-and-step' in
-;;   /usr/share/emacs/<version>/lisp/progmodes/sh-script.el.gz
-;;
-(defun brc/sh-send-command (stay)
-  "Send the current line to the inferior shell.
-When region is active, send region instead.
-When STAY is non-nil, keep point where it currently is, otherwise move point to shell process buffer after sending text."
-  ;; FIXME `sh-send-txt' in `shell-script.el' is causing issues sending a
-  ;;       *multiline* region when the region includes any command that needs to
-  ;;       read stdin from the user.  Sending a single entire line or typing the
-  ;;       line manually to comint (in shell-mode) doesn't exhibit the behavior.
-  ;;       The problem is simply caused by the concatenation of the text with a
-  ;;       newline character `\n'.  When sending a region that is selected line-
-  ;;       wise (i.e., S-v in Evil), the appended newline will appear as user
-  ;;       input instead of acting to submit the text to comint; this only
-  ;;       occurs when a multiline region contains *entire lines* (i.e., not
-  ;;       when a multiline region is selected character-wise and contains only
-  ;;       part of a line at the beginning or end). `comint.el' has two methods
-  ;;       for sending text: `comint-send-string' and `comint-send-region'
-  ;;       (these are just wrappers around `process-send-string' and
-  ;;       `process-send-region'). `sh-send-text' only ever uses the former,
-  ;;       which always concatenates a newline to the text. Currently, the
-  ;;       solution is to detect whether we're sending a multiline region or not
-  ;;       and conditionally use `comint-send-region'.
-  ;;       This is all tested with Evil in visual select mode; haven't tried
-  ;;       with mark and point in vanilla Emacs. Fix this upstream in
-  ;;       `shell-script.el'.
-  ;;
-  ;; TODO Investigate `sh-execute-region' in `sh-script.el'.
-  ;; TODO Is it possible to use high-level `comint-send-input' interface instead
-  ;;      low-level `comint-send-string' so that the shell buffer can be aware
-  ;;      of the injected input?  That way, `C-c C-p' and `C-c C-o' would work.
-  ;;
-  (let ((src-window (get-buffer-window))
-        (shell-buffer (process-buffer (sh-shell-process t))))
-    (if (use-region-p)
-        (let ((numlines (count-lines (region-beginning) (region-end)))
-              (from (region-beginning))
-              (to (region-end)))
-          (if (eq numlines 1)
-              (sh-send-text (buffer-substring-no-properties from to))
-            (comint-send-region (sh-shell-process t) from to)))
-      (let ((from (line-beginning-position))
-            (to (line-end-position)))
-        (sh-send-text (buffer-substring-no-properties from to))))
-    ;; TODO Make sure shell buffer is visible in the last frame where it was
-    ;;      showing, possibly creating a new window if the buffer is not
-    ;;      currently visible. See `(display-buffer)' help for tons of options.
-    ;; (display-buffer shell-buffer)  ;; This shows buffer in current frame
-    (unless stay (pop-to-buffer shell-buffer))))
-
-(defun brc/sh-send-line-or-region ()
-  "Send the current line to the inferior shell; remain in current code window.
-When region is active, send region instead."
-  (interactive)
-  (brc/sh-send-command t))
-
-(defun brc/sh-send-line-or-region-and-go ()
-  "Send the current line to the inferior shell and move there.
-When region is active, send region instead."
-  (interactive)
-  (brc/sh-send-command nil))
-
-(defalias 'brc/sh-send-paragraph
-  ;; Select paragraph (v i p),
-  ;; send region (SPC o r),
-  ;; deselect (ESC),
-  ;; move point to first column (0)
-  (kmacro "v i p SPC o r <escape> 0"))
-
-;; TODO re-implement per changes to `brc/sh-send-command' above
-;;
-;; (defun brc/sh-send-line-or-region-and-step ()
-;;   "Send the current line to the inferior shell and move point to next line;
-;; remain in current code window. When region is active, send region instead."
-;;   (interactive)
-;;   (brc/sh-send-command nil)
-;;   (if (use-region-p)
-;;       (goto-char (region-end))
-;;     (goto-char (1+ (line-end-position)))))
-
-(defun brc/sh-awk-print ()
-  "Inject '|awk {print $}' and move point inside braces."
-  (interactive)
-  (insert "|awk '{print $}'")
-  (backward-char 2))
-
-(defun brc/sh-sed-replace ()
-  "Inject '|sed s///' and move point inside slashes."
-  (interactive)
-  (insert "|sed -r -e 's///'")
-  (backward-char 3))
-
-(defun brc/sh-while-read ()
-  "Inject '|while read x' and move point inside loop body."
-  (interactive)
-  (insert "|while read x; do ; done")
-  (backward-char 2))
-
-(defun brc/ruby-send-line-or-region ()
-  "Send the current line or active region to the inferior Ruby process."
-  (interactive)
-  ;; FIXME region doesn't work
-  (if (use-region-p)
-      (ruby-send-region)
-    (ruby-send-line)))
-
-
-(defun brc/truncate-syslog-lines ()
-  "Toggle line truncation on when file name ends in `.log'"
-  (if (string-suffix-p ".log" (buffer-name))
-      (toggle-truncate-lines 1)))
-
-;; From https://emacs.stackexchange.com/questions/41222/how-can-i-pass-the-no-line-break-argument-to-base64-encode-region-in-m-x
-;;
-(defun brc/base64-encode-region-prefix-arg (&rest _args)
-  "Pass prefix arg as third arg to `base64-encode-region'."
-  (interactive "r\nP"))
-
-(advice-add 'base64-encode-region :before #'brc/base64-encode-region-prefix-arg)
-
-
-(defun brc/replace-ec2-hostname-with-ip ()
-  "Replace all occurrences of `ip-w-x-y-z.ec2.internal' with `w.x.y.z' on
-current line"
-  (interactive "*")  ;; fail if buffer readonly
-  ;; TODO Add region support
-  ;;
-  ;;      See https://stackoverflow.com/a/58308604/2228206
-  ;;          http://xahlee.info/emacs/emacs/elisp_command_working_on_string_or_region.html
-  ;;
-  ;;      Either make a separate function that works on a region and
-  ;;      conditionally call it from this function, or make a monolithic
-  ;;      function that handles all cases.
-  ;;
-  ;;      The bitch of this for implementing region support was figuring out why
-  ;;      BOUND wasn't being honored in the call to `(re-search-forward)'; it
-  ;;      turns out that shortening the size of the buffer (by changing it)
-  ;;      causes BOUND to now be farther out than we want it to be; see the
-  ;;      comment in the same SO post:
-  ;;
-  ;;        https://stackoverflow.com/a/58322478/2228206
-  ;;
-  ;;         ^ "Unfortunately `(use-region-p)' also has some quirks. BOUND needs
-  ;;            to be updated when a replacement will change the length of the
-  ;;            region."
-  ;;
-  ;; Hacky WIP
-                                        ; (let (start end)
-                                        ;   (if (use-region-p)
-                                        ;       (progn
-                                        ;         (setq start (region-beginning)
-                                        ;               end (region-end))
-                                        ;         ;; Linewise visual mode is selecting the newline and placing
-                                        ;         ;; my cursor on the following line (outside of region)
-                                        ;         ;; Detect this condition and reduce `end'
-                                        ;         (when (char-equal ?\C-j (char-after (- end 1)))
-                                        ;           (setq end (- end 2))
-                                        ;           (message "Found newline!")
-                                        ;           (message "Start is %d" start)
-                                        ;           (message "End is %d" end)))
-                                        ;     (setq start (line-beginning-position)
-                                        ;           end (line-end-position)))
-                                        ;  (goto-char start)
-  (save-excursion
-    (beginning-of-line)
-    (let ((re "ip-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)-\\([0-9]+\\)\\..+\\.internal")
-          (end (make-marker)))
-      (set-marker end (line-end-position))
-      (while (re-search-forward re end t)
-        (replace-match "\\1.\\2.\\3.\\4"))
-      (set-marker end nil))))
-
-
-(defun brc/replace-epoch-with-readable-date ()
-  "Replace all occurrences of Unix epoch timestamps on the current line with
-respective human-readable dates. For example, replace `1714834042' with
-\"Sat May 4 07:47:22 AM PDT 2024\""
-  (interactive "*")  ;; fail if buffer readonly
-  (save-excursion
-    (beginning-of-line)
-    (let ((re "\\b[0-9]\\{7,10\\}\\b")
-          (end (make-marker)))
-      (set-marker end (line-end-position))
-      (while (re-search-forward re end t)
-        (replace-match
-         (string-chop-newline
-          (shell-command-to-string
-           (concat "date --date=@"
-                   (string-chop-newline
-                    (number-to-string (number-at-point))))))))
-      (set-marker end nil))))
-
-
-(defun brc/make-buffer-plain-text ()
-  "Remove all text properties from entire buffer. Useful for yanking output
-from comint buffer and pasting it somewhere else so you can edit it. See
-https://emacs.stackexchange.com/questions/12526/how-to-remove-all-text-properties-in-a-buffer"
-  (interactive "*")  ;; fail if buffer readonly
-  ;; TODO: Operate on region instead of entire buffer
-  (let ((inhibit-read-only t))
-    (set-text-properties (point-min) (point-max) nil)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Eshell functions
-;;
-(defun eshell/kls ()
-  "List Kubernetes clusters."
-  (with-temp-buffer
-    (cd "/dr/k8s/kubeconfigs")
-    (shell-command
-     (concat "ls kubeconfig-*-sa"
-             "|sed -e s/kubeconfig-// -e 's/-sa$//'"
-             "|sort -u")
-     (buffer-name))
-    (buffer-string)))
-
-;; TODO: Figure out how to cycle thru preceding commands and swap word upon
-;;       subsequent presses of M-.
-(defun brc/eshell-yank-last-arg (n)
-  "Mimic Bash `yank-last-arg'."
-  (interactive "p")
-  (insert (car (reverse
-                (split-string
-                 (eshell-previous-input-string (- n 1)))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Unimpaired-paste emulator (YOPO)
-;;
-;;  TODO: seems like newline-and-indent not being restored
-;;
-;; ;; https://github.com/tpope/vim-unimpaired/blob/master/plugin/unimpaired.vim
-;; (defun setup_paste ()
-;;   (setq-local oldret (key-binding "\C-m"))
-;;   (local-set-key "\C-m" 'evil-ret)  ;; was 'newline-and-indent)
-;;   (add-hook 'evil-insert-state-exit-hook
-;;             #'(lambda () (when (boundp 'oldret)
-;;                           (local-set-key "\C-m" oldret)
-;;                           (makunbound 'oldret)))
-;;             nil t))
 
 ;; XXX Brokenness with `helm-ag' and ripgrep.
 ;;
@@ -1576,80 +1722,33 @@ https://emacs.stackexchange.com/questions/12526/how-to-remove-all-text-propertie
 ;; This confirmed my suspicion.
 
 
-;; From https://xenodium.com/emacs-clone-git-repo-from-clipboard/
-;; Also see Reddit post: https://www.reddit.com/r/emacs/comments/k3iter/simplequick_git_repo_clone_from_browser_to_emacs/
-;;
-(defun brc/git-clone-clipboard-url ()
-  "Clone git URL in clipboard asynchronously and open in dired when finished."
-  (interactive)
-  (cl-assert (string-match-p "^\\(http\\|https\\|ssh\\)://" (current-kill 0)) nil "No URL in clipboard")
-  (let* ((url (current-kill 0))
-         (download-dir (expand-file-name "/git/"))
-         (project-dir (concat (file-name-as-directory download-dir)
-                              (file-name-base url)))
-         (default-directory download-dir)
-         (command (format "git clone %s" url))
-         (buffer (generate-new-buffer (format "*%s*" command)))
-         (proc))
-    (when (file-exists-p project-dir)
-      (if (y-or-n-p (format "%s exists. delete?" (file-name-base url)))
-          (delete-directory project-dir t)
-        (user-error "Bailed")))
-    (switch-to-buffer buffer)
-    (setq proc (start-process-shell-command (nth 0 (split-string command)) buffer command))
-    (with-current-buffer buffer
-      (setq default-directory download-dir)
-      (shell-command-save-pos-or-erase)
-      (require 'shell)
-      (shell-mode)
-      (view-mode +1))
-    (set-process-sentinel proc
-                          (lambda (process state)
-                            (let ((output (with-current-buffer (process-buffer process)
-                                            (buffer-string))))
-                              (kill-buffer (process-buffer process))
-                              (if (= (process-exit-status process) 0)
-                                  (progn
-                                    (message "finished: %s" command)
-                                    (dired project-dir))
-                                (user-error (format "%s\n%s" command output))))))
-    (set-process-filter proc #'comint-output-filter)))
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol t)
+ '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
+ '(mouse-yank-at-point t)
+ '(package-selected-packages
+   '(company-quickhelp company-terraform terraform-mode hcl-mode ranger sicp yasnippet-classic-snippets zones go-guru go-eldoc flycheck-pos-tip pos-tip flycheck company-go go-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode web-beautify livid-mode skewer-mode simple-httpd js2-refactor multiple-cursors js2-mode js-doc coffee-mode flyspell-correct-helm flyspell-correct auto-dictionary arch-packer dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat groovy-mode helm-gtags ggtags strace-mode ini-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data puppet-mode yaml-mode mmm-mode markdown-toc markdown-mode jinja2-mode gh-md company-ansible ansible-doc ansible xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help vimrc-mode dactyl-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme lv rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot smeargle orgit magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor helm-company company-statistics helm-c-yasnippet fuzzy company auto-yasnippet yasnippet ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg eval-sexp-fu highlight elisp-slime-nav f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))
+ '(safe-local-variable-values
+   '((encoding . utf-8)
+     (eval ansible 1)
+     (eval add-to-list 'company-backends 'company-ansible))))
 
-(defun brc/fix-ps1-prompt-for-comint ()
-  "Set new $PS1 value for the bash process being used by comint."
-  ;; TODO Check the current major mode first before doing anything?
-  (interactive)
-  (evil-insert 0)
-  ;; FIXME Kill any existing input text first.
-  ;;       (comint-send-input) will send whatever input already exists on the
-  ;;       line... maybe you can find out whether you actually killed any text
-  ;;       and then conditionally restore it after the comint-send-input.
-  (comint-kill-input)
-  (insert "unset PROMPT_COMMAND; ")
-  (insert "export PS1='[\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;34m\\]\\w\\[\\e[0m\\]]$ '")
-  (comint-send-input)
-  (move-beginning-of-line))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background nil))))
+ '(evil-search-highlight-persist-highlight-face ((t (:background "magenta" :foreground "brightyellow" :underline t))))
+ '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#444444" :foreground "#87D700"))))
+ '(smerge-refined-removed ((t (:inherit smerge-refined-change :background "#FFDEC8" :foreground "red")))))
 
-(defun brc/update-system-path ()
-  "Update Emacs' $PATH from the shell."
-  (interactive)
-  (let ((path-string (shell-command-to-string "bash -l -c 'echo $PATH'")))
-    (setenv "PATH" (car (split-string path-string "\n")))
-    (setq exec-path (split-string (getenv "PATH") path-separator))))
-
-;; (defun brc/go-mode-hook ()
-;;	"Custom settings for go-mode."
-;;	;; Use tabs for indentation
-;;	(setq-default indent-tabs-mode t)
-;;	;; Set the visual width of a tab character to 2 spaces
-;;	(setq-default tab-width 2)
-;;	;; Set the evil shift width to 4 (which will be a single tab due to indent-tabs-mode t)
-;;	(setq evil-shift-width 1)
-;;	;; If using go-ts-mode (tree-sitter mode for Go), set its specific offset
-;;	(when (boundp 'go-ts-mode-indent-offset)
-;;		(setq go-ts-mode-indent-offset 1)))
-
-;; (add-hook 'go-ts-mode-hook 'brc/go-mode-hook)
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -1662,7 +1761,6 @@ This function is called at the very end of Spacemacs initialization."
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    '(Man-notify-method 'aggressive)
-   ;; '(claude-code-ide-window-width 100)
    '(comint-process-echoes t)
    '(comint-scroll-to-bottom-on-input t)
    '(emacs-pager-max-line-coloring 5000)
@@ -1690,6 +1788,8 @@ This function is called at the very end of Spacemacs initialization."
    '(magit-diff-refine-hunk t)
    '(magit-diff-refine-ignore-whitespace nil)
    '(magit-display-buffer-function 'magit-display-buffer-fullcolumn-most-v1)
+   '(markdown-command
+     "pandoc -f markdown -t html --embed-resources --standalone --syntax-highlighting=zenburn")
    '(mouse-yank-at-point t)
    '(org-export-backends '(ascii html icalendar latex man md odt))
    '(org-fold-core-style 'overlays)
@@ -1736,12 +1836,12 @@ This function is called at the very end of Spacemacs initialization."
                  json-mode json-reformat json-snatcher lab light-soap-theme
                  link-hint linum-relative live-py-mode livid-mode log4e
                  lorem-ipsum lush-theme lv macrostep madhat2r-theme magit
-                 magit-gitflow magit-popup majapahit-theme markdown-mode
-                 markdown-toc material-theme minimal-theme minitest mmm-mode
-                 moe-theme molokai-theme monochrome-theme monokai-theme move-text
-                 multi-term multiple-cursors mustang-theme naquadah-theme
-                 noctilux-theme obsidian-theme occidental-theme oldlace-theme
-                 omtose-phellack-theme open-junk-file org-bullets
+                 magit-gitflow magit-popup magit-todos majapahit-theme
+                 markdown-mode markdown-toc material-theme minimal-theme minitest
+                 mmm-mode moe-theme molokai-theme monochrome-theme monokai-theme
+                 move-text multi-term multiple-cursors mustang-theme
+                 naquadah-theme noctilux-theme obsidian-theme occidental-theme
+                 oldlace-theme omtose-phellack-theme open-junk-file org-bullets
                  org-category-capture org-download org-mime org-plus-contrib
                  org-pomodoro org-present org-projectile organic-green-theme orgit
                  packed paradox parent-mode pcre2el persp-mode
@@ -1763,9 +1863,10 @@ This function is called at the very end of Spacemacs initialization."
                  twilight-anti-bright-theme twilight-bright-theme twilight-theme
                  ujelly-theme underwater-theme use-package uuidgen vi-tilde-fringe
                  vimrc-mode volatile-highlights vterm web-beautify
-                 web-completion-data web-mode which-key white-sand-theme winum
-                 with-editor ws-butler xterm-color yaml-mode yapfify yasnippet
-                 yasnippet-classic-snippets zen-and-art-theme zenburn-theme zones))
+                 web-completion-data web-mode wgrep-helm which-key
+                 white-sand-theme winum with-editor ws-butler xterm-color
+                 yaml-mode yapfify yasnippet yasnippet-classic-snippets
+                 zen-and-art-theme zenburn-theme zones))
    '(paradox-github-token t)
    '(ranger-hidden-regexp 'nil)
    '(safe-local-variable-directories
